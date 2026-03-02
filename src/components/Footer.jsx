@@ -19,7 +19,7 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-4">Liên hệ</h3>
             <div className="space-y-2 text-gray-400">
               <p>📞 0877736289</p>
-              <p>📧 Support@waka.vn</p>
+              <p>📧 Support@Tekbook.vn</p>
             </div>
           </div>
           
@@ -37,7 +37,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-700 pt-8 text-center text-gray-400 text-sm">
-          <p>Bản Quyền © 2025 TIEMSACH.ORG. Tiệm sách eBook trực tuyến miễn phí dành cho mọi người.</p>
+          <p>Bản Quyền © 2026 TekBook.org. Tiệm sách eBook trực tuyến miễn phí dành cho mọi người.</p>
         </div>
       </div>
     </footer>
