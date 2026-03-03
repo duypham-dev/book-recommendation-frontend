@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hook/useAuth";
 
 // Components
 import Hero from "../components/Hero";
@@ -33,9 +32,6 @@ const Home = () => {
   const [topBooks, setTopBooks] = useState([]);
   const [topBooksLoading, setTopBooksLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Note: useAuth hook available for future user-specific features
-  const _auth = useAuth();
   
   // Refs for intersection observer - use single object
   const genreRefs = useRef({});
