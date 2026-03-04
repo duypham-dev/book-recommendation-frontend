@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import Hero from "../components/Hero";
 import BookCarousel from "../components/BookCarousel";
 import TopBooksShowcase from "../components/TopBooksShowcase";
-import ThemeToggle from "../components/ThemeToggle";
 
 // Layout
 import MainLayout from "../layout/MainLayout";
@@ -164,7 +163,6 @@ const Home = () => {
       heroContent={<Hero />}
       onSearchSubmit={handleSearchSubmit}
     >
-      <ThemeToggle />
       <main className="mt-8 px-4 sm:px-6 lg:px-8 space-y-8">
         {topBooksLoading && (
           <div className="py-16 text-center">

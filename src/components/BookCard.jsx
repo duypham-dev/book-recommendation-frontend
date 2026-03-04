@@ -5,20 +5,20 @@ import { useState } from "react"
 import { getPreviewBook } from "../services/bookService"
 
 const BookCard = ({ book }) => {
-  const navigate = useNavigate()
-  const [showTooltip, setShowTooltip] = useState(false)
-  const [previewBook, setPreviewBook] = useState({})
-  const [previewCache, setPreviewCache] = useState({})
+  const navigate = useNavigate();
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [previewBook, setPreviewBook] = useState({});
+  const [previewCache, setPreviewCache] = useState({});
   
   const fetchPreviewBook = async (bookId) => {
     try {
        if (previewCache[bookId]) {
-        setPreviewBook(previewCache[bookId])
-        setShowTooltip(true)
+        setPreviewBook(previewCache[bookId]);
+        setShowTooltip(true);
         return
       }
       const data = await getPreviewBook(bookId);
-      setPreviewCache(prev => ({ ...prev, [bookId]: data }))
+      setPreviewCache(prev => ({ ...prev, [bookId]: data }));
       setPreviewBook(data);
       setShowTooltip(true);
     } catch (error) {
@@ -28,7 +28,7 @@ const BookCard = ({ book }) => {
 
 
   const handleClick = () => {
-    navigate(`/books/${book.bookId}`)
+    navigate(`/books/${book.bookId}`);
   }
 
   return (

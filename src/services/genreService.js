@@ -47,7 +47,7 @@ export const getAllGenres = async () => {
  */
 export const getGenreById = async (genreId) => {
   try {
-    const response = await api.get(`/books/genres/${genreId}`);
+    const response = await api.get(`/genres/${genreId}`);
     return response.data || response;
   } catch (error) {
     console.error("Error fetching genre by ID:", error.response?.data || error.message);

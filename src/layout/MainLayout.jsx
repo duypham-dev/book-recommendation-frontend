@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import AuthModal from '../components/AuthModal';
+import ThemeToggle from '../components/ThemeToggle';
 import useAuth from '../hook/useAuth';
 
 const MainLayout = ({
@@ -42,6 +43,7 @@ const MainLayout = ({
           onModeChange={setAuthMode} // Hàm để thay đổi chế độ từ bên trong modal
         />
       )}
+      {!user && <ThemeToggle />}
     </div>
   );
 };
