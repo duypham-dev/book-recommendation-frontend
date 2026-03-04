@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import CategoryDropdown from './CategoriesDropdown';
 import ProfilePopover from './ProfilePopover';
 import SearchSuggestions from './SearchSuggestions';
-import useAuth from '../hook/useAuth';
-import { searchBooks } from '../services/manageBookService';
+import useAuth from '../../hook/useAuth';
+import { searchBooks } from '../../services/manageBookService';
 
 const Header = ({
   onAuthClick,

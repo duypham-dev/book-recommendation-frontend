@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Header from '../components/Header';
+import Header from '../components/header/Header';
 import Footer from '../components/Footer';
 import AuthModal from '../components/AuthModal';
 import ThemeToggle from '../components/ThemeToggle';

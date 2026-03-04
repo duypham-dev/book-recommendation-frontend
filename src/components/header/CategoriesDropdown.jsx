@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllGenres } from "../services/genreService";
+import { getAllGenres } from "../../services/genreService";
 
 const CategoryDropdown = ({ onSelect }) => {
   const navigate = useNavigate();
