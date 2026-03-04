@@ -12,30 +12,21 @@ export const getBooks = async (page = 0, size = 10) => {
   }
 };
 
-export const getBooksByGenre = async (genreId, pageOrOptions = {}, size = 10) => {
+/**
+ * Fetch books by genre with pagination and sorting.
+ * @param {string|number} genreId
+ * @param {{ page?: number, size?: number, sort?: string }} options
+ * @returns {{ content: Array, page: number, size: number, total: number, totalPages: number }}
+ */
+export const getBooksByGenre = async (genreId, { page = 0, size = 10, sort = '' } = {}) => {
   try {
-    let page = 0;
-    let pageSize = 10;
-    let sort = "";
-
-    if (typeof pageOrOptions === "number") {
-      page = pageOrOptions;
-      pageSize = size;
-    } else if (typeof pageOrOptions === "object" && pageOrOptions !== null) {
-      page = pageOrOptions.page ?? 0;
-      pageSize = pageOrOptions.size ?? 10;
-      sort = pageOrOptions.sort ?? "";
-    }
-
-    const params = { page, size: pageSize };
+    const params = { page, size };
     if (sort?.trim()) {
       params.sort = sort.trim();
     }
 
-    const response = await api.get(`/books/genre/${genreId}`, {
-      params
-    });
-    return response;
+    const response = await api.get(`/books/genre/${genreId}`, { params });
+    return response.data || response;
   } catch (error) {
     console.error("Get books by genre failed:", error.response?.data || error.message);
     throw error;

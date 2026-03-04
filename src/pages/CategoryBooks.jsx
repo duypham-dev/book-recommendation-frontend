@@ -1,124 +1,237 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import BookCard from "../components/BookCard";
-import { getGenres } from "../services/genreService";
+import { getGenreById } from "../services/genreService";
 import { getBooksByGenre } from "../services/manageBookService";
 
 const BOOKS_PER_PAGE = 12;
 
-const CategoryBooks = () => {
+// ─── Sub-components ─────────────────────────────────────────────────────────
 
+const LoadingSpinner = () => (
+  <div className="text-center py-16">
+    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+    <p className="mt-4 text-gray-600 dark:text-gray-300">Đang tải sách...</p>
+  </div>
+);
+
+const EmptyState = () => (
+  <div className="text-center py-16">
+    <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+      <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+    </div>
+    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+      Chưa có sách trong thể loại này
+    </h3>
+    <p className="text-gray-600 dark:text-gray-400">
+      Vui lòng quay lại sau hoặc khám phá các thể loại khác
+    </p>
+  </div>
+);
+
+const BookListItem = React.memo(({ book }) => (
+  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-all">
+    <div className="flex gap-4">
+      <img
+        src={book.coverImageUrl || "/placeholder.svg"}
+        alt={book.title}
+        className="w-24 h-32 object-cover rounded-lg"
+        loading="lazy"
+      />
+      <div className="flex-1">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <a href={`/books/${book.bookId}`}>{book.title}</a>
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+          {book.authors?.map((a) => a.authorName).join(", ") || "Không rõ tác giả"}
+        </p>
+      </div>
+    </div>
+  </div>
+));
+BookListItem.displayName = "BookListItem";
+
+const Pagination = React.memo(({ currentPage, totalPages, onPageChange }) => {
+  const pageNumbers = useMemo(() => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - 1 && i <= currentPage + 1)
+      ) {
+        pages.push({ type: "page", value: i });
+      } else if (i === currentPage - 2 || i === currentPage + 2) {
+        pages.push({ type: "ellipsis", value: i });
+      }
+    }
+    return pages;
+  }, [currentPage, totalPages]);
+
+  if (totalPages <= 1) return null;
+
+  return (
+    <div className="mt-8 flex justify-center items-center gap-2">
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+      >
+        ← Trước
+      </button>
+
+      <div className="flex items-center gap-1">
+        {pageNumbers.map((item) =>
+          item.type === "ellipsis" ? (
+            <span key={`ellipsis-${item.value}`} className="text-gray-400">...</span>
+          ) : (
+            <button
+              key={item.value}
+              onClick={() => onPageChange(item.value)}
+              className={`w-10 h-10 rounded-lg font-medium transition-colors ${
+                currentPage === item.value
+                  ? "bg-blue-600 text-white"
+                  : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+              }`}
+            >
+              {item.value}
+            </button>
+          )
+        )}
+      </div>
+
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+      >
+        Sau →
+      </button>
+    </div>
+  );
+});
+Pagination.displayName = "Pagination";
+
+// ─── Main Component ─────────────────────────────────────────────────────────
+
+const CategoryBooks = () => {
   const { categoryId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const initialCategoryName = searchParams.get("name") || "Thể loại";
-  
-  const [books, setBooks] = useState([]);
-  const [totalBooks, setTotalBooks] = useState(0);
+
+  // Genre info
   const [genreName, setGenreName] = useState(initialCategoryName);
   const [genreDescription, setGenreDescription] = useState("");
-  const [genresLoading, setGenresLoading] = useState(false);
+  const [genreLoading, setGenreLoading] = useState(false);
+
+  // Books data
+  const [books, setBooks] = useState([]);
+  const [totalBooks, setTotalBooks] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [booksLoading, setBooksLoading] = useState(false);
-  const [sortBy, setSortBy] = useState('newest');
-  const [viewMode, setViewMode] = useState('grid'); // grid, list
+
+  // UI state
+  const [sortBy, setSortBy] = useState("newest");
+  const [viewMode, setViewMode] = useState("grid");
   const [currentPage, setCurrentPage] = useState(1);
 
+  // ── Fetch genre info (single lightweight call) ────────────────────────────
   useEffect(() => {
+    if (!categoryId) return;
+
+    let cancelled = false;
+
     const fetchGenreInfo = async () => {
-      setGenresLoading(true);
+      setGenreLoading(true);
       try {
-        const { genres } = await getGenres({ size: 200 });
-        console.log("Fetched genres:", genres);
-        const matchedGenre = genres.find(
-          (genre) => String(genre.genreId) === String(categoryId),
-        );
-        if (matchedGenre) {
-          setGenreName(matchedGenre.genreName);
-          setGenreDescription(matchedGenre.description || "");
-        } else {
+        const genre = await getGenreById(categoryId);
+        if (cancelled) return;
+
+        setGenreName(genre?.genreName || initialCategoryName);
+        setGenreDescription(genre?.description || "");
+      } catch {
+        if (!cancelled) {
           setGenreName(initialCategoryName);
           setGenreDescription("");
         }
-      } catch (error) {
-        console.error("Không thể tải thông tin thể loại:", error);
-        setGenreName(initialCategoryName);
-        setGenreDescription("");
       } finally {
-        setGenresLoading(false);
+        if (!cancelled) setGenreLoading(false);
       }
     };
-    
-    // Scroll to top when category changes
+
+    // Reset page state & scroll to top on category change
+    setCurrentPage(1);
+    setSortBy("newest");
     window.scrollTo(0, 0);
     fetchGenreInfo();
+
+    return () => { cancelled = true; };
   }, [categoryId, initialCategoryName]);
 
-  const fetchBooksByCategory = useCallback(async (page = 1) => {
-    if (!categoryId) return;
-
-    const pageIndex = Math.max(0, page - 1);
-
-    setBooksLoading(true);
-    try {
-      const response = await getBooksByGenre(categoryId, {
-        page: pageIndex,
-        size: BOOKS_PER_PAGE,
-        sort: sortBy,
-      });
-      console.log("Fetched books by category:", response);
-      const data = response?.data || response;
-      const content = data?.content || [];
-      const total = data?.totalElements ?? content.length;
-      const totalPagesCalculated = Math.max(1, Math.ceil(total / BOOKS_PER_PAGE));
-
-      if (page > totalPagesCalculated) {
-        setTotalBooks(total);
-        setBooks([]);
-        setCurrentPage(totalPagesCalculated);
-        return;
-      }
-
-      setBooks(Array.isArray(data) ? data : []);
-      setTotalBooks(total);
-    } catch (error) {
-      console.error("Không thể tải sách theo thể loại:", error);
-      setBooks([]);
-      setTotalBooks(0);
-    } finally {
-      setBooksLoading(false);
-    }
-  }, [categoryId, sortBy]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-    setBooks([]);
-    setTotalBooks(0);
-  }, [categoryId]);
-
-  useEffect(() => {
+  // ── Fetch books (depends on categoryId, page, sort) ───────────────────────
+  const fetchBooks = useCallback(async (page, sort) => {
     if (!categoryId) {
       setBooks([]);
       setTotalBooks(0);
+      setTotalPages(1);
       return;
     }
-    fetchBooksByCategory(currentPage);
-  }, [categoryId, sortBy, currentPage, fetchBooksByCategory]);
 
-  const currentBooks = books;
-  const totalPages = Math.max(1, Math.ceil(totalBooks / BOOKS_PER_PAGE));
+    setBooksLoading(true);
+    try {
+      const result = await getBooksByGenre(categoryId, {
+        page: page - 1, // API uses 0-based index
+        size: BOOKS_PER_PAGE,
+        sort,
+      });
 
-  const handleSearchSubmit = useCallback((keyword) => {
-    const trimmedKeyword = keyword.trim();
-    if (trimmedKeyword) {
-      navigate(`/search?q=${encodeURIComponent(trimmedKeyword)}`);
+      const content = result?.content ?? [];
+      const total = result?.total ?? 0;
+      const pages = result?.totalPages ?? 1;
+
+      setBooks(content);
+      setTotalBooks(total);
+      setTotalPages(pages);
+    } catch {
+      setBooks([]);
+      setTotalBooks(0);
+      setTotalPages(1);
+    } finally {
+      setBooksLoading(false);
     }
-  }, [navigate]);
+  }, [categoryId]);
 
-  const handleSortChange = (value) => {
+  useEffect(() => {
+    fetchBooks(currentPage, sortBy);
+  }, [currentPage, sortBy, fetchBooks]);
+
+  // ── Handlers ──────────────────────────────────────────────────────────────
+  const handleSearchSubmit = useCallback(
+    (keyword) => {
+      const trimmed = keyword.trim();
+      if (trimmed) {
+        navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+      }
+    },
+    [navigate]
+  );
+
+  const handleSortChange = useCallback((value) => {
     setSortBy(value);
     setCurrentPage(1);
-  };
+  }, []);
+
+  const handlePageChange = useCallback((page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  // ── Derived state ─────────────────────────────────────────────────────────
+  const isLoading = genreLoading || booksLoading;
 
   return (
     <MainLayout onSearchSubmit={handleSearchSubmit}>
@@ -135,14 +248,14 @@ const CategoryBooks = () => {
                 {genreName}
               </span>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">
                   {genreName}
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400">
-                  {genresLoading || booksLoading ? (
+                  {isLoading ? (
                     "Đang tải thông tin thể loại..."
                   ) : (
                     <>
@@ -164,11 +277,11 @@ const CategoryBooks = () => {
               {/* View Mode Toggle */}
               <div className="flex items-center gap-2 bg-white dark:bg-gray-800 rounded-lg p-1 shadow-sm border border-gray-200 dark:border-gray-700">
                 <button
-                  onClick={() => setViewMode('grid')}
+                  onClick={() => setViewMode("grid")}
                   className={`px-4 py-2 rounded-md transition-all ${
-                    viewMode === 'grid'
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    viewMode === "grid"
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,11 +289,11 @@ const CategoryBooks = () => {
                   </svg>
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
+                  onClick={() => setViewMode("list")}
                   className={`px-4 py-2 rounded-md transition-all ${
-                    viewMode === 'list'
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    viewMode === "list"
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,156 +304,51 @@ const CategoryBooks = () => {
             </div>
           </div>
 
-          {/* Filter & Sort Bar */}
+          {/* Sort Bar */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Sắp xếp:
-                </label>
-                <select
-                  value={sortBy}
-                  onChange={(e) => handleSortChange(e.target.value)}
-                  className="px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                >
-                  <option value="popular">Phổ biến nhất</option>
-                  <option value="newest">Mới nhất</option>
-                  <option value="title-asc">Tên sách (A-Z)</option>
-                  <option value="title-desc">Tên sách (Z-A)</option>
-                </select>
-              </div>
-
-              {/* Quick Filters */}
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Lọc nhanh:</span>
-                <button className="px-3 py-1.5 text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors">
-                  Miễn phí
-                </button>
-                <button className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                  Đánh giá cao
-                </button>
-                <button className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                  Bestseller
-                </button>
-              </div>
+            <div className="flex items-center gap-4">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Sắp xếp:
+              </label>
+              <select
+                value={sortBy}
+                onChange={(e) => handleSortChange(e.target.value)}
+                className="px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              >
+                <option value="popular">Phổ biến nhất</option>
+                <option value="newest">Mới nhất</option>
+                <option value="title-asc">Tên sách (A-Z)</option>
+                <option value="title-desc">Tên sách (Z-A)</option>
+              </select>
             </div>
           </div>
 
           {/* Books Grid/List */}
           {booksLoading ? (
-            <div className="text-center py-16">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-300">Đang tải sách...</p>
-            </div>
-          ) : currentBooks.length === 0 ? (
-            <div className="text-center py-16">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Chưa có sách trong thể loại này
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Vui lòng quay lại sau hoặc khám phá các thể loại khác
-              </p>
-            </div>
+            <LoadingSpinner />
+          ) : books.length === 0 ? (
+            <EmptyState />
           ) : (
             <>
-              {viewMode === 'grid' ? (
+              {viewMode === "grid" ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
-                  {currentBooks.map((book) => (
-                    <BookCard key={book.id} book={book} />
+                  {books.map((book) => (
+                    <BookCard key={book.bookId} book={book} />
                   ))}
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {currentBooks.map((book) => (
-                    <div
-                      key={book.id}
-                      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-all"
-                    >
-                      <div className="flex gap-4">
-                        <img
-                          src={book.coverImageUrl || "/placeholder.svg"}
-                          alt={book.title}
-                          className="w-24 h-32 object-cover rounded-lg"
-                        />
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                            <a href={`/books/${book.id}`}>{book.title}</a>
-                          </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            {book.authors?.map(a => a.name).join(", ") || "Không rõ tác giả"}
-                          </p>
-                          <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                            {book.averageRating !== undefined && (
-                              <div className="flex items-center gap-1">
-                                <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <span>{book.averageRating.toFixed(1)}</span>
-                              </div>
-                            )}
-                            <span>•</span>
-                            <span>{book.genres?.map(g => g.name).join(", ") || "Chưa phân loại"}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  {books.map((book) => (
+                    <BookListItem key={book.bookId} book={book} />
                   ))}
                 </div>
               )}
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="mt-8 flex justify-center items-center gap-2">
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    ← Trước
-                  </button>
-                  
-                  <div className="flex items-center gap-1">
-                    {[...Array(totalPages)].map((_, index) => {
-                      const pageNum = index + 1;
-                      if (
-                        pageNum === 1 ||
-                        pageNum === totalPages ||
-                        (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                      ) {
-                        return (
-                          <button
-                            key={pageNum}
-                            onClick={() => setCurrentPage(pageNum)}
-                            className={`w-10 h-10 rounded-lg font-medium transition-colors ${
-                              currentPage === pageNum
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-                            }`}
-                          >
-                            {pageNum}
-                          </button>
-                        );
-                      } else if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
-                        return <span key={pageNum} className="text-gray-400">...</span>;
-                      }
-                      return null;
-                    })}
-                  </div>
-
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    Sau →
-                  </button>
-                </div>
-              )}
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </>
           )}
         </div>

@@ -67,7 +67,7 @@ const Home = () => {
   const loadGenreBooks = useCallback(async (genreId) => {
     try {
       const response = await getBooksByGenre(genreId, { page: 0, size: DEFAULT_PAGE_SIZE });
-      const books = Array.isArray(response?.data) ? response.data : [];
+      const books = Array.isArray(response?.content) ? response.content : [];
       
       setGenreBooks(prev => ({ ...prev, [genreId]: books }));
     } catch (err) {

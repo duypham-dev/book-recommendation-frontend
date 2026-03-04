@@ -41,6 +41,21 @@ export const getAllGenres = async () => {
 };
 
 /**
+ * Fetch a single genre by ID.
+ * @param {string|number} genreId
+ * @returns {{ genreId: string, genreName: string, description: string|null }}
+ */
+export const getGenreById = async (genreId) => {
+  try {
+    const response = await api.get(`/books/genres/${genreId}`);
+    return response.data || response;
+  } catch (error) {
+    console.error("Error fetching genre by ID:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+/**
  * Create a new genre
  * @param {{ name: string, description: string }} genreData
  */
