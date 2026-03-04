@@ -24,14 +24,14 @@ const TopBooksShowcase = ({ books = [], title = "Top sách nổi bật" }) => {
 
   // Lấy tối đa 4 cuốn sách
   const topBooks = books.slice(0, 4);
-
+  console.log("TopBooksShowcase received books:", topBooks);
   const BookItem = ({ book, index }) => (
     <div className="w-full sm:w-[calc(50%-0.5rem)] lg:w-auto flex-shrink-0 snap-start">
       <div
         className={`group relative w-full h-full max-h-[600px] cursor-pointer bg-transparent hover:bg-[#FFD875] shadow-lg hover:shadow-2xl ${
           index % 2 === 0 ? "clip-slant-left" : "clip-slant-right"
         }`}
-        onClick={() => handleBookClick(book.id)}
+        onClick={() => handleBookClick(book.bookId)}
       >
         {/* Book Cover Background */}
         <div
@@ -82,7 +82,7 @@ const TopBooksShowcase = ({ books = [], title = "Top sách nổi bật" }) => {
       {/* Desktop Grid Layout (lg and up) */}
       <div className="hidden lg:grid lg:grid-cols-4 gap-4 bg-none">
         {topBooks.map((book, index) => (
-          <BookItem key={book.id} book={book} index={index} />
+          <BookItem key={book.bookId} book={book} index={index} />
         ))}
       </div>
 
@@ -102,7 +102,7 @@ const TopBooksShowcase = ({ books = [], title = "Top sách nổi bật" }) => {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {topBooks.map((book, index) => (
-            <BookItem key={book.id} book={book} index={index} />
+            <BookItem key={book.bookId} book={book} index={index} />
           ))}
         </div>
         
