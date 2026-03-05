@@ -41,6 +41,7 @@ function AuthProvider({ children }) {
     setLoading(true);
     try {
       const userData = await getUser();
+      console.log("Fetched user profile:", userData);
       setUser(userData);
       return userData;
     } catch (err) {

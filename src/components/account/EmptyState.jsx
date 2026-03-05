@@ -2,8 +2,8 @@ import React from 'react';
 
 const EmptyState = React.memo(({ icon: Icon, message }) => {
   return (
-    <div className="text-center py-12 text-gray-500">
-      {Icon && <Icon className="w-16 h-16 mx-auto mb-4 text-gray-300" />}
+    <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+      {Icon && <Icon className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" />}
       <p>{message}</p>
     </div>
   );

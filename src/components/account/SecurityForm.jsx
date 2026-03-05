@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { message } from "antd"
 
 const SecurityForm = React.memo(({ user, onChangePassword, isSubmitting }) => {
-  console.log("Rendering SecurityForm with user:", user)
   const [showChangePassword, setShowChangePassword] = useState(false)
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -60,22 +59,22 @@ const SecurityForm = React.memo(({ user, onChangePassword, isSubmitting }) => {
   return (
     <div className="max-w-md space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
         <input
           type="email"
           value={user?.email || ""}
           disabled
-          className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 cursor-not-allowed text-sm sm:text-base"
+          className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-400 cursor-not-allowed text-sm sm:text-base"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Mật khẩu</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mật khẩu</label>
         <input
           type="password"
           value="••••••••••"
           disabled
-          className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 cursor-not-allowed text-sm sm:text-base"
+          className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-400 cursor-not-allowed text-sm sm:text-base"
         />
       </div>
 
@@ -88,43 +87,43 @@ const SecurityForm = React.memo(({ user, onChangePassword, isSubmitting }) => {
       </button>
 
       {showChangePassword && (
-        <form className="mt-6 pt-6 border-t border-gray-200 space-y-4" onSubmit={handleSubmitPassword}>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Thay đổi mật khẩu</h3>
+        <form className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 space-y-4" onSubmit={handleSubmitPassword}>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Thay đổi mật khẩu</h3>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Mật khẩu hiện tại</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mật khẩu hiện tại</label>
             <input
               type="password"
               name="currentPassword"
               value={passwordData.currentPassword}
               onChange={handlePasswordChange}
-              className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm sm:text-base"
+              className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm sm:text-base"
               placeholder="Nhập mật khẩu hiện tại"
               disabled={isSubmitting}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Mật khẩu mới</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mật khẩu mới</label>
             <input
               type="password"
               name="newPassword"
               value={passwordData.newPassword}
               onChange={handlePasswordChange}
-              className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm sm:text-base"
+              className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm sm:text-base"
               placeholder="Nhập mật khẩu mới"
               disabled={isSubmitting}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Xác nhận mật khẩu mới</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Xác nhận mật khẩu mới</label>
             <input
               type="password"
               name="confirmPassword"
               value={passwordData.confirmPassword}
               onChange={handlePasswordChange}
-              className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm sm:text-base"
+              className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm sm:text-base"
               placeholder="Nhập lại mật khẩu mới"
               disabled={isSubmitting}
             />
@@ -141,7 +140,7 @@ const SecurityForm = React.memo(({ user, onChangePassword, isSubmitting }) => {
             <button
               type="button"
               onClick={handleChangePasswordClick}
-              className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-sm sm:text-base"
+              className="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium text-sm sm:text-base"
               disabled={isSubmitting}
             >
               Hủy

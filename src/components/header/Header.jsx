@@ -20,7 +20,7 @@ const Header = ({
   const { isAuthenticated, logout } = useAuth();
   const searchTimeoutRef = useRef(null);
   const searchContainerRef = useRef(null);
-
+  
   const updateSearchValue = (value) => {
     setInternalSearch(value);
 

@@ -96,16 +96,16 @@ const HistorySection = React.memo(() => {
 
   return (
     <div>
-      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">LỊCH SỬ ĐỌC SÁCH</h2>
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">LỊCH SỬ ĐỌC SÁCH</h2>
 
       {error && (
-        <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+        <div className="mb-4 rounded-md border border-red-200 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 py-3 text-sm text-red-600 dark:text-red-400">
           Không thể tải lịch sử đọc. Vui lòng thử lại sau.
         </div>
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center py-12 text-gray-500">
+        <div className="flex items-center justify-center py-12 text-gray-500 dark:text-gray-400">
           <Loader2 className="mr-2 h-5 w-5 animate-spin" />
           <span>Đang tải lịch sử đọc...</span>
         </div>
@@ -133,7 +133,7 @@ const HistorySection = React.memo(() => {
                       </span>
                     )}
                   </div>
-                  <p className="mt-2 text-xs text-gray-500">
+                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                     Cập nhật: {formatLastReadTime(item.lastReadAt) || "Chưa có dữ liệu"}
                   </p>
                 </div>

@@ -53,7 +53,7 @@ const PersonalInfoForm = React.memo(({ user, onSubmit, onAvatarChange, isSubmitt
           type="button"
           onClick={handleChangeAvatar}
           disabled={isUploadingAvatar}
-          className="px-4 py-2 bg-gray-900 text-white rounded-full text-sm hover:bg-gray-800 transition-colors disabled:opacity-60"
+          className="px-4 py-2 bg-gray-900 dark:bg-gray-700 text-white rounded-full text-sm hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors disabled:opacity-60"
         >
           {isUploadingAvatar ? "Đang cập nhật..." : "Thay ảnh"}
         </button>
@@ -61,46 +61,46 @@ const PersonalInfoForm = React.memo(({ user, onSubmit, onAvatarChange, isSubmitt
 
       <div className="order-last md:order-first md:col-span-2 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Họ và tên</label>
           <input
             type="text"
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
-            className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm sm:text-base"
+            className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm sm:text-base"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Số điện thoại</label>
           <input
             type="tel"
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleChange}
-            className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm sm:text-base"
+            className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm sm:text-base"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Tên người dùng</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tên người dùng</label>
           <input
             type="text"
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm sm:text-base"
+            className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm sm:text-base"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Id người dùng</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Id người dùng</label>
           <input
             type="text"
             name="userId"
             value={user?.id || ""}
             disabled
-            className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed text-sm sm:text-base"
+            className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed text-sm sm:text-base"
           />
         </div>
 

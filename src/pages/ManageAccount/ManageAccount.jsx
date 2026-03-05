@@ -21,10 +21,10 @@ const PATH_TO_TAB = {
 }
 
 const ManageAccount = () => {
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
-  const { user } = useAuth()
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const { user } = useAuth();
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const activeTab = PATH_TO_TAB[pathname] || "profile"
   const activeLabel = TAB_CONFIG[activeTab]?.label || ""
@@ -32,13 +32,13 @@ const ManageAccount = () => {
   const breadcrumbItems = useMemo(
     () => [
       {
-        title: <Link to="/" className="text-gray-600 hover:text-blue-600 transition-colors">Trang chủ</Link>,
+          title: <Link to="/" className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Trang chủ</Link>,
       },
       {
-        title: <span className="text-gray-800 font-medium">Quản lí tài khoản</span>,
+          title: <span className="text-gray-800 dark:text-gray-200 font-medium">Quản lí tài khoản</span>,
       },
       {
-        title: <span className="text-gray-800 font-medium">{activeLabel}</span>,
+          title: <span className="text-gray-800 dark:text-gray-200 font-medium">{activeLabel}</span>,
       },
     ],
     [activeLabel],
@@ -68,13 +68,13 @@ const ManageAccount = () => {
   return (
     <MainLayout showHero={false} onSearchSubmit={handleSearchSubmit}>
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className="bg-white p-3 sm:p-4 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 shadow-sm">
           <Breadcrumb separator=">" items={breadcrumbItems} />
         </div>
       </div>
 
       <div className="px-4 sm:px-6 lg:px-8 py-2">
-        <div className="bg-white shadow-sm rounded-lg relative">
+        <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg relative">
           <button
             onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
             className="md:hidden fixed bottom-6 right-6 z-50 bg-teal-500 text-white p-4 rounded-full shadow-lg hover:bg-teal-600 transition-colors"
@@ -94,7 +94,7 @@ const ManageAccount = () => {
                 transform transition-transform duration-300 ease-in-out
                 ${isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"}
                 md:translate-x-0 md:col-span-1
-                bg-white md:bg-transparent
+                bg-white dark:bg-gray-800 md:bg-transparent md:dark:bg-transparent
               `}
             >
               <AccountSidebar user={user} activeTab={activeTab} onTabChange={handleTabChange} />

@@ -109,7 +109,7 @@ const AccountInfoSection = React.memo(() => {
 
   if (loading && !user) {
     return (
-      <div className="py-10 text-center text-gray-500">
+      <div className="py-10 text-center text-gray-500 dark:text-gray-400">
         Đang tải thông tin tài khoản...
       </div>
     );
@@ -117,7 +117,7 @@ const AccountInfoSection = React.memo(() => {
 
   if (!user) {
     return (
-      <div className="py-10 text-center text-gray-500">
+      <div className="py-10 text-center text-gray-500 dark:text-gray-400">
         Không tìm thấy thông tin tài khoản.
       </div>
     );
@@ -126,7 +126,7 @@ const AccountInfoSection = React.memo(() => {
   return (
     <div>
       <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
           QUẢN LÍ THÔNG TIN
         </h2>
       </div>

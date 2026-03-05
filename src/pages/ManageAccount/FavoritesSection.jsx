@@ -9,8 +9,9 @@ import { useMessage } from "../../contexts/MessageProvider"
 import { sendFeedback } from "../../utils/feedbackHelper"
 
 const FavoritesSection = React.memo(() => {
-  const [favoriteBooks, setFavoriteBooks] = useState([]);
   const message = useMessage();
+  const [favoriteBooks, setFavoriteBooks] = useState([]);
+ 
   const { user } = useAuth();
 
   const userId = user?.userId;
@@ -23,10 +24,12 @@ const FavoritesSection = React.memo(() => {
         setFavoriteBooks(booksData);
       } catch (error) {
         console.error("Failed to fetch favorite books:", error);
+        message.error("Không thể tải sách yêu thích");
       }
     };
     fetchData();
-  }, [userId]);
+    console.log("Fetch favorites run!");
+  }, [userId, message]);
 
   const handleRemoveFavorite = useCallback(async (bookId) => {
     try {
@@ -59,15 +62,16 @@ const FavoritesSection = React.memo(() => {
   if (favoriteBooks.length === 0) {
     return (
       <div>
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">SÁCH YÊU THÍCH</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">SÁCH YÊU THÍCH</h2>
         <EmptyState icon={Book} message="Bạn chưa có sách yêu thích nào" />
       </div>
     )
   }
 
+  console.log("Rendering FavoritesSection with books:", favoriteBooks);
   return (
     <div>
-      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 shrink-0">SÁCH YÊU THÍCH</h2>
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 shrink-0">SÁCH YÊU THÍCH</h2>
 
       <div
         className="grid gap-3 sm:gap-4 lg:gap-6 pb-4 overflow-y-auto max-h-[calc(100vh-400px)] sm:max-h-[calc(100vh-380px)] p-2"
