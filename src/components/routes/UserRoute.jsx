@@ -1,39 +1,21 @@
-import React from 'react';
 import { Navigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 /**
- * UserRoute - Protects routes that should only be accessible by regular users
- * Admin users will be redirected to /admin
+ * UserRoute - Public pages accessible by guests & regular users.
+ * Admin users are redirected to /admin.
+ * No loading spinner needed — public content renders immediately.
  */
 const UserRoute = ({ children }) => {
-  const { user, isAuthenticated, loading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
-  if (loading && user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // If user is authenticated, check if they are admin
   if (isAuthenticated) {
     const roleName = typeof user?.role === 'string' ? user.role : user?.role?.name;
-    const isAdmin = roleName?.toUpperCase() === 'ADMIN' || user?.isAdmin;
-    console.log("🔍 UserRoute - Is Admin:", isAdmin);
-    
-    if (isAdmin) {
-      console.log("⚠️ UserRoute - Admin trying to access user route, redirecting to /admin");
+    if (roleName?.toUpperCase() === 'ADMIN') {
       return <Navigate to="/admin" replace />;
     }
   }
 
-  // Allow access for non-authenticated users or regular users
-  // console.log("✅ UserRoute - Allowing access");
   return children;
 };
 

@@ -10,7 +10,6 @@ import { useMessage } from "../../contexts/MessageProvider"
 import { sendFeedback } from "../../utils/feedbackHelper"
 
 const FavoritesSection = React.memo(() => {
-  // Update later to fetch real data
   const [favoriteBooks, setFavoriteBooks] = React.useState([]);
   const message = useMessage();
 
@@ -20,7 +19,6 @@ const FavoritesSection = React.memo(() => {
       try {
         const booksData = await getBookFavorites(user.id);
         setFavoriteBooks(booksData);
-        console.log("Fetched favorite books:", booksData);
       } catch (error) {
         console.error("Failed to fetch favorite books:", error);
       }
@@ -47,7 +45,6 @@ const FavoritesSection = React.memo(() => {
     }
   }
 
-  // console.log(favoriteBooks);
   if (favoriteBooks.length === 0) {
     return (
       <div>

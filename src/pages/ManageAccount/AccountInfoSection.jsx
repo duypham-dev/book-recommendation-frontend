@@ -33,9 +33,7 @@ const AccountInfoSection = React.memo(() => {
 
   useEffect(() => {
     fetchUserProfile();
-  }, [user, loading, fetchUserProfile]);
-
-  console.log("AccountInfoSection render", { userInfor, loading });
+  }, [fetchUserProfile]);
 
   const subTabs = [
     { id: "personal", label: "Thông tin cá nhân" },

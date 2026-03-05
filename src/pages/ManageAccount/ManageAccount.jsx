@@ -1,86 +1,69 @@
-import { useMemo, useCallback, useContext, useState } from "react"
+import { useMemo, useCallback, useState } from "react"
 import { Breadcrumb } from "antd"
+import { Outlet, useNavigate, useLocation, Link } from "react-router-dom"
+import { Menu, X } from "lucide-react"
 import MainLayout from "../../layouts/MainLayout"
 import AccountSidebar from "../../components/account/AccountSidebar"
-import { Outlet, useNavigate, useLocation } from "react-router-dom"
 import { PATHS } from "../../constants/routePaths"
-import { AuthContext } from "../../contexts/AuthContext"
-import { Menu, X } from "lucide-react"
-import {Link} from "react-router-dom"
+import useAuth from "../../hooks/useAuth"
+
+const TAB_CONFIG = {
+  profile: { path: PATHS.MANAGE_ACCOUNT_REDIRECT.PROFILE, label: "Thông tin tài khoản" },
+  "favorite-books": { path: PATHS.MANAGE_ACCOUNT_REDIRECT.FAVORITE_BOOKS, label: "Sách yêu thích" },
+  "history-reading": { path: PATHS.MANAGE_ACCOUNT_REDIRECT.HISTORY_READING, label: "Lịch sử đọc sách" },
+}
+
+const PATH_TO_TAB = {
+  [PATHS.MANAGE_ACCOUNT_REDIRECT.ROOT]: "profile",
+  [PATHS.MANAGE_ACCOUNT_REDIRECT.PROFILE]: "profile",
+  [PATHS.MANAGE_ACCOUNT_REDIRECT.FAVORITE_BOOKS]: "favorite-books",
+  [PATHS.MANAGE_ACCOUNT_REDIRECT.HISTORY_READING]: "history-reading",
+}
 
 const ManageAccount = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth()
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
-  console.log("rerender")
-
-  const pathToTab = useMemo(
-    () => ({
-      [PATHS.MANAGE_ACCOUNT_REDIRECT.PROFILE]: "profile",
-      [PATHS.MANAGE_ACCOUNT_REDIRECT.FAVORITE_BOOKS]: "favorite-books",
-      [PATHS.MANAGE_ACCOUNT_REDIRECT.HISTORY_READING]: "history-reading",
-      [PATHS.MANAGE_ACCOUNT_REDIRECT.ROOT]: "profile",
-    }),
-    [],
-  )
-
-  const tabToPath = useMemo(
-    () => ({
-      profile: PATHS.MANAGE_ACCOUNT_REDIRECT.PROFILE,
-      "favorite-books": PATHS.MANAGE_ACCOUNT_REDIRECT.FAVORITE_BOOKS,
-      "history-reading": PATHS.MANAGE_ACCOUNT_REDIRECT.HISTORY_READING,
-    }),
-    [],
-  )
-
-  //Active tab for Sidebar
-  const activeTab = pathToTab[pathname] || "profile"
-
-  // Tab labels for breadcrumb
-  const tabLabels = useMemo(
-    () => ({
-      profile: "Thông tin tài khoản",
-      "favorite-books": "Sách yêu thích",
-      "history-reading": "Lịch sử đọc sách",
-    }),
-    [],
-  )
+  const activeTab = PATH_TO_TAB[pathname] || "profile"
+  const activeLabel = TAB_CONFIG[activeTab]?.label || ""
 
   const breadcrumbItems = useMemo(
     () => [
-      { 
-        title: <Link to="/" className="text-gray-600 hover:text-blue-600 transition-colors">Trang chủ</Link>
-      }, 
-      { 
-        title: <span className="text-gray-800 font-medium">Quản lí tài khoản</span>
+      {
+        title: <Link to="/" className="text-gray-600 hover:text-blue-600 transition-colors">Trang chủ</Link>,
       },
-      { 
-        title: <span className="text-gray-800 font-medium">{tabLabels[activeTab]}</span>
-      }
+      {
+        title: <span className="text-gray-800 font-medium">Quản lí tài khoản</span>,
+      },
+      {
+        title: <span className="text-gray-800 font-medium">{activeLabel}</span>,
+      },
     ],
-    [activeTab, tabLabels],
+    [activeLabel],
   )
 
   const handleTabChange = useCallback(
     (tab) => {
-      console.log("Tab changed to:", tab)
-      const targetPath = tabToPath[tab]
+      const targetPath = TAB_CONFIG[tab]?.path
       if (targetPath && pathname !== targetPath) {
         navigate(targetPath)
         setIsMobileSidebarOpen(false)
       }
     },
-    [pathname, navigate, tabToPath],
+    [pathname, navigate],
   )
 
-  const handleSearchSubmit = useCallback((keyword) => {
-    const trimmedKeyword = keyword.trim();
-    if (trimmedKeyword) {
-      navigate(`/search?q=${encodeURIComponent(trimmedKeyword)}`);
-    }
-  }, [navigate]);
+  const handleSearchSubmit = useCallback(
+    (keyword) => {
+      const trimmed = keyword.trim()
+      if (trimmed) {
+        navigate(`/search?q=${encodeURIComponent(trimmed)}`)
+      }
+    },
+    [navigate],
+  )
 
   return (
     <MainLayout showHero={false} onSearchSubmit={handleSearchSubmit}>
