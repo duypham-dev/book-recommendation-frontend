@@ -85,6 +85,7 @@ const BookDetail = () => {
       setLoading(true);
       try {
         const response = await getBookDetail(id);
+        console.log("Fetched book detail:", response);
         setBookData(response);
       } catch (error) {
         console.error("Failed to fetch book detail:", error);

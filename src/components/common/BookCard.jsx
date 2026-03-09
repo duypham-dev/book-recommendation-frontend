@@ -36,7 +36,7 @@ const calcTooltipPosition = (triggerRect, tooltipWidth = 320, tooltipHeight = 28
   return { left, top, arrowSide };
 };
 
-const BookCard = ({ book, className = "" }) => {
+const BookCard = ({ book, className = "", preview = true }) => {
   const navigate = useNavigate();
   const [showTooltip, setShowTooltip] = useState(false);
   const [previewBook, setPreviewBook] = useState({});
@@ -91,17 +91,17 @@ const BookCard = ({ book, className = "" }) => {
     if (showTooltip) updateTooltipPosition();
   }, [showTooltip, previewBook, updateTooltipPosition]);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = preview ? () => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     setTooltipPos(calcTooltipPosition(rect));
     hoverTimer.current = setTimeout(() => fetchPreviewBook(book.bookId), 200);
-  };
+  } : undefined;
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = preview ? () => {
     clearTimeout(hoverTimer.current);
     setShowTooltip(false);
-  };
+  } : undefined;
 
   const handleClick = () => {
     navigate(`/books/${book.bookId}`);
@@ -126,7 +126,7 @@ const BookCard = ({ book, className = "" }) => {
       </p>
 
       {/* Tooltip via Portal — renders at document.body level to avoid overflow clipping */}
-      {showTooltip && createPortal(
+      {preview && showTooltip && createPortal(
         <div
           ref={tooltipRef}
           className="fixed z-[9999] w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 pointer-events-none animate-fadeIn"

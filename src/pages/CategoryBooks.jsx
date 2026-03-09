@@ -52,6 +52,7 @@ const BookListItem = React.memo(({ book }) => (
     </div>
   </div>
 ));
+
 BookListItem.displayName = "BookListItem";
 
 const Pagination = React.memo(({ currentPage, totalPages, onPageChange }) => {

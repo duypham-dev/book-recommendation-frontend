@@ -145,7 +145,7 @@ const HistorySection = React.memo(() => {
               return (
                 <div key={item.id ?? item.bookId ?? `${book.bookId}-${item.lastReadAt}`} className="flex flex-col items-center">
                   <div className="relative">
-                    <BookCard book={book} />
+                    <BookCard book={book} preview={false} />
                     {progressValue !== null && (
                       <span className="absolute left-2 top-2 rounded-full bg-blue-600/90 px-3 py-1 text-xs font-medium text-white shadow">
                         Đọc {progressValue}%

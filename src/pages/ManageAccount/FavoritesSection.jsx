@@ -8,22 +8,23 @@ import { getBookFavorites, removeFavorite } from "../../services/favoriteService
 import useMessage from "../../hooks/useMessage";
 import { sendFeedback } from "../../utils/feedbackHelper"
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 10;
 
 const FavoritesSection = React.memo(() => {
   const message = useMessage();
-  const [favoriteBooks, setFavoriteBooks] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(0);
-
   const { user } = useAuth();
   const userId = user?.userId;
 
-  const sentinelRef = useRef(null);
-  const loadingRef = useRef(false);
+  const [favoriteBooks, setFavoriteBooks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
 
+  const pageRef = useRef(0);
+  const loadingRef = useRef(false);
+  const sentinelRef = useRef(null);
+
+  // Function to fetch favorite books with pagination
   const fetchFavorites = useCallback(async (pageIndex = 0, reset = false) => {
     if (!userId || loadingRef.current) return;
     loadingRef.current = true;
@@ -36,9 +37,8 @@ const FavoritesSection = React.memo(() => {
 
       setFavoriteBooks(prev => reset ? content : [...prev, ...content]);
       setHasMore(pageIndex + 1 < totalPages);
-      setPage(pageIndex);
-    } catch (error) {
-      console.error("Failed to fetch favorite books:", error);
+      pageRef.current = pageIndex;
+    } catch {
       message.error("Không thể tải sách yêu thích");
     } finally {
       setLoading(false);
@@ -50,22 +50,30 @@ const FavoritesSection = React.memo(() => {
   // Initial fetch
   useEffect(() => {
     if (!userId) return;
+    // Scroll to top
+    window.scrollTo(0, 0);
+
     setFavoriteBooks([]);
-    setPage(0);
-    setHasMore(true);
+    setHasMore(false);
     setInitialLoading(true);
+    
+    // Get first page of favorites
     fetchFavorites(0, true);
   }, [userId, fetchFavorites]);
 
-  // IntersectionObserver for infinite scroll
+  console.log("Render FavoritesSection with", { favoriteBooks, loading, hasMore, pageRef: pageRef.current });
+  // Infinite scroll via IntersectionObserver
   useEffect(() => {
+    //If has more is false, no need to set up observer
+    if (!hasMore) return;
+
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && hasMore && !loadingRef.current) {
-          fetchFavorites(page + 1);
+        if (entry.isIntersecting && !loadingRef.current) {
+          fetchFavorites(pageRef.current + 1);
         }
       },
       { rootMargin: "200px" }
@@ -73,7 +81,7 @@ const FavoritesSection = React.memo(() => {
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [hasMore, page, fetchFavorites]);
+  }, [hasMore, fetchFavorites]);
 
   const handleRemoveFavorite = useCallback(async (bookId) => {
     try {
@@ -128,12 +136,10 @@ const FavoritesSection = React.memo(() => {
     <div>
       <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 shrink-0">SÁCH YÊU THÍCH</h2>
 
-      <div
-        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6 pb-4 overflow-y-auto max-h-[calc(100vh-400px)] sm:max-h-[calc(100vh-380px)]"
-      >
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6 py-4">
         {favoriteBooks.map((book) => (
           <div key={book.id} className="relative group flex justify-center">
-            <BookCard book={book.book || book} />
+            <BookCard book={book.book || book} preview={false} />
             <button
               onClick={() => confirmRemove(book)}
               className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600 z-10"
