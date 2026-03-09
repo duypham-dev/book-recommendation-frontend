@@ -165,7 +165,6 @@ export default function EpubCoreViewer({ onBack }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   // UI states
-  // const [dark, setDark] = useState(true);
   const [panelOpen, setPanelOpen] = useState(false); // thay cho tocOpen
   const [panelTab, setPanelTab] = useState("toc"); // "toc" | "bm"
   const [editingBmId, setEditingBmId] = useState(null); // id đang sửa
@@ -409,18 +408,20 @@ export default function EpubCoreViewer({ onBack }) {
     rendition.on("relocated", onRelocated);
 
     const onKey = (e) => {
-      if (e.key === "ArrowLeft") rendition.prev();
-      if (e.key === "ArrowRight") rendition.next();
+      if (e.key === "ArrowLeft") renditionRef.current?.prev();
+      if (e.key === "ArrowRight") renditionRef.current?.next();
     };
     window.addEventListener("keydown", onKey);
 
-    const onResize = () => rendition.resize("100%", "100%");
+    const onResize = () => renditionRef.current?.resize("100%", "100%");
     window.addEventListener("resize", onResize);
 
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", onResize);
       rendition.off("relocated", onRelocated);
+      renditionRef.current = null;
+      bookRef.current = null;
       try {
         epubBook.destroy();
       } catch {}
@@ -432,11 +433,6 @@ export default function EpubCoreViewer({ onBack }) {
   const goPrev = () => renditionRef.current?.prev();
   const goNext = () => renditionRef.current?.next();
   const goTo = (target) => renditionRef.current?.display(target);
-  // const toggleTheme = () => {
-  //   const next = !dark;
-  //   setDark(next);
-  //   renditionRef.current?.themes.select(next ? "dark" : "light");
-  // };
 
   // “Trang X / Y” — input đổi trang
   const [pageInput, setPageInput] = useState("");

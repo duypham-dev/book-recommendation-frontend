@@ -73,3 +73,27 @@ export const getPreviewBook = async (bookId) => {
     throw error;
   }
 };
+
+/**
+ * Get a presigned URL for reading a book (EPUB/PDF).
+ * @param {number|string} bookId
+ * @param {string} format - Preferred format: "EPUB" | "PDF"
+ * @returns {Promise<{ url: string, typeName: string, expiresIn: number }>}
+ */
+export const getBookReadUrl = async (bookId, format = 'EPUB') => {
+  const response = await api.get(`/books/${bookId}/read-url`, {
+    params: { format },
+  });
+  return response.data || response;
+};
+
+/**
+ * Get a presigned download URL for a specific book format.
+ * @param {number|string} bookId
+ * @param {number|string} formatId
+ * @returns {Promise<{ url: string, fileName: string, typeName: string, expiresIn: number }>}
+ */
+export const getBookDownloadUrl = async (bookId, formatId) => {
+  const response = await api.get(`/books/${bookId}/download/${formatId}`);
+  return response.data || response;
+};
