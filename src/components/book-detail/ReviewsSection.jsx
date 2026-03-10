@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import RatingSummary from './RatingSummary';
 import SectionHeader from '../common/SectionHeader';
 import ReviewsList from './ReviewsList';
@@ -7,20 +7,19 @@ import ReviewModal from './ReviewModal';
 const ReviewsSection = React.memo(({ rating, totalReviews, reviews, onLoadMore, bookTitle, onReviewSubmit }) => {
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-    const handleWriteReview = () => {
+    const handleWriteReview = useCallback(() => {
         setIsReviewModalOpen(true);
-    };
+    }, []);
 
-    const handleCloseModal = () => {
+    const handleCloseModal = useCallback(() => {
         setIsReviewModalOpen(false);
-    };
+    }, []);
 
-    const handleSubmitReview = (newReview) => {
-        // Add new review to the beginning of the list
+    const handleSubmitReview = useCallback((newReview) => {
         if (onReviewSubmit) {
             onReviewSubmit(newReview);
         }
-    };
+    }, [onReviewSubmit]);
     return (
         <>
         <div className="border-t border-gray-300 dark:border-gray-600 pt-8">
