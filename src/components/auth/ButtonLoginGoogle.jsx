@@ -57,7 +57,7 @@ function ButtonLoginGoogle() {
     <div className="flex justify-center items-center w-full min-h-[44px]"> 
       <div 
         id="google-signin-button" 
-        className="w-[250px] min-h-[44px] overflow-hidden flex justify-center"
+        className="w-[250px] min-h-[44px] flex justify-center"
         style={{ height: '44px' }} // Khóa cứng chiều cao để tránh SDK thay đổi
       ></div>
     </div>
