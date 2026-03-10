@@ -81,3 +81,22 @@ export const getUserRating = async (userId, bookId) => {
         return null;
     }
 };
+
+/**
+ * Get paginated ratings for a book (public endpoint, no userId needed).
+ * @param {string} bookId
+ * @param {number} page  - 0-based page index
+ * @param {number} size  - number of ratings per page
+ * @returns {Promise<{ ratings: Array, total: number, hasMore: boolean, page: number, size: number }>}
+ */
+export const getBookRatingsPaginated = async (bookId, page = 0, size = 5) => {
+    try {
+        const response = await api.get(`/books/${bookId}/ratings`, {
+            params: { page, size },
+        });
+        return response.data?.data ?? response.data ?? { ratings: [], total: 0, hasMore: false };
+    } catch (error) {
+        console.error('Get paginated ratings failed:', error.response?.data || error.message);
+        throw error;
+    }
+};

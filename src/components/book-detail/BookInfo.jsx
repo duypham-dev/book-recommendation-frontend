@@ -6,7 +6,7 @@ import BookDescription from './BookDescription';
 import ReviewsSection from './ReviewsSection';
 
 
-const BookInfo = React.memo(({ book, onRead, onFavorite, onDownload, isFavorited, loadingFavorite, onReviewSubmit }) => {
+const BookInfo = React.memo(({ book, onRead, onFavorite, onDownload, isFavorited, loadingFavorite, onReviewSubmit, onLoadMore, hasMore, loadingMore }) => {
   return (
     <div className="lg:col-span-3">
       <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{book.title}</h1>
@@ -45,9 +45,10 @@ const BookInfo = React.memo(({ book, onRead, onFavorite, onDownload, isFavorited
         totalReviews={book.totalReviews}
         reviews={book.reviewsList || []}
         bookTitle={book.title}
-        onLoadMore={() => console.log('Load more reviews')}
+        onLoadMore={onLoadMore}
+        hasMore={hasMore}
+        loadingMore={loadingMore}
         onReviewSubmit={onReviewSubmit}
-
       />
     </div>
   );

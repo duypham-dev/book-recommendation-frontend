@@ -46,14 +46,19 @@ const BookDetail = () => {
   console.log('Rendering BookDetail');
   const { book, bookData, loading, handleRead, handleDownload } = useBookDetail();
   const { isFavorited, loadingFavorite, handleFavorite, syncFavorite } = useFavorite(book?.id);
-  const { reviews, avgRating, totalReviews, syncReviews, handleReviewSubmit } = useBookReviews(book?.id);
 
-  // Sync favorite & reviews state from the single backend response
+  const ratingStats = useMemo(() => bookData ? {
+    averageRating: bookData.averageRating ?? 0,
+    totalReviews: bookData.totalReviews ?? 0,
+  } : null, [bookData?.averageRating, bookData?.totalReviews]);
+
+  const { reviews, avgRating, totalReviews, hasMore, loadingMore, loadMore, handleReviewSubmit } = useBookReviews(book?.id, ratingStats);
+
+  // Sync favorite state from the book detail response
   useEffect(() => {
     if (!bookData) return;
     syncFavorite(bookData.isFav ?? false);
-    syncReviews(bookData.ratings ?? []);
-  }, [bookData, syncFavorite, syncReviews]);
+  }, [bookData, syncFavorite]);
 
   const breadcrumbItems = useMemo(() => [
     { title: <Link to="/">Trang chủ</Link> },
@@ -123,6 +128,9 @@ const BookDetail = () => {
                       loadingFavorite={loadingFavorite}
                       onDownload={handleDownload}
                       onReviewSubmit={handleReviewSubmit}
+                      onLoadMore={loadMore}
+                      hasMore={hasMore}
+                      loadingMore={loadingMore}
                     />
                   </Suspense>
                 </div>
