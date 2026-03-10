@@ -21,20 +21,20 @@ const AdminSidebar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4">
+      <nav className="flex-1 px-3 py-4 ">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = location.pathname === item.path
-
+          console.log(`Rendering nav item: ${item.label}, isActive: ${isActive}`)
           return (
             <Link
               key={item.path}
               to={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-1 transition-colors ${
-                isActive ? "bg-sidebar-admin-items text-white" : "text-gray-300 hover:bg-slate-700"
+                isActive ? "!bg-sidebar-admin-items !text-white" : "!text-gray-300 hover:!bg-slate-700"
               }`}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-5 h-5 " />
               <span className="text-sm">{item.label}</span>
             </Link>
           )

@@ -65,7 +65,7 @@ const ProfilePopover = ({ user, logout }) => {
     hidden: { opacity: 0, y: -6 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.18 } }
   };
-
+  
   const displayName = user?.fullName || user?.name || user?.username || 'Người dùng';
   const email = user?.email || 'Chưa cập nhật email';
   const avatarSrc = user?.avatarUrl || user?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop';
