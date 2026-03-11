@@ -99,6 +99,27 @@ export const deleteBook = async (bookId) => {
   }
 };
 
+export const getDeletedBooks = async ({ page = 0, size = 10, keyword = "", sort = "" } = {}) => {
+  try {
+    const params = { page, size };
+    if (keyword?.trim()) params.keyword = keyword.trim();
+    if (sort?.trim()) params.sort = sort.trim();
+    return await api.get("/admin/books/deleted", { params });
+  } catch (error) {
+    console.error("Get deleted books failed:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const hardDeleteBook = async (bookId) => {
+  try {
+    return await api.delete(`/admin/books/hard-delete/${bookId}`);
+  } catch (error) {
+    console.error("Hard delete book failed:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 export const deleteBooksBulk = async (bookIds = []) => {
   try {
     return await api.delete("/admin/books", {

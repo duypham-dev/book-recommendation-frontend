@@ -26,6 +26,7 @@ import AdminUsers from "./pages/Admin/AdminUsers";
 import AdminBooks from "./pages/Admin/AdminBooks";
 import AdminAddBook from "./pages/Admin/AdminAddBook";
 import AdminEditBook from "./pages/Admin/AdminEditBook";
+import AdminDeletedBooks from "./pages/Admin/AdminDeletedBooks";
 import AdminGenres from "./pages/Admin/AdminGenres";
 import AdminRecommendation from "./pages/Admin/AdminRecommendation";
 import OAuthRedirect from "./pages/Auth/OAuthRedirect.jsx";
@@ -139,6 +140,14 @@ function App() {
               element={
                 <AdminRoute>
                   <AdminEditBook />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={PATHS.ADMIN.DELETED_BOOKS}
+              element={
+                <AdminRoute>
+                  <AdminDeletedBooks />
                 </AdminRoute>
               }
             />
