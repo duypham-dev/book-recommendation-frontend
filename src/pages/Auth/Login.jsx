@@ -51,6 +51,7 @@ const Login = ({ onModeChange, onClose }) => {
       if (role && role.toUpperCase() === 'ADMIN') {
         navigate(PATHS.ADMIN.ROOT, { replace: true });
       }
+      console.log('Login result:', result);
       onClose?.(); // Close modal on successful login
     } catch (err) {
       message.error('Đăng nhập thất bại!');

@@ -53,11 +53,11 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const isRefreshEndpoint = originalRequest.url?.includes('/auth/refresh');
+    const isAuthEndpoint = originalRequest.url?.includes('/auth/refresh') || originalRequest.url?.includes('/auth/login') || originalRequest.url?.includes('/auth/register');
     const hasRetried = originalRequest._retry === true;
     const is401Error = error.response?.status === 401;
-    // Only attempt refresh for 401 errors, not retried requests, and not refresh endpoint itself
-    if (is401Error && !hasRetried && !isRefreshEndpoint) {
+    // Only attempt refresh for 401 errors, not retried requests, and not auth endpoints themselves
+    if (is401Error && !hasRetried && !isAuthEndpoint) {
       
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
