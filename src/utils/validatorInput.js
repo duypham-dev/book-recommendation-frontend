@@ -68,3 +68,23 @@ export function validateSignup(form) {
     errors
   };
 }
+
+export function validateResetPassword(form) {
+  const errors = {};
+  const newPassword = form.newPassword || "";
+  const confirmPassword = form.confirmPassword || "";
+
+  if (!newPassword || !patterns.passwordStrong.test(newPassword)) {
+    errors.newPassword =
+      "Mật khẩu phải ≥ 8 ký tự, có chữ thường, HOA, số và ký tự đặc biệt.";
+  }
+
+  if (confirmPassword !== newPassword) {
+    errors.confirmPassword = "Xác nhận mật khẩu không khớp.";
+  }
+
+  return {
+    valid: Object.keys(errors).length === 0,
+    errors
+  };
+}
