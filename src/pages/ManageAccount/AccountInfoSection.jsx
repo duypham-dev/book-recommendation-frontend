@@ -21,7 +21,7 @@ const AccountInfoSection = React.memo(() => {
   const [updatingProfile, setUpdatingProfile] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [changingPassword, setChangingPassword] = useState(false);
-  const { user, loading, fetchUserProfile: fetchGlobalUserProfile } = useAuth();
+  const { user, loading, updateUser } = useAuth();
   const message = useMessage();
   const [userInfo, setUserInfo] = useState({});
 
@@ -46,10 +46,19 @@ const AccountInfoSection = React.memo(() => {
       if (!userId) return;
       setUpdatingProfile(true);
       try {
-        await updateUserProfile(userId, formData);
+        // Backend returns { user: updatedProfile, accessToken }
+        const { user: updatedProfile, accessToken } = await updateUserProfile(userId, formData);
+
+        // Update local display state directly from response — no extra API call
+        setUserInfo((prev) => ({ ...prev, ...updatedProfile }));
+
+        // Sync AuthContext + store new token so JWT stays up to date
+        updateUser(
+          { fullName: updatedProfile.fullName, avatarUrl: updatedProfile.avatarUrl },
+          accessToken,
+        );
+
         message.success("Cập nhật thông tin thành công");
-        await fetchUserProfile();
-        await fetchGlobalUserProfile(); 
       } catch (error) {
         const msg = error?.response?.data?.message || "Cập nhật thông tin thất bại";
         message.error(msg);
@@ -57,7 +66,7 @@ const AccountInfoSection = React.memo(() => {
         setUpdatingProfile(false);
       }
     },
-    [userId, fetchUserProfile, message],
+    [userId, updateUser, message],
   );
 
   const handleAvatarChange = useCallback(
@@ -65,10 +74,16 @@ const AccountInfoSection = React.memo(() => {
       if (!userId || !file) return;
       setUploadingAvatar(true);
       try {
-        await updateUserAvatar(userId, file);
+        // Backend returns { user: { id, avatarUrl }, accessToken }
+        const { user: updatedAvatar, accessToken } = await updateUserAvatar(userId, file);
+
+        // Update only avatarUrl in local display state
+        setUserInfo((prev) => ({ ...prev, avatarUrl: updatedAvatar.avatarUrl }));
+
+        // Sync AuthContext + store new token
+        updateUser({ avatarUrl: updatedAvatar.avatarUrl }, accessToken);
+
         message.success("Cập nhật ảnh đại diện thành công");
-        await fetchUserProfile();
-        await fetchGlobalUserProfile();
       } catch (error) {
         const msg = error?.response?.data?.message || "Cập nhật ảnh đại diện thất bại";
         message.error(msg);
@@ -76,9 +91,8 @@ const AccountInfoSection = React.memo(() => {
         setUploadingAvatar(false);
       }
     },
-    [userId, fetchUserProfile, message],
+    [userId, updateUser, message],
   );
-  console.log("AccountInfoSection render - userInfo:");
 
   const handlePasswordChange = useCallback(
     async ({ currentPassword, newPassword }) => {

@@ -135,20 +135,34 @@ function AuthProvider({ children }) {
     return { success: true };
   }, []);
 
-  // Context value - memoized to prevent unnecessary re-renders
+  /**
+   * Update user state and optionally store a new access token
+   *
+   * Called after profile/avatar updates so the context stays in sync
+   * without an extra round-trip to /auth/profile.
+   *
+   * @param {Object} partialUserData - Fields to merge into the current user
+   * @param {string|null} newAccessToken - New JWT issued by the update endpoint
+   */
+  const updateUser = useCallback((partialUserData, newAccessToken = null) => {
+    if (newAccessToken) setAuthData(newAccessToken);
+    setUser((prev) => (prev ? { ...prev, ...partialUserData } : prev));
+  }, []);
+
   const value = {
     // State
     user,
     loading,
     isAuthenticated: !!user,
-    
+
     // Methods
     login,
     register,
     logout,
     setUser,
     getUserProfile,
-    
+    updateUser,
+
     // Alias for backward compatibility
     fetchUserProfile: getUserProfile,
   };
