@@ -50,6 +50,16 @@ export const refreshToken = async () => {
   }
 };
 
+export const activateAccount = async (token) => {
+  try {
+    const response = await api.post("/auth/activate", { token });
+    return response.data || response;
+  } catch (error) {
+    console.error("Activate account failed:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 export const forgotPassword = async (email) => {
   try {
     const response = await api.post("/auth/forgot-password", { email });

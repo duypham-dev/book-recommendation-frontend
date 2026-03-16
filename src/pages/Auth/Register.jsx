@@ -19,6 +19,7 @@ const Register = ({ onModeChange }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [errorInputs, setErrorInputs] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const message = useMessage();
   // Access register function from useAuth hook
@@ -89,7 +90,8 @@ const Register = ({ onModeChange }) => {
     try {
       const result = await register(formData);
       if (result.success) {
-        message.success("Đăng ký thành công! Vui lòng đăng nhập.");
+        setIsSubmitted(true);
+        message.success("Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.");
         onModeChange("login");
       }
     } catch (err) {
@@ -104,10 +106,35 @@ const Register = ({ onModeChange }) => {
     return errorInputs[fieldId];
   };
 
+  if (isSubmitted) {
+    return (
+      <div className="w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6">Kiểm tra email</h2>
+        <div className="text-center space-y-4">
+          <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+            <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <p className="text-gray-600">
+            Chúng tôi đã gửi một email xác nhận đến địa chỉ của bạn. Vui lòng kiểm tra hộp thư đến để kích hoạt tài khoản của bạn.
+          </p>
+          <p className="text-sm text-gray-400">Liên kết sẽ hết hạn sau 15 phút.</p>
+        </div>
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => onModeChange('login')}
+            className="text-red-500 hover:underline"
+          >
+            Trở lại đăng nhập
+          </button>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="w-full max-w-md">
       <h2 className="text-2xl font-bold text-center mb-6">Đăng ký</h2>
-
       <form onSubmit={handleSubmit} className="space-y-4">
         {formFields.map((field) => (
           <div key={field.id}>

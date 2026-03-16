@@ -31,6 +31,7 @@ import AdminGenres from "./pages/Admin/AdminGenres";
 import AdminRecommendation from "./pages/Admin/AdminRecommendation";
 import OAuthRedirect from "./pages/Auth/OAuthRedirect.jsx";
 import ResetPassword from "./pages/Auth/ResetPassword.jsx";
+import ActivateAccount from "./pages/Auth/ActivateAccount.jsx";
 
 import Upload from "./pages/Upload.jsx";
 
@@ -172,6 +173,7 @@ function App() {
             {/* Other Routes */}
             <Route path="/oauth/callback" element={<OAuthRedirect />} />
             <Route path={PATHS.RESET_PASSWORD} element={<ResetPassword />} />
+            <Route path="/activate-account" element={<ActivateAccount />} />
             <Route path="/reader" element={<EpubCoreViewer />} />
             <Route path="/upload" element={<Upload />} />
           </Routes>
