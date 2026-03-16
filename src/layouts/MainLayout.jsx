@@ -13,7 +13,7 @@ const MainLayout = ({
   onGenreSelect,
 }) => {
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authMode, setAuthMode] = useState('login'); // 'login' or 'register' or 'forgot' or 'confirm'
+  const [authMode, setAuthMode] = useState('login'); // 'login' or 'register' or 'forgot'
   const { user } = useAuth();
 
   // Hàm này sẽ được truyền xuống cho Header để mở modal

@@ -10,7 +10,6 @@ import { getBookReadUrl, getBookDownloadUrl } from "../services/bookService";
  * Returns the normalized book object, raw bookData, loading state, and action handlers.
  */
 const useBookDetail = () => {
-  console.log("Rendering useBookDetail");
   const { id } = useParams();
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -58,7 +57,7 @@ const useBookDetail = () => {
       cover: bookData.coverImageUrl || "https://via.placeholder.com/300x400",
       description: bookData.description || "Chưa có mô tả",
     };
-  }, [bookData]);
+  }, [bookData]); 
 
   // Read handler
   const handleRead = useCallback(async () => {

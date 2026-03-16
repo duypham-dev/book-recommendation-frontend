@@ -7,6 +7,7 @@ import ScrollToTop from '../components/common/ScrollToTop';
 import useBookDetail from '../hooks/useBookDetail';
 import useFavorite from '../hooks/useFavorite';
 import useBookReviews from '../hooks/useBookReviews';
+import useSameGenreBooks from '../hooks/useSameGenreBooks';
 
 const BookCover = React.lazy(() => import('../components/book-detail/BookCover'));
 const BookInfo = React.lazy(() => import('../components/book-detail/BookInfo'));
@@ -46,6 +47,13 @@ const BookDetail = () => {
   console.log('Rendering BookDetail');
   const { book, bookData, loading, handleRead, handleDownload } = useBookDetail();
   const { isFavorited, loadingFavorite, handleFavorite, syncFavorite } = useFavorite(book?.id);
+
+  // Fetch books that share at least one genre with the current book.
+  // Starts only once `book.id` is resolved; no-ops on null/undefined.
+  const { books: sameGenreBooks, loading: loadingSameGenre } = useSameGenreBooks(book?.id);
+
+  // Derive the first genre for the "Xem tất cả" navigation in RelatedBooks.
+  const firstGenre = bookData?.genres?.[0];
 
   const ratingStats = useMemo(() => bookData ? {
     averageRating: bookData.averageRating ?? 0,
@@ -137,11 +145,16 @@ const BookDetail = () => {
               </ErrorBoundary>
             )}
 
-            {/* Related Books */}
+            {/* Same-genre books — starts loading once the main book is resolved */}
             {!loading && book && (
               <ErrorBoundary>
                 <Suspense fallback={<div className="text-center py-4">Loading related books...</div>}>
-                  <RelatedBooks books={[]} />
+                  <RelatedBooks
+                    books={sameGenreBooks}
+                    loading={loadingSameGenre}
+                    genreId={firstGenre?.genreId}
+                    genreName={firstGenre?.genreName}
+                  />
                 </Suspense>
               </ErrorBoundary>
             )}

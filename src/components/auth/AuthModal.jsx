@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import Login from '../../pages/Auth/Login.jsx';
 import Register from '../../pages/Auth/Register.jsx';
-import ForgotPassword from './ForgotPassword';
-import ConfirmPassword from './ConfirmPassword';
+import ForgotPassword from '../../pages/Auth/ForgotPassword.jsx';
+
+const AUTH_MODES = {
+  LOGIN: 'login',
+  REGISTER: 'register',
+  FORGOT: 'forgot',
+};
 
 const AuthModal = ({ onClose, initialMode, onModeChange }) => {
   const [mode, setMode] = useState(initialMode);
@@ -15,14 +20,12 @@ const AuthModal = ({ onClose, initialMode, onModeChange }) => {
 
   const renderAuthComponent = () => {
     switch(mode) {
-      case 'login':
+      case AUTH_MODES.LOGIN:
         return <Login onModeChange={switchMode} onClose={onClose} />;
-      case 'register':
+      case AUTH_MODES.REGISTER:
         return <Register onModeChange={switchMode} />;
-      case 'forgot':
+      case AUTH_MODES.FORGOT:
         return <ForgotPassword onModeChange={switchMode} />;
-      case 'confirm':
-        return <ConfirmPassword onModeChange={switchMode} />;
       default:
         return <Login onModeChange={switchMode} onClose={onClose} />;
     }

@@ -81,7 +81,7 @@ const Login = ({ onModeChange, onClose }) => {
             onChange={onChange}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             placeholder="Email"
-            autoComplete="email"
+            autocomplete="email"
             // required
           />
         </div>
@@ -94,7 +94,7 @@ const Login = ({ onModeChange, onClose }) => {
             onChange={onChange}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 pr-12"
             placeholder="Mật khẩu"
-            autoComplete="password"
+            autocomplete="password"
             // required
           />
           <button

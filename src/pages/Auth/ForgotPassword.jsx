@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { forgotPassword } from '../../services/authService';
+import { forgotPassword } from '../../services/authService.js';
 import useMessage from '../../hooks/useMessage.jsx';
 
 const ForgotPassword = ({ onModeChange }) => {

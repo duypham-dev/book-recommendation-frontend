@@ -97,3 +97,18 @@ export const getBookDownloadUrl = async (bookId, formatId) => {
   const response = await api.get(`/books/${bookId}/download/${formatId}`);
   return response.data || response;
 };
+
+/**
+ * Fetch a capped list of non-deleted books sharing at least one genre with
+ * the given book, excluding the book itself, ordered newest-first.
+ *
+ * @param {string|number} bookId - Source book whose genres are matched.
+ * @param {number}        limit  - Max results to return (default 6, backend caps at 20).
+ * @returns {Promise<Array>} Array of book list items shaped by toBookListResponse.
+ */
+export const getSameGenreBooks = async (bookId, limit = 6) => {
+  const response = await api.get(`/books/${bookId}/same-genre`, {
+    params: { limit },
+  });
+  return response.data || response;
+};
