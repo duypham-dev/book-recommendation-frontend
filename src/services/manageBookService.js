@@ -47,7 +47,6 @@ export const searchBooks = async (keyword, page = 0, size = 10) => {
 
 export const getBookDetail = async (bookId, userId = null) => {
   try {
-    console.log(`Fetching book detail for bookId: ${bookId} with userId: ${userId}`);
     const response = await api.get(`/books/${bookId}`, {
       params: { userId }
     });
