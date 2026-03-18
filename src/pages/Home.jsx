@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 import Hero from "../components/home/Hero";
 import BookCarousel from "../components/common/BookCarousel";
 import TopBooksShowcase from "../components/home/TopBooksShowcase";
+import SectionWrapper from "../components/home/SectionWrapper";
+import PromoBanner from "../components/home/PromoBanner";
+import FeatureHighlights from "../components/home/FeatureHighlights";
+import PlatformIntro from "../components/home/PlatformIntro";
 
 // Layout
 import MainLayout from "../layouts/MainLayout";
@@ -22,6 +26,35 @@ const GENRE_CONFIG = [
   { id: 11, name: "Tài chính", title: "TÀI CHÍNH" },
   { id: 6, name: "Kỹ năng sống", title: "KỸ NĂNG SỐNG" },
   { id: 9, name: "Tiểu thuyết", title: "TIỂU THUYẾT" },
+];
+
+// Interleaved sections inserted between genre carousels
+const INTERLEAVED_SECTIONS = [
+  {
+    key: "promo-banner",
+    afterGenreIndex: 0,
+    component: PromoBanner,
+    props: {
+      heading: "Khám phá thế giới tri thức",
+      subtitle:
+        "Hàng nghìn đầu sách chất lượng đang chờ bạn. Đọc miễn phí, mọi lúc, mọi nơi trên mọi thiết bị.",
+      ctaText: "Khám phá ngay",
+      ctaLink: "/search",
+      variant: "primary",
+    },
+  },
+  {
+    key: "feature-highlights",
+    afterGenreIndex: 1,
+    component: FeatureHighlights,
+    props: {},
+  },
+  {
+    key: "platform-intro",
+    afterGenreIndex: 2,
+    component: PlatformIntro,
+    props: {},
+  },
 ];
 
 const Home = () => {
@@ -115,24 +148,26 @@ const Home = () => {
     }
   }, [navigate]);
 
-  // Memoized genre sections to prevent re-renders
-  const genreSections = useMemo(() => (
-    GENRE_CONFIG.map((genre) => {
+  // Build interleaved sections: genre carousel -> promo section -> genre carousel -> ...
+  const genreSections = useMemo(() => {
+    const sections = [];
+
+    GENRE_CONFIG.forEach((genre, index) => {
       const books = genreBooks[genre.id];
       const isLoaded = genreLoaded[genre.id];
 
-      return (
-        <div 
-          key={genre.id} 
-          ref={setGenreRef(genre.id)} 
+      sections.push(
+        <div
+          key={genre.id}
+          ref={setGenreRef(genre.id)}
           data-genre-id={genre.id}
           className="min-h-[100px]"
         >
           {isLoaded ? (
             books?.length > 0 ? (
-              <BookCarousel 
-                books={books} 
-                title={genre.title} 
+              <BookCarousel
+                books={books}
+                title={genre.title}
                 genreId={genre.id}
                 genreName={genre.name}
                 subtitle={true}
@@ -154,8 +189,23 @@ const Home = () => {
           )}
         </div>
       );
-    })
-  ), [genreBooks, genreLoaded, setGenreRef]);
+
+      // Insert interleaved section after this genre if configured
+      const interleaved = INTERLEAVED_SECTIONS.find(
+        (s) => s.afterGenreIndex === index
+      );
+      if (interleaved) {
+        const SectionComponent = interleaved.component;
+        sections.push(
+          <SectionWrapper key={interleaved.key} variant="accent">
+            <SectionComponent {...interleaved.props} />
+          </SectionWrapper>
+        );
+      }
+    });
+
+    return sections;
+  }, [genreBooks, genreLoaded, setGenreRef]);
 
   return (
     <MainLayout
