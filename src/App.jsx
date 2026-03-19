@@ -7,28 +7,28 @@ import { Routes, Route } from "react-router-dom";
 import { ConfigProvider, App as AntdApp, theme as antdTheme } from "antd";
 import { useThemeContext } from "./hooks/useTheme";
 
-import BookDetail from "./pages/BookDetail";
-import CategoryBooks from "./pages/CategoryBooks";
+import BookDetail from "./pages/BookDetail.jsx";
+import CategoryBooks from "./pages/CategoryBooks.jsx";
 
 import AuthProvider from "./contexts/Auth/AuthProvider.jsx";
-import ProtectedRoute from "./components/routes/ProtectedRoute";
-import AdminRoute from "./components/routes/AdminRoute";
-import UserRoute from "./components/routes/UserRoute";
+import ProtectedRoute from "./components/routes/ProtectedRoute.jsx";
+import AdminRoute from "./components/routes/AdminRoute.jsx";
+import UserRoute from "./components/routes/UserRoute.jsx";
 
-import ManageAccount from "./pages/ManageAccount/ManageAccount";
-import AccountInfoSection from "./pages/ManageAccount/AccountInfoSection";
-import FavoritesSection from "./pages/ManageAccount/FavoritesSection";
-import HistorySection from "./pages/ManageAccount/HistorySection";
-import { PATHS } from "./constants/routePaths";
+import ManageAccount from "./pages/ManageAccount/ManageAccount.jsx";
+import AccountInfoSection from "./pages/ManageAccount/AccountInfoSection.jsx";
+import FavoritesSection from "./pages/ManageAccount/FavoritesSection.jsx";
+import HistorySection from "./pages/ManageAccount/HistorySection.jsx";
+import { PATHS } from "./constants/routePaths.js";
 
-import AdminDashboard from "./pages/Admin/AdminDashboard";
-import AdminUsers from "./pages/Admin/AdminUsers";
-import AdminBooks from "./pages/Admin/AdminBooks";
-import AdminAddBook from "./pages/Admin/AdminAddBook";
-import AdminEditBook from "./pages/Admin/AdminEditBook";
-import AdminDeletedBooks from "./pages/Admin/AdminDeletedBooks";
-import AdminGenres from "./pages/Admin/AdminGenres";
-import AdminRecommendation from "./pages/Admin/AdminRecommendation";
+import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
+import AdminUsers from "./pages/Admin/AdminUsers.jsx";
+import AdminBooks from "./pages/Admin/AdminBooks.jsx";
+import AdminAddBook from "./pages/Admin/AdminAddBook.jsx";
+import AdminEditBook from "./pages/Admin/AdminEditBook.jsx";
+import AdminDeletedBooks from "./pages/Admin/AdminDeletedBooks.jsx";
+import AdminGenres from "./pages/Admin/AdminGenres.jsx";
+import AdminRecommendation from "./pages/Admin/AdminRecommendation.jsx";
 import OAuthRedirect from "./pages/Auth/OAuthRedirect.jsx";
 import ResetPassword from "./pages/Auth/ResetPassword.jsx";
 import ActivateAccount from "./pages/Auth/ActivateAccount.jsx";
