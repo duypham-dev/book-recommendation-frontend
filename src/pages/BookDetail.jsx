@@ -7,6 +7,7 @@ import useBookDetail from "../hooks/useBookDetail";
 import useFavorite from "../hooks/useFavorite";
 import useBookReviews from "../hooks/useBookReviews";
 import useSameGenreBooks from "../hooks/useSameGenreBooks";
+import { applyPreset, isCloudinaryUrl } from "../utils/cloudinaryUtils";
 
 const BookCover = React.lazy(
   () => import("../components/book-detail/BookCover"),
@@ -119,6 +120,22 @@ const BookDetail = () => {
     };
   }, [book, avgRating, totalReviews, reviews]);
 
+  // Optimized background image URL for desktop (blur effect)
+  const backgroundBlurUrl = useMemo(() => {
+    if (!enrichedBook?.cover) return "";
+    return isCloudinaryUrl(enrichedBook.cover)
+      ? applyPreset(enrichedBook.cover, "backgroundBlur")
+      : enrichedBook.cover;
+  }, [enrichedBook?.cover]);
+
+  // Optimized background image URL for mobile (no blur, low quality)
+  const backgroundMobileUrl = useMemo(() => {
+    if (!enrichedBook?.cover) return "";
+    return isCloudinaryUrl(enrichedBook.cover)
+      ? applyPreset(enrichedBook.cover, "backgroundMobile")
+      : enrichedBook.cover;
+  }, [enrichedBook?.cover]);
+
   return (
     <MainLayout showHero={false} onSearchSubmit={handleSearchSubmit}>
       <ScrollToTop />
@@ -160,15 +177,15 @@ const BookDetail = () => {
               <div className="hidden lg:block absolute inset-0 overflow-hidden pointer-events-none z-0">
                 <div
                   className="absolute inset-0 scale-110 blur-2xl opacity-20 dark:opacity-10 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${enrichedBook.cover})` }}
+                  style={{ backgroundImage: `url(${backgroundBlurUrl})` }}
                 />
               </div>
 
-              {/* Mobile background - cover image with gradient fade */}
+              {/* Mobile background - cover image with gradient fade (no blur) */}
               <div className="lg:hidden absolute top-0 left-0 right-0 h-70 overflow-hidden pointer-events-none z-0">
                 <div
                   className="absolute inset-0 bg-cover bg-top"
-                  style={{ backgroundImage: `url(${enrichedBook.cover})` }}
+                  style={{ backgroundImage: `url(${backgroundMobileUrl})` }}
                 />
                 {/* Gradient overlay - fade from top to bottom */}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent from-10% via-gray-50/70 via-40% to-gray-50 dark:via-gray-900/70 dark:to-gray-900" />
