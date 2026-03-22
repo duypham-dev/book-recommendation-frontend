@@ -1,14 +1,22 @@
-import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import { useNavigate } from "react-router-dom";
 
 // Components
 import Hero from "../components/home/Hero";
 import BookCarousel from "../components/common/BookCarousel";
 import TopBooksShowcase from "../components/home/TopBooksShowcase";
+import GenreShowcase from "../components/home/GenreShowcase";
 import SectionWrapper from "../components/home/SectionWrapper";
 import PromoBanner from "../components/home/PromoBanner";
 import FeatureHighlights from "../components/home/FeatureHighlights";
 import PlatformIntro from "../components/home/PlatformIntro";
+import SideTitleBookCarousel from "../components/home/SideTitleBookCarousel";
 
 // Layout
 import MainLayout from "../layouts/MainLayout";
@@ -16,7 +24,6 @@ import MainLayout from "../layouts/MainLayout";
 // Services
 import { getBooksByGenre } from "../services/manageBookService";
 import { getMostReadBooks } from "../services/bookService";
-
 
 const DEFAULT_PAGE_SIZE = 12;
 const TOP_BOOKS_SIZE = 4;
@@ -28,34 +35,7 @@ const GENRE_CONFIG = [
   { id: 9, name: "Tiểu thuyết", title: "TIỂU THUYẾT" },
 ];
 
-// Interleaved sections inserted between genre carousels
-const INTERLEAVED_SECTIONS = [
-  {
-    key: "promo-banner",
-    afterGenreIndex: 0,
-    component: PromoBanner,
-    props: {
-      heading: "Khám phá thế giới tri thức",
-      subtitle:
-        "Hàng nghìn đầu sách chất lượng đang chờ bạn. Đọc miễn phí, mọi lúc, mọi nơi trên mọi thiết bị.",
-      ctaText: "Khám phá ngay",
-      ctaLink: "/search",
-      variant: "primary",
-    },
-  },
-  {
-    key: "feature-highlights",
-    afterGenreIndex: 1,
-    component: FeatureHighlights,
-    props: {},
-  },
-  {
-    key: "platform-intro",
-    afterGenreIndex: 2,
-    component: PlatformIntro,
-    props: {},
-  },
-];
+const HIGHLIGHT_GENRE = { id: 12, name: "Tâm lí", title: "Sách tâm lí" };
 
 const Home = () => {
   const navigate = useNavigate();
@@ -64,7 +44,7 @@ const Home = () => {
   const [topBooks, setTopBooks] = useState([]);
   const [topBooksLoading, setTopBooksLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Refs for intersection observer - use single object
   const genreRefs = useRef({});
   const loadedGenresRef = useRef(new Set());
@@ -72,7 +52,7 @@ const Home = () => {
   // Load top books (most read)
   useEffect(() => {
     const controller = new AbortController();
-    
+
     const loadTopBooks = async () => {
       try {
         const response = await getMostReadBooks(0, TOP_BOOKS_SIZE);
@@ -90,7 +70,7 @@ const Home = () => {
         }
       }
     };
-    
+
     loadTopBooks();
     return () => controller.abort();
   }, []);
@@ -98,13 +78,16 @@ const Home = () => {
   // Load books by genre - optimized with single state update
   const loadGenreBooks = useCallback(async (genreId) => {
     try {
-      const response = await getBooksByGenre(genreId, { page: 0, size: DEFAULT_PAGE_SIZE });
+      const response = await getBooksByGenre(genreId, {
+        page: 0,
+        size: DEFAULT_PAGE_SIZE,
+      });
       const books = Array.isArray(response?.content) ? response.content : [];
-      
-      setGenreBooks(prev => ({ ...prev, [genreId]: books }));
+
+      setGenreBooks((prev) => ({ ...prev, [genreId]: books }));
     } catch (err) {
       console.error(`Error loading genre ${genreId}:`, err);
-      setGenreBooks(prev => ({ ...prev, [genreId]: [] }));
+      setGenreBooks((prev) => ({ ...prev, [genreId]: [] }));
     }
   }, []);
 
@@ -116,16 +99,16 @@ const Home = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          
+
           const genreId = Number(entry.target.dataset.genreId);
           if (loadedGenresRef.current.has(genreId)) return;
-          
+
           loadedGenresRef.current.add(genreId);
-          setGenreLoaded(prev => ({ ...prev, [genreId]: true }));
+          setGenreLoaded((prev) => ({ ...prev, [genreId]: true }));
           loadGenreBooks(genreId);
         });
       },
-      { root: null, rootMargin: "100px", threshold: 0.1 }
+      { root: null, rootMargin: "100px", threshold: 0.1 },
     );
 
     // Observe all genre refs
@@ -137,16 +120,22 @@ const Home = () => {
   }, [topBooksLoading, loadGenreBooks]);
 
   // Ref callback for genre sections
-  const setGenreRef = useCallback((genreId) => (el) => {
-    genreRefs.current[genreId] = el;
-  }, []);
+  const setGenreRef = useCallback(
+    (genreId) => (el) => {
+      genreRefs.current[genreId] = el;
+    },
+    [],
+  );
 
-  const handleSearchSubmit = useCallback((keyword) => {
-    const trimmedKeyword = keyword.trim();
-    if (trimmedKeyword) {
-      navigate(`/search?keyword=${encodeURIComponent(trimmedKeyword)}`);
-    }
-  }, [navigate]);
+  const handleSearchSubmit = useCallback(
+    (keyword) => {
+      const trimmedKeyword = keyword.trim();
+      if (trimmedKeyword) {
+        navigate(`/search?keyword=${encodeURIComponent(trimmedKeyword)}`);
+      }
+    },
+    [navigate],
+  );
 
   // Build interleaved sections: genre carousel -> promo section -> genre carousel -> ...
   const genreSections = useMemo(() => {
@@ -187,21 +176,8 @@ const Home = () => {
               </p>
             </div>
           )}
-        </div>
+        </div>,
       );
-
-      // Insert interleaved section after this genre if configured
-      const interleaved = INTERLEAVED_SECTIONS.find(
-        (s) => s.afterGenreIndex === index
-      );
-      if (interleaved) {
-        const SectionComponent = interleaved.component;
-        sections.push(
-          <SectionWrapper key={interleaved.key} variant="accent">
-            <SectionComponent {...interleaved.props} />
-          </SectionWrapper>
-        );
-      }
     });
 
     return sections;
@@ -217,27 +193,75 @@ const Home = () => {
         {topBooksLoading && (
           <div className="py-16 text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
-            <p className="mt-4 text-gray-600 dark:text-gray-300">Đang tải sách...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">
+              Đang tải sách...
+            </p>
           </div>
         )}
 
         {error && (
           <div className="py-8 text-center bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-xl">
-            <p className="text-red-600 dark:text-red-300 font-medium">{error}</p>
+            <p className="text-red-600 dark:text-red-300 font-medium">
+              {error}
+            </p>
           </div>
         )}
+
+        {/* <SectionWrapper variant="gradient" fullWidth={true}>
+          <PromoBanner
+            heading="Khám phá thế giới tri thức"
+            subtitle="Hàng nghìn đầu sách chất lượng đang chờ bạn. Đọc miễn phí, mọi lúc, mọi nơi trên mọi thiết bị."
+            ctaText="Khám phá ngay"
+            ctaLink="/search"
+            variant="primary"
+          />
+        </SectionWrapper>
+
+                  <SectionWrapper variant="gradient" fullWidth={true}>
+          <FeatureHighlights />
+        </SectionWrapper> */}
+
         {!topBooksLoading && !error && (
           <>
+            {/* Genre Showcase - User Interests */}
+            <GenreShowcase />
+
             {/* Top Books Showcase - Most Read Books */}
             {topBooks.length > 0 && (
-              <TopBooksShowcase 
-                books={topBooks} 
-                title="Top sách được đọc nhiều nhất" 
+              <TopBooksShowcase
+                books={topBooks}
+                title="Top sách được đọc nhiều nhất"
               />
             )}
 
+             {/* Highlight Genre - Custom Layout */}
+            <div
+              ref={setGenreRef(HIGHLIGHT_GENRE.id)}
+              data-genre-id={HIGHLIGHT_GENRE.id}
+              className="min-h-[100px] mb-12"
+            >
+              {genreLoaded[HIGHLIGHT_GENRE.id] ? (
+                genreBooks[HIGHLIGHT_GENRE.id]?.length > 0 ? (
+                  <SideTitleBookCarousel
+                    books={genreBooks[HIGHLIGHT_GENRE.id]}
+                    title={HIGHLIGHT_GENRE.title}
+                    genreId={HIGHLIGHT_GENRE.id}
+                  />
+                ) : null
+              ) : (
+                <div className="py-16 text-center">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400" />
+                  <p className="mt-4 text-gray-500 dark:text-gray-400">
+                    Đang tải {HIGHLIGHT_GENRE.name}...
+                  </p>
+                </div>
+              )}
+            </div>
+
             {/* Genre Carousels - Lazy Loaded */}
             {genreSections}
+
+           
           </>
         )}
       </main>

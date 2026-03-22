@@ -25,29 +25,33 @@ const PromoBanner = ({
 }) => {
   const navigate = useNavigate();
 
-  const gradients = {
+  const backgrounds = {
     primary:
-      "from-[#1a1a2e] via-[#16213e] to-[#0f3460] dark:from-[#0d1117] dark:via-[#161b22] dark:to-[#1a1f36]",
-    warm: "from-[#2d1b00] via-[#4a2c17] to-[#6b3a2a] dark:from-[#1a0f00] dark:via-[#2d1b0e] dark:to-[#3d2218]",
+      "bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
+    warm: "bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-900/50",
   };
 
   const accentColors = {
     primary: {
-      dot: "bg-blue-400/20",
-      ring: "border-blue-400/30",
-      btn: "bg-white text-gray-900 hover:bg-gray-100",
-      glow: "from-blue-500/20 via-purple-500/10 to-transparent",
+      dot: "bg-blue-400/10",
+      ring: "border-blue-400/20 text-blue-600 dark:text-blue-400",
+      btn: "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600",
+      glow: "from-blue-500/10 via-purple-500/5 to-transparent",
+      text: "text-gray-900 dark:text-white",
+      subtext: "text-gray-600 dark:text-gray-300",
     },
     warm: {
-      dot: "bg-amber-400/20",
-      ring: "border-amber-400/30",
-      btn: "bg-amber-400 text-gray-900 hover:bg-amber-300",
-      glow: "from-amber-500/20 via-orange-500/10 to-transparent",
+      dot: "bg-amber-400/10",
+      ring: "border-amber-400/20 text-amber-600 dark:text-amber-400",
+      btn: "bg-amber-600 text-white hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600",
+      glow: "from-amber-500/10 via-orange-500/5 to-transparent",
+      text: "text-gray-900 dark:text-white",
+      subtext: "text-gray-600 dark:text-gray-300",
     },
   };
 
   const colors = accentColors[variant] || accentColors.primary;
-  const gradient = gradients[variant] || gradients.primary;
+  const bg = backgrounds[variant] || backgrounds.primary;
 
   return (
     <motion.div
@@ -55,7 +59,7 @@ const PromoBanner = ({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
-      className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${gradient}`}
+      className={`relative overflow-hidden rounded-2xl ${bg}`}
     >
       {/* Decorative elements */}
       <div className="pointer-events-none absolute inset-0">
@@ -73,7 +77,7 @@ const PromoBanner = ({
         <div className="flex-1 text-center md:text-left">
           <motion.div
             variants={itemVariants}
-            className={`mb-4 inline-flex items-center gap-2 rounded-full border ${colors.ring} bg-white/5 px-4 py-1.5 text-xs font-medium text-white/80 backdrop-blur-sm`}
+            className={`mb-4 inline-flex items-center gap-2 rounded-full border ${colors.ring} bg-white/50 dark:bg-black/20 px-4 py-1.5 text-xs font-medium backdrop-blur-sm`}
           >
             <BookOpen className="h-3.5 w-3.5" />
             <span>Tekbook - Thư viện số</span>
@@ -81,14 +85,14 @@ const PromoBanner = ({
 
           <motion.h2
             variants={itemVariants}
-            className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4"
+            className={`text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-4 ${colors.text}`}
           >
             {heading}
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
-            className="text-base sm:text-lg text-white/70 max-w-lg mb-6 leading-relaxed"
+            className={`text-base sm:text-lg max-w-lg mb-6 leading-relaxed ${colors.subtext}`}
           >
             {subtitle}
           </motion.p>

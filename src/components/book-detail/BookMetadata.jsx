@@ -13,20 +13,20 @@ const BookMetadata = React.memo(({ metadata }) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+    <div className="grid grid-cols-2 sm:grid-cols-2 gap-x-4 gap-y-3 sm:gap-3 mb-6 sm:mb-8">
       {metadataItems.map((item) => {
         const Icon = item.icon;
         return (
           <div
             key={item.label}
-            className="flex items-start gap-3 px-4 py-3 rounded-xl bg-white/60 dark:bg-white/5 border border-gray-100 dark:border-gray-700/50"
+            className="flex items-start gap-2 sm:gap-3 py-1 sm:py-3 sm:px-4 sm:rounded-xl sm:bg-white/60 sm:dark:bg-white/5 sm:border sm:border-gray-100 sm:dark:border-gray-700/50"
           >
-            <div className="flex-shrink-0 mt-0.5 p-1.5 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary">
-              <Icon className="w-5 h-5" />
+            <div className="flex-shrink-0 mt-0.5 p-1 sm:p-1.5 rounded-md sm:rounded-lg bg-primary/10 dark:bg-primary/20 text-primary">
+              <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm text-gray-400 dark:text-gray-400 mb-0.5">{item.label}</p>
-              <p className="text-sm font-medium text-gray-800 dark:text-gray-200 break-words">{item.value || '—'}</p>
+              <p className="text-xs sm:text-sm text-gray-400 dark:text-gray-400 mb-0.5">{item.label}</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-800 dark:text-gray-200 break-words leading-snug">{item.value || '—'}</p>
             </div>
           </div>
         );

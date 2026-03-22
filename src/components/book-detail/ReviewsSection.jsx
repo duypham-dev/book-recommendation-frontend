@@ -22,8 +22,8 @@ const ReviewsSection = React.memo(({ rating, totalReviews, reviews, onLoadMore, 
 
     return (
         <>
-        <div className="pt-10">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Đánh giá & Nhận xét</h2>
+        <div className="pt-6 sm:pt-10">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">Đánh giá & Nhận xét</h2>
           <RatingSummary rating={rating} totalReviews={totalReviews} onWriteReview={handleWriteReview} />
           <ReviewsList reviews={reviews} onLoadMore={onLoadMore} hasMore={hasMore} loadingMore={loadingMore} />
         </div>

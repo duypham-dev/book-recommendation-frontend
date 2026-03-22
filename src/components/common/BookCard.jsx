@@ -119,9 +119,9 @@ const BookCard = ({ book, className = "", preview = true }) => {
         <img src={book.coverImageUrl || "/placeholder.svg"} alt={book.title} className="w-full aspect-[3/4] object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
       </div>
-      <h3 className="mt-3 font-semibold text-gray-800 dark:text-white line-clamp-2 text-sm">{book.title}</h3>
-      <p className="text-xs text-gray-500 dark:text-gray-300 mt-1 flex gap-2 items-center">
-        <Pen size={14} className="flex-shrink-0" />
+      <h3 className="mt-2 sm:mt-3 font-semibold text-gray-800 dark:text-white line-clamp-2 text-xs sm:text-sm">{book.title}</h3>
+      <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-300 mt-0.5 sm:mt-1 flex gap-1.5 sm:gap-2 items-center">
+        <Pen size={12} className="flex-shrink-0 sm:w-3.5 sm:h-3.5" />
         <span className="truncate">{book.authors?.map(a => a.authorName).join(", ") || "-"}</span>
       </p>
 

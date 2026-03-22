@@ -14,14 +14,14 @@ const BookDescription = React.memo(({ description, previewLength = 800 }) => {
   const isFaded = shouldTruncate && !showFullDescription;
 
   return (
-    <div className="mb-10">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+    <div className="mb-6 sm:mb-10">
+      <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
         Giới thiệu sách
       </h2>
-      
+
       {/* Container của đoạn text */}
-      <div 
-        className={`text-sm text-gray-600 dark:text-gray-300 leading-7 text-justify whitespace-pre-line transition-all duration-300
+      <div
+        className={`text-sm text-gray-600 dark:text-gray-300 leading-6 sm:leading-7 text-justify whitespace-pre-line transition-all duration-300
           ${isFaded ? '[mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]' : ''}
         `}
       >
@@ -31,7 +31,7 @@ const BookDescription = React.memo(({ description, previewLength = 800 }) => {
       {shouldTruncate && (
         <button
           onClick={() => setShowFullDescription(!showFullDescription)}
-          className="mt-3 text-sm text-primary hover:text-primary-hover dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors duration-200 inline-flex items-center gap-1"
+          className="mt-2 sm:mt-3 text-sm text-primary hover:text-primary-hover dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors duration-200 inline-flex items-center gap-1"
         >
           {showFullDescription ? (
             <>Thu gọn <ChevronUp className="w-4 h-4" /></>

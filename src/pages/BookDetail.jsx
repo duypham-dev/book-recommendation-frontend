@@ -156,15 +156,27 @@ const BookDetail = () => {
           <>
             {/* Hero Section with blurred backdrop */}
             <div className="relative">
-              <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+              {/* Desktop background - subtle blur */}
+              <div className="hidden lg:block absolute inset-0 overflow-hidden pointer-events-none z-0">
                 <div
                   className="absolute inset-0 scale-110 blur-2xl opacity-20 dark:opacity-10 bg-cover bg-center"
                   style={{ backgroundImage: `url(${enrichedBook.cover})` }}
                 />
               </div>
-              <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+
+              {/* Mobile background - cover image with gradient fade */}
+              <div className="lg:hidden absolute top-0 left-0 right-0 h-70 overflow-hidden pointer-events-none z-0">
+                <div
+                  className="absolute inset-0 bg-cover bg-top"
+                  style={{ backgroundImage: `url(${enrichedBook.cover})` }}
+                />
+                {/* Gradient overlay - fade from top to bottom */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent from-10% via-gray-50/70 via-40% to-gray-50 dark:via-gray-900/70 dark:to-gray-900" />
+              </div>
+
+              <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
                 <ErrorBoundary>
-                  <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+                  <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 lg:gap-12">
                     <Suspense
                       fallback={
                         <div className="lg:w-72 aspect-[3/4] bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse" />
@@ -210,7 +222,7 @@ const BookDetail = () => {
                   </div>
                 }
               >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                   <RelatedBooks
                     books={sameGenreBooks}
                     loading={loadingSameGenre}

@@ -70,11 +70,11 @@ const PlatformIntro = () => {
   const isInView = useInView(statsRef, { once: true, amount: 0.4 });
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-800/80 dark:via-gray-900/60 dark:to-gray-800/80 border border-gray-200/50 dark:border-gray-700/30">
+    <div className="relative overflow-hidden rounded-2xl bg-transparent">
       {/* Decorative background */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-3/4 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px w-3/4 bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-3/4 bg-gray-200 dark:bg-gray-700" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px w-3/4 bg-gray-200 dark:bg-gray-700" />
       </div>
 
       <div className="relative z-10 px-6 py-10 sm:px-10 sm:py-14 lg:px-16 lg:py-16">

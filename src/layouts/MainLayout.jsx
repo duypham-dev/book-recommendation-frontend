@@ -32,7 +32,9 @@ const MainLayout = ({
         onGenreSelect={onGenreSelect}
       />
       {showHero && heroContent}
-      <main className="flex-1 max-w-7xl mx-auto mt-5 w-full">{children}</main>
+      <main className={`flex-1 max-w-7xl mx-auto w-full relative z-20 ${showHero ? "-mt-20" : "mt-5"}`}>
+        {children}
+      </main>
       <Footer />
       {/* Render AuthModal có điều kiện */}
       {/* Chỉ hiển thị khi showAuthModal là true */}

@@ -10,7 +10,7 @@ const Hero = () => {
         }}
       />
       <div className="pointer-events-none absolute inset-0 z-10 h-full w-full bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:4px_4px] opacity-20"/>
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col items-center justify-center text-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col items-center justify-center text-center z-20">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
           THƯ VIỆN Ở TRONG TẦM TAY BẠN
         </h2>
@@ -20,6 +20,9 @@ const Hero = () => {
           miễn phí đang chờ bạn khám phá.
         </p>
       </div>
+      
+      {/* Vùng gradient chuyển mượt ở dưới cùng */}
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-background dark:from-gray-900 to-transparent z-10 pointer-events-none" />
     </div>
   );
 };

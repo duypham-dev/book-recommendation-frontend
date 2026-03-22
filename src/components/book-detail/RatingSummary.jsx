@@ -14,14 +14,16 @@ const RatingSummary = React.memo(({ rating, totalReviews, onWriteReview, ratingD
   const distribution = { ...defaultDistribution, ...ratingDistribution };
 
   return (
-    <div className="flex flex-col sm:flex-row items-stretch gap-6 mb-8 p-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/50 rounded-2xl shadow-sm">
+    <div className="flex flex-col sm:flex-row items-stretch gap-4 sm:gap-6 mb-6 sm:mb-8 p-4 sm:p-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/50 rounded-xl sm:rounded-2xl shadow-sm">
       {/* Left: Big score */}
-      <div className="flex flex-col items-center justify-center sm:min-w-[120px]">
-        <div className="text-5xl font-bold text-gray-900 dark:text-white leading-none">
+      <div className="flex flex-row sm:flex-col items-center justify-center gap-3 sm:gap-0 sm:min-w-[120px]">
+        <div className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white leading-none">
           {rating.toFixed(1)}
         </div>
-        <StarRating rating={rating} showValue={false} size="w-3.5 h-3.5" />
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{totalReviews} đánh giá</p>
+        <div className="flex flex-col items-center sm:items-center">
+          <StarRating rating={rating} showValue={false} size="w-3.5 h-3.5" />
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{totalReviews} đánh giá</p>
+        </div>
       </div>
 
       {/* Divider */}
@@ -30,9 +32,9 @@ const RatingSummary = React.memo(({ rating, totalReviews, onWriteReview, ratingD
       {/* Center: Distribution bars */}
       <div className="flex-1 space-y-1.5">
         {[5, 4, 3, 2, 1].map((stars) => (
-          <div key={stars} className="flex items-center gap-3">
+          <div key={stars} className="flex items-center gap-2 sm:gap-3">
             <span className="text-xs text-gray-500 dark:text-gray-400 w-3 text-right">{stars}</span>
-            <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+            <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 sm:h-2 overflow-hidden">
               <div
                 className="bg-amber-400 h-full rounded-full transition-all duration-500"
                 style={{ width: `${distribution[stars]}%` }}
@@ -47,7 +49,7 @@ const RatingSummary = React.memo(({ rating, totalReviews, onWriteReview, ratingD
       <div className="flex items-center sm:pl-2">
         <button
           onClick={onWriteReview}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-2.5 px-5 bg-primary text-white rounded-full hover:bg-primary-hover transition-all text-sm font-medium shadow-md shadow-primary/20 active:scale-95"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-2 sm:py-2.5 px-4 sm:px-5 bg-primary text-white rounded-full hover:bg-primary-hover transition-all text-sm font-medium shadow-md shadow-primary/20 active:scale-95"
         >
           <PencilLine size={16} /> Viết đánh giá
         </button>
