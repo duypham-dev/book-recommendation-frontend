@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import { applyPreset } from "../../utils/cloudinaryUtils.js";
 /**
  * TopBooksShowcase — displays a ranked grid (desktop) or horizontal carousel
  * (tablet/mobile) of the top-read books with slanted clip-path styling.
@@ -117,6 +117,9 @@ const TopBooksShowcase = ({ books = [], title = "Top sách nổi bật" }) => {
 const BookCard = React.memo(({ book, index, onClick, isCarousel = false }) => {
   const slantClass = index % 2 === 0 ? "clip-slant-left" : "clip-slant-right";
 
+  // Áp dụng tối ưu hóa kích thước + định dạng
+  const optimizedCover = book.coverImageUrl ? applyPreset(book.coverImageUrl, "bookCard") : "/placeholder-book.jpg";
+  
   return (
     <div
       data-book-card
@@ -150,7 +153,7 @@ const BookCard = React.memo(({ book, index, onClick, isCarousel = false }) => {
           `}
         >
           <img
-            src={book.coverImageUrl || book.cover || "/placeholder-book.jpg"}
+            src={optimizedCover}
             alt={book.title}
             className="h-full w-full object-cover"
             loading="lazy"
@@ -162,14 +165,6 @@ const BookCard = React.memo(({ book, index, onClick, isCarousel = false }) => {
               bg-amber-300/20 opacity-0 group-hover:opacity-100
               transition-opacity duration-200
               pointer-events-none
-            "
-          />
-          {/* Dot pattern */}
-          <div
-            className="
-              absolute inset-0 pointer-events-none
-              bg-[radial-gradient(#000_1px,transparent_1px)]
-              [background-size:4px_4px] opacity-20
             "
           />
         </div>

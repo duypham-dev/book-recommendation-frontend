@@ -134,6 +134,12 @@ export const CLOUDINARY_PRESETS = {
     format: "auto",
     crop: "limit",
   },
+  bookCardLarge: {
+    width: 400,
+    quality: "auto:good",
+    format: "auto",
+    crop: "limit",
+  },
   // Background blur (desktop)
   backgroundBlur: {
     width: 100,
