@@ -26,6 +26,7 @@ const AdminRoute = ({ children }) => {
   }
 
   const roleName = typeof user?.role === 'string' ? user.role : user?.role?.name;
+  //Check role
   if (roleName?.toUpperCase() !== 'ADMIN') {
     return <Navigate to="/" replace />;
   }

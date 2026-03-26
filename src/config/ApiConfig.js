@@ -50,10 +50,13 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     // Guard: No config means network error or cancelled request
     if (!originalRequest) {
+      console.log('No original request config found, cannot attempt token refresh');
       return Promise.reject(error);
     }
 
-    const isAuthEndpoint = originalRequest.url?.includes('/auth/refresh') || originalRequest.url?.includes('/auth/login') || originalRequest.url?.includes('/auth/register');
+    const isAuthEndpoint = originalRequest.url?.includes('/auth/refresh') || 
+                            originalRequest.url?.includes('/auth/login') || 
+                            originalRequest.url?.includes('/auth/register');
     const hasRetried = originalRequest._retry === true;
     const is401Error = error.response?.status === 401;
     // Only attempt refresh for 401 errors, not retried requests, and not auth endpoints themselves
@@ -66,7 +69,7 @@ api.interceptors.response.use(
         .then((token) => {
           originalRequest.headers['Authorization'] = 'Bearer ' + token;
           return api(originalRequest);
-        })
+        })  
         .catch((err) => Promise.reject(err));
       }
 
@@ -74,9 +77,9 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const response = await api.post("/auth/refresh");
-        const accessToken = response?.data?.accessToken || response?.accessToken;
-        
+        const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {}, { withCredentials: true });
+        const accessToken = response?.data?.data?.accessToken || response?.accessToken;
+        console.log('Refresh token successful, new access token received', response);
         if (accessToken) {
           setAuthData(accessToken);
           processQueue(null, accessToken);
@@ -87,7 +90,12 @@ api.interceptors.response.use(
         }
       } catch (err) {
         processQueue(err, null);
-        clearAuthData();
+
+        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+          axios.post(`${API_BASE_URL}/auth/logout`, {}, { withCredentials: true }).catch(() => {});
+          clearAuthData();
+        }
+        
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

@@ -30,3 +30,19 @@ export const getAdminDashboard = async (params = {}) => {
     };
   }
 };
+
+export const getNewUsersLast7Days = async () => {
+  try {
+    const response = await api.get("/admin/dashboard/new-users-last-7-days"); 
+    return {
+      data: response.data || null,
+      message: "New users last 7 days data retrieved successfully",
+    };
+  } catch (error) {
+    console.error("Failed to fetch new users last 7 days data:", error);
+    return {
+      data: null,
+      message: error.response?.data?.message || error.message || "Failed to fetch new users last 7 days data",
+    };
+  }
+};

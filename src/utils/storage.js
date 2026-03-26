@@ -6,6 +6,7 @@ const ACCESS_TOKEN = 'access_token'
 export function setAuthData(token) {
     try {
         localStorage.setItem(ACCESS_TOKEN, token)
+        console.debug('Auth data stored successfully')
     } catch (error) {
         console.error('Failed to store Auth data:', error)
         throw new Error('Failed to save login data')
@@ -24,6 +25,7 @@ export function updateAuthUser(updatedUser) {
 export function clearAuthData() {
     try {
         localStorage.removeItem(ACCESS_TOKEN)
+        console.debug('Auth data cleared successfully')
         // localStorage.removeItem(AUTH_USER_KEY)
     } catch (error) {
         console.error('Failed to clear Auth data:', error)

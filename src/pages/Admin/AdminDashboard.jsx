@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { message } from "antd";
+import {useQuery} from "@tanstack/react-query";
 import AdminLayout from "../../layouts/AdminLayout";
 import {
   ResponsiveContainer,
@@ -22,7 +23,7 @@ import {
 import ListCard from "../../components/admin/ListCard";
 import StatCard from "../../components/admin/StatCard";
 
-import { getAdminDashboard } from "../../services/dashboardService";
+import { getAdminDashboard, getNewUsersLast7Days } from "../../services/dashboardService";
 
 const formatNumber = (value) => {
   if (typeof value !== "number" || Number.isNaN(value)) {
@@ -42,24 +43,26 @@ const formatDateLabel = (dateString) => {
 
 const AdminDashboard = () => {
   const [dashboard, setDashboard] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [newUser7Days, setNewUser7Days] = useState([]);
+
+  const newUsersQuery = useQuery({
+    queryKey: ["newUsersLast7Days"],
+    queryFn: getNewUsersLast7Days,
+  });
+
+  const dashboardQuery = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: getAdminDashboard,
+  });
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      setLoading(true);
-      try {
-        const { dashboard } = await getAdminDashboard();
-        setDashboard(dashboard);
-      } catch (error) {
-        console.error("Load dashboard failed:", error);
-        message.error("Không thể tải dữ liệu thống kê!");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-  }, []);
+    if (dashboardQuery.isError || newUsersQuery.isError) {
+      message.error("Không thể tải dữ liệu!");
+    } else if (dashboardQuery.data && newUsersQuery.data) {
+      setDashboard(dashboardQuery.data.dashboard);
+      setNewUser7Days(newUsersQuery.data.data);
+    }
+  }, [dashboardQuery.isError, dashboardQuery.data, newUsersQuery.isError, newUsersQuery.data]);
 
   const stats = useMemo(
     () => [
@@ -89,11 +92,11 @@ const AdminDashboard = () => {
 
   const chartData = useMemo(
     () =>
-      (dashboard?.newUsersLast7Days ?? []).map((item) => ({
+      (newUser7Days ?? []).map((item) => ({
         date: formatDateLabel(item.date),
         value: item.count ?? 0,
       })),
-    [dashboard],
+    [newUser7Days],
   );
 
   const topRatedBooks = useMemo(
@@ -140,7 +143,7 @@ const AdminDashboard = () => {
                 icon={stat.icon}
                 label={stat.label}
                 value={stat.value}
-                isLoading={loading}
+                isLoading={dashboardQuery.isFetching}
               />
             ))}
           </div>
@@ -216,14 +219,14 @@ const AdminDashboard = () => {
             subtitle="Các đầu sách được đánh giá cao nhất:"
             items={topRatedBooks}
             variant="rating"
-            isLoading={loading}
+            isLoading={dashboardQuery.isFetching}
           />
           <ListCard
             title="Top sách được yêu thích nhất"
             subtitle="Các đầu sách được yêu thích nhất:"
             items={topFavoriteBooks}
             variant="favorite"
-            isLoading={loading}
+            isLoading={dashboardQuery.isFetching}
           />
         </div>
       </div>

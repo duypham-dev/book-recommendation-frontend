@@ -35,7 +35,7 @@ const AdminSidebar = () => {
               to={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
                 isActive
-                  ? "!bg-sidebar-admin-items-active dark:!bg-sidebar-admin-items-active-dark !text-sidebar-admin-items-active-text dark:!text-sidebar-admin-items-active-text-dark border border-sidebar-admin-items-active-border dark:border-sidebar-admin-items-active-border-dark"
+                  ? "!bg-sidebar-admin-items-active dark:!bg-sidebar-admin-items-active-dark !text-sidebar-admin-items-active-text dark:!text-white border border-sidebar-admin-items-active-border dark:border-sidebar-admin-items-active-border-dark"
                   : "!text-sidebar-admin-items-text dark:!text-sidebar-admin-items-text-dark hover:!bg-sidebar-admin-items-hover dark:hover:!bg-sidebar-admin-items-hover-dark border border-transparent"
               }`}
             >
