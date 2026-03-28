@@ -17,7 +17,7 @@ const useTopBooks = (pageSize = 4) => {
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
   });
-  console.log("Top books query data:", data);
+  
   return {
     topBooks: Array.isArray(data) ? data : [],
     loading: isLoading,

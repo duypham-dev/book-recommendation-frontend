@@ -10,7 +10,6 @@ const SideTitleBookCarousel = ({
   className,
 }) => {
 
-  console.log("Classname for SideTitleBookCarousel:", className);
   const scrollContainerRef = useRef(null);
 
   const scroll = (direction) => {
@@ -58,9 +57,9 @@ const SideTitleBookCarousel = ({
           className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth h-full items-center pb-4 md:pb-0"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {books.map((book) => (
+          {books.map((book, index) => (
             <div
-              key={book.id}
+              key={index}
               className="min-w-[200px] w-[200px] flex-shrink-0"
             >
               <BookCard book={book} />

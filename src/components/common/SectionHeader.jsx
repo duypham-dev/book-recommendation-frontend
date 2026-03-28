@@ -18,7 +18,7 @@ function SectionHeader(props) {
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-base sm:text-xl font-medium text-gray-800 dark:text-white mb-1.5 sm:mb-2">{title}</h1>
-                    <div className="w-20 sm:w-32 h-0.5 sm:h-1 bg-red-500 rounded-t-2xl"></div>
+                    <div className="w-20 sm:w-32 h-0.5 sm:h-1 bg-red-500 dark:bg-red-700 rounded-t-2xl"></div>
                 </div>
                 <div className="flex items-center gap-2 sm:gap-3">
                     {extra}
@@ -32,7 +32,7 @@ function SectionHeader(props) {
                     )}
                 </div>
             </div>
-            <hr className="text-gray-200"/>
+            <hr className="text-gray-200 dark:text-gray-600"/>
         </div>
     );
 }
