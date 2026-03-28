@@ -9,6 +9,7 @@ import { useThemeContext } from "./hooks/useTheme";
 
 import BookDetail from "./pages/BookDetail";
 import CategoryBooks from "./pages/CategoryBooks";
+import AllBooks from "./pages/AllBooks";
 import Membership from "./pages/Membership";
 
 import AuthProvider from "./contexts/Auth/AuthProvider.jsx";
@@ -81,6 +82,14 @@ function App() {
                 element={
                   <UserRoute>
                     <BookDetail />
+                  </UserRoute>
+                }
+              />
+              <Route
+                path={PATHS.ALL_BOOKS}
+                element={
+                  <UserRoute>
+                    <AllBooks />
                   </UserRoute>
                 }
               />

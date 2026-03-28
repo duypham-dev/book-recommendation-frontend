@@ -2,6 +2,7 @@ export const PATHS = {
   HOME: "/",
   SEARCH: "/search",
   CATEGORY: "/category/:categoryId",
+  ALL_BOOKS: "/books",
   MEMBERSHIP: "/membership",
   RESET_PASSWORD: "/reset-password",
   MANAGE_ACCOUNT_REDIRECT: {

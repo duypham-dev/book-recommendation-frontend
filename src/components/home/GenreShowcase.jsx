@@ -27,6 +27,10 @@ const GenreShowcase = () => {
     );
   };
 
+  const handleOtherClick = () => {
+    navigate(`/books`);
+  }
+
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -130,6 +134,7 @@ const GenreShowcase = () => {
                   hover:scale-105 transition-transform duration-300 shadow-md hover:shadow-xl
                   relative overflow-hidden group
                 `}
+              onClick={() => handleOtherClick()}
           >
             {/* Subtle overlay for styling */}
             <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />

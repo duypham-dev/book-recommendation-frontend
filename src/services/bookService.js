@@ -75,6 +75,26 @@ export const getPreviewBook = async (bookId) => {
   }
 };
 
+export const getAllBooks = async (pageParam, signal) => {
+  try {
+    const response = await api.get(`/books`, {
+      params: { cursor: pageParam },
+      signal
+    });
+    console.log("response", response);
+    const responseData = response.data || response;
+    
+    console.log(`Fetched page ${pageParam} of all books`);
+    return {
+      content: responseData.content || [],
+      nextPage: responseData.nextCursor || null,
+    };
+  } catch (error) {
+    console.error("Failed to fetch all books:", error);
+    throw error;
+  }
+};
+
 /**
  * Get a presigned URL for reading a book (EPUB/PDF).
  * @param {number|string} bookId
