@@ -149,7 +149,7 @@ const BaseBookCard = ({ children, isCarousel, index, onClick }) => {
       onClick={onClick}
     >
       {/* Vỏ bọc chứa slant và hover scale chung */}
-      <div className={`group relative ${slantClass} ${onClick ? 'cursor-pointer' : ''}`}>
+      <div className={`group relative hover:bg-[#FFD875] ${slantClass} ${onClick ? 'cursor-pointer' : ''}`}>
         {children.cover} {/* Slot cho ảnh bìa */}
       </div>
 

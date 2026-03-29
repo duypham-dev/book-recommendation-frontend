@@ -65,7 +65,7 @@ const AllBooks = () => {
 
   return (
     <MainLayout>
-      <div className="container mx-auto px-4 py-8 mt-16 min-h-screen">
+      <div className="container mx-auto px-4 py-8 mt-5 min-h-screen">
         <div className="flex items-center gap-3 mb-8">
           <div className="p-3 bg-blue-100 dark:bg-blue-900/40 rounded-xl">
             <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" />

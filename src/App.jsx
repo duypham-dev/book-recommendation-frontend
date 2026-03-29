@@ -11,6 +11,7 @@ import BookDetail from "./pages/BookDetail";
 import CategoryBooks from "./pages/CategoryBooks";
 import AllBooks from "./pages/AllBooks";
 import Membership from "./pages/Membership";
+import About from "./pages/About";
 
 import AuthProvider from "./contexts/Auth/AuthProvider.jsx";
 import { GenreProvider } from "./contexts/Genre/GenreProvider.jsx";
@@ -106,6 +107,14 @@ function App() {
                 element={
                   <UserRoute>
                     <Membership />
+                  </UserRoute>
+                }
+              />
+              <Route
+                path={PATHS.ABOUT}
+                element={
+                  <UserRoute>
+                    <About />
                   </UserRoute>
                 }
               />

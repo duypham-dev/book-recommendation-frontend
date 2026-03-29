@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 // Components
 import Hero from "../components/home/Hero";
 import BookCarousel from "../components/common/BookCarousel";
+import ScrollToTop from "../components/common/ScrollToTop";
+
 import TopBooksShowcase, {
   TopBooksSkeleton,
 } from "../components/home/TopBooksShowcase";
@@ -30,7 +32,7 @@ const Home = () => {
   const navigate = useNavigate();
   // Get genres with O(1) lookup map
   const { genreMap } = useGenreMap();
-
+  
   // Load top books
   const {
     topBooks,

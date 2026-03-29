@@ -2,7 +2,12 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import ePub from "epubjs";
 
-import { ChevronLeft, ChevronRight, Bookmark, BookmarkCheck } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Bookmark,
+  BookmarkCheck,
+} from "lucide-react";
 
 import SidePanel from "./SidePanel";
 import { AnimatePresence } from "framer-motion";
@@ -22,8 +27,6 @@ import {
 const DEFAULT_POS_KEY = "reader:cfi";
 const DEFAULT_BM_KEY = "reader:bookmarks";
 
-
-
 export default function EpubCoreViewer({ onBack }) {
   const { theme, setTheme } = useThemeContext();
   const locationState = useLocation();
@@ -31,6 +34,7 @@ export default function EpubCoreViewer({ onBack }) {
 
   const { src = "", book = {} } = locationState.state || {};
   const parsedBookId = typeof book?.id !== "undefined" ? Number(book.id) : null;
+  console.log("Parsed book ID:", parsedBookId);
   const bookId = Number.isFinite(parsedBookId) ? parsedBookId : null;
 
   const storagePrefix = useMemo(() => {
@@ -73,20 +77,43 @@ export default function EpubCoreViewer({ onBack }) {
   const [toc, setToc] = useState([]);
   const [totalPages, setTotalPages] = useState(0); // dựa trên locations
   const [page, setPage] = useState(1); // trang hiện tại (1-based)
-  const [currentCfi, setCurrentCfi] = useState(() => localStorage.getItem(posStorageKey) || null);
+  const [currentCfi, setCurrentCfi] = useState(
+    () => localStorage.getItem(posStorageKey) || null,
+  );
   const [chapterTitle, setChapterTitle] = useState("");
 
   const resolveTheme = useCallback(() => {
     if (theme === "dark") return "dark";
     if (theme === "light") return "light";
-    // system: nhìn class .dark trên <html> do hook đã set
-    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+    return document.documentElement.classList.contains("dark")
+      ? "dark"
+      : "light";
   }, [theme]);
 
   const themeRef = useRef(resolveTheme());
 
   useEffect(() => {
     themeRef.current = resolveTheme();
+    const r = renditionRef.current;
+    if (!r) return;
+
+    const t = resolveTheme();
+    const isDark = t === "dark";
+
+    // 1. Vẫn gọi select để epub.js biết theme hiện tại (cho trang mới)
+    r.themes.select(t);
+
+    // 2. Trực tiếp update DOM của iframe đang hiển thị — đây là phần browser thực sự render
+    try {
+      r.getContents().forEach((content) => {
+        const body = content?.document?.body;
+        if (!body) return;
+        body.style.background = isDark ? "#111827" : "#ffffff";
+        body.style.color = isDark ? "#e5e7eb" : "#0f172a";
+      });
+    } catch (e) {
+      console.error("Failed to apply theme to iframe contents:", e);
+    }
   }, [resolveTheme]);
 
   const handleGoBack = useCallback(() => {
@@ -98,21 +125,13 @@ export default function EpubCoreViewer({ onBack }) {
   }, [onBack]);
 
   useEffect(() => {
-    const r = renditionRef.current;
-    if (!r) return;
-    const apply = () => r.themes.select(resolveTheme());
-
-    apply(); // ⟵ áp ngay khi theme đổi
-    r.on("rendered", apply); // ⟵ áp lại sau mỗi lần render trang
-    return () => r.off("rendered", apply);
-  }, [resolveTheme]);
-
-  useEffect(() => {
     let ignore = false;
 
     if (!bookId || !isAuthenticated) {
       try {
-        const savedBookmarks = JSON.parse(localStorage.getItem(bmStorageKey) || "[]");
+        const savedBookmarks = JSON.parse(
+          localStorage.getItem(bmStorageKey) || "[]",
+        );
         if (!ignore) {
           const normalized = Array.isArray(savedBookmarks)
             ? savedBookmarks.map((b) => ({
@@ -182,15 +201,18 @@ export default function EpubCoreViewer({ onBack }) {
     return map;
   }, [toc]);
 
-  const saveCFI = useCallback((cfi) => {
-    if (!cfi) return;
-    setCurrentCfi(cfi);
-    try {
-      localStorage.setItem(posStorageKey, cfi);
-    } catch (err) {
-      console.error("Failed to persist reading position:", err);
-    }
-  }, [posStorageKey]);
+  const saveCFI = useCallback(
+    (cfi) => {
+      if (!cfi) return;
+      setCurrentCfi(cfi);
+      try {
+        localStorage.setItem(posStorageKey, cfi);
+      } catch (err) {
+        console.error("Failed to persist reading position:", err);
+      }
+    },
+    [posStorageKey],
+  );
 
   const lastProgressRef = useRef({ value: null, time: 0 });
 
@@ -217,10 +239,16 @@ export default function EpubCoreViewer({ onBack }) {
       const normalized = Math.max(0, Math.min(100, numericProgress));
       const now = Date.now();
       const last = lastProgressRef.current;
-      const progressDiff = last.value === null ? normalized : Math.abs(normalized - last.value);
+      const progressDiff =
+        last.value === null ? normalized : Math.abs(normalized - last.value);
       const timeDiff = now - (last.time ?? 0);
 
-      if (!force && last.value !== null && progressDiff < 3 && timeDiff < 15000) {
+      if (
+        !force &&
+        last.value !== null &&
+        progressDiff < 3 &&
+        timeDiff < 15000
+      ) {
         return;
       }
 
@@ -301,6 +329,9 @@ export default function EpubCoreViewer({ onBack }) {
     });
     rendition.themes.select(themeRef.current);
     rendition.themes.fontSize("110%");
+    rendition.on("rendered", () => {
+      rendition.themes.select(themeRef.current);
+    });
 
     const toTotalLocations = () => {
       const locations = bookRef.current?.locations;
@@ -319,7 +350,7 @@ export default function EpubCoreViewer({ onBack }) {
 
         // Send 'history' feedback to Recommendation System when user starts reading
         if (user?.id && bookId != null) {
-          sendFeedback(user.id, bookId, 'history');
+          sendFeedback(user.id, bookId, "history");
         }
 
         const nav = await epubBook.loaded.navigation;
@@ -424,11 +455,12 @@ export default function EpubCoreViewer({ onBack }) {
       bookRef.current = null;
       try {
         epubBook.destroy();
-      } catch {}
+      } catch (e) {
+        console.error("Failed to destroy epub book:", e);
+      }
     };
   }, [src, bookId]);
 
-  
   // Actions
   const goPrev = () => renditionRef.current?.prev();
   const goNext = () => renditionRef.current?.next();
@@ -444,17 +476,22 @@ export default function EpubCoreViewer({ onBack }) {
     try {
       const cfi = bookRef.current?.locations?.cfiFromLocation(p - 1);
       if (cfi) goTo(cfi);
-    } catch {}
+    } catch (e) {
+      console.error("Failed to jump to page:", e);
+    }
   };
 
   // Bookmark
-  const persistGuestBookmarks = useCallback((next) => {
-    try {
-      localStorage.setItem(bmStorageKey, JSON.stringify(next));
-    } catch (err) {
-      console.error("Failed to persist guest bookmarks:", err);
-    }
-  }, [bmStorageKey]);
+  const persistGuestBookmarks = useCallback(
+    (next) => {
+      try {
+        localStorage.setItem(bmStorageKey, JSON.stringify(next));
+      } catch (err) {
+        console.error("Failed to persist guest bookmarks:", err);
+      }
+    },
+    [bmStorageKey],
+  );
 
   const toggleBookmark = async () => {
     if (!currentCfi) return;
@@ -495,7 +532,8 @@ export default function EpubCoreViewer({ onBack }) {
     const payload = {
       pageNumber: Number.isFinite(page) ? page : null,
       locationInBook: currentCfi,
-      note: chapterTitle || (Number.isFinite(page) ? `Trang ${page}` : "Dấu trang"),
+      note:
+        chapterTitle || (Number.isFinite(page) ? `Trang ${page}` : "Dấu trang"),
     };
 
     try {
@@ -514,7 +552,8 @@ export default function EpubCoreViewer({ onBack }) {
 
     const trimmed = newText?.trim();
     const fallbackNote =
-      target.note || (target.pageNumber ? `Trang ${target.pageNumber}` : "Dấu trang");
+      target.note ||
+      (target.pageNumber ? `Trang ${target.pageNumber}` : "Dấu trang");
     const nextNote = trimmed || fallbackNote;
 
     setEditingBmId(null);
@@ -522,7 +561,7 @@ export default function EpubCoreViewer({ onBack }) {
     if (!isAuthenticated || bookId == null) {
       setBookmarks((prev) => {
         const next = prev.map((b) =>
-          b.id === id ? { ...b, note: nextNote } : b
+          b.id === id ? { ...b, note: nextNote } : b,
         );
         persistGuestBookmarks(next);
         return next;
@@ -533,9 +572,7 @@ export default function EpubCoreViewer({ onBack }) {
     try {
       const updated = await updateBookmarkApi(user.id, id, { note: nextNote });
       const mapped = mapBookmarkFromApi(updated);
-      setBookmarks((prev) =>
-        prev.map((b) => (b.id === id ? mapped : b))
-      );
+      setBookmarks((prev) => prev.map((b) => (b.id === id ? mapped : b)));
     } catch (err) {
       console.error("Failed to rename bookmark:", err);
     }
@@ -569,7 +606,7 @@ export default function EpubCoreViewer({ onBack }) {
   // sau các useState khác
   const isBookmarked = useMemo(
     () => !!currentCfi && bookmarks.some((b) => b.cfi === currentCfi),
-    [bookmarks, currentCfi]
+    [bookmarks, currentCfi],
   );
 
   return (
@@ -596,19 +633,21 @@ export default function EpubCoreViewer({ onBack }) {
           <span>/{totalPages || "–"}</span>
         </form>
 
-        {/* Tiêu đề sách */}
+        {/* Title */}
         <div className="absolute inset-x-0 text-center pointer-events-none">
           <div className="font-semibold">{meta.title || "—"}</div>
         </div>
 
-        {/* Nút phải */}
+        {/* Right button */}
         <div className="ml-auto flex items-center gap-2">
           <button
-            onClick={() => setTheme(prev => (prev === 'dark' ? 'light' : 'dark'))}
+            onClick={() =>
+              setTheme((prev) => (prev === "dark" ? "light" : "dark"))
+            }
             className="px-2 py-1 rounded hover:bg-white/10"
             title="Chế độ tối/sáng"
           >
-            {resolveTheme() === 'dark' ? '🌙' : '☀️'}
+            {resolveTheme() === "dark" ? "🌙" : "☀️"}
           </button>
           {/* Bookmark: bấm để lưu/bỏ lưu, Ctrl+click hoặc right-click để mở panel Dấu trang */}
           <button
@@ -680,7 +719,7 @@ export default function EpubCoreViewer({ onBack }) {
         className="fixed right-4 text-5xl top-1/2 -translate-y-1/2 z-10 p-3 rounded-full text-gray-500 dark:text-white dark:hover:bg-white/20 hover:bg-gray-600 hover:text-gray-200"
         title="Trang sau"
       >
-        <ChevronRight size={32}/>
+        <ChevronRight size={32} />
       </button>
 
       {/* Footer: đếm trang */}
@@ -697,9 +736,13 @@ export default function EpubCoreViewer({ onBack }) {
             setTab={setPanelTab}
             toc={toc}
             currentHref={currentHref}
-            goTo={(t) => { goTo(t.cfi || t.href); }}
+            goTo={(t) => {
+              goTo(t.cfi || t.href);
+            }}
             bookmarks={bookmarks}
-            onGoBookmark={(b) => { goTo(b.cfi); }}
+            onGoBookmark={(b) => {
+              goTo(b.cfi);
+            }}
             editingBmId={editingBmId}
             setEditingBmId={setEditingBmId}
             renameBookmark={renameBookmark}

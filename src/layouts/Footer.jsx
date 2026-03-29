@@ -1,15 +1,17 @@
 import React from 'react';
 import { Facebook, Twitter } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { PATHS } from '../constants/routePaths';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white mt-20">
+    <footer className="bg-black text-white mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
             <h3 className="font-bold text-lg mb-4">Về Tekbook</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white">Giới thiệu</a></li>
+              <li><Link to={PATHS.ABOUT} className="hover:text-white">Giới thiệu</Link></li>
               <li><a href="#" className="hover:text-white">Liên hệ</a></li>
               <li><a href="#" className="hover:text-white">Chính sách bảo mật</a></li>
             </ul>

@@ -11,9 +11,9 @@
  * These genres are displayed in the primary carousels on the home page
  */
 export const MAIN_GENRE_CONFIG = [
-  { id: 11, name: "Tài chính", title: "TÀI CHÍNH" },
-  { id: 6, name: "Kỹ năng sống", title: "KỸ NĂNG SỐNG" },
-  { id: 9, name: "Tiểu thuyết", title: "TIỂU THUYẾT" },
+  { id: 11, name: "Tài chính", title: "TÀI CHÍNH" , slug: "tai-chinh"},
+  { id: 6, name: "Kỹ năng sống", title: "KỸ NĂNG SỐNG" , slug: "ky-nang-song"},
+  { id: 9, name: "Tiểu thuyết", title: "TIỂU THUYẾT" , slug: "tieu-thuyet"},
 ];
 
 /**
@@ -21,9 +21,9 @@ export const MAIN_GENRE_CONFIG = [
  * These genres are displayed in the side-title gradient section
  */
 export const SIDE_GENRE_CONFIG = [
-  { id: 12, name: "Văn học", title: "VĂN HỌC" , color: "from-blue-500 to-white"},
-  { id: 8, name: "Trinh thám", title: "TRINH THÁM" , color: "from-green-500 to-white"},
-  { id: 7, name: "Lịch sử", title: "LỊCH SỬ" , color: "from-purple-500 to-white"},
+  { id: 12, name: "Văn học", title: "VĂN HỌC" , slug: "van-hoc", color: "from-blue-500 to-white"},
+  { id: 8, name: "Trinh thám", title: "TRINH THÁM" , slug: "trinh-tham", color: "from-green-500 to-white"},
+  { id: 7, name: "Lịch sử", title: "LỊCH SỬ" , slug: "lich-su", color: "from-purple-500 to-white"},
 ];
 
 /**

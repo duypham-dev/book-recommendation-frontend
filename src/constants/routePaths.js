@@ -4,6 +4,7 @@ export const PATHS = {
   CATEGORY: "/category/:categoryId",
   ALL_BOOKS: "/books",
   MEMBERSHIP: "/membership",
+  ABOUT: "/about",
   RESET_PASSWORD: "/reset-password",
   MANAGE_ACCOUNT_REDIRECT: {
     ROOT: "/manage-account",
