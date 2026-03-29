@@ -27,6 +27,38 @@ import {
 const DEFAULT_POS_KEY = "reader:cfi";
 const DEFAULT_BM_KEY = "reader:bookmarks";
 
+const applyThemeToContents = (r, isDark) => {
+  try {
+    r.getContents().forEach((content) => {
+      const doc = content?.document;
+      if (!doc) return;
+
+      // Set body background ngay lập tức (không cần !important)
+      if (doc.body) {
+        doc.body.style.background = isDark ? "#111827" : "#ffffff";
+      }
+
+      // Inject/update <style> tag để override CSS của sách
+      const STYLE_ID = "epub-theme-override";
+      let styleEl = doc.getElementById(STYLE_ID);
+      if (!styleEl) {
+        styleEl = doc.createElement("style");
+        styleEl.id = STYLE_ID;
+        doc.head?.appendChild(styleEl);
+      }
+      styleEl.textContent = isDark
+        ? `* { color: #e5e7eb !important; background-color: transparent !important; }
+           body { background: #111827 !important; }
+           a { color: #93c5fd !important; }`
+        : `* { color: #0f172a !important; background-color: transparent !important; }
+           body { background: #ffffff !important; }
+           a { color: #2563eb !important; }`;
+    });
+  } catch (e) {
+    console.error("Failed to apply theme to iframe contents:", e);
+  }
+};
+
 export default function EpubCoreViewer({ onBack }) {
   const { theme, setTheme } = useThemeContext();
   const locationState = useLocation();
@@ -34,7 +66,7 @@ export default function EpubCoreViewer({ onBack }) {
 
   const { src = "", book = {} } = locationState.state || {};
   const parsedBookId = typeof book?.id !== "undefined" ? Number(book.id) : null;
-  console.log("Parsed book ID:", parsedBookId);
+  console.log("Book rendered");
   const bookId = Number.isFinite(parsedBookId) ? parsedBookId : null;
 
   const storagePrefix = useMemo(() => {
@@ -92,29 +124,14 @@ export default function EpubCoreViewer({ onBack }) {
 
   const themeRef = useRef(resolveTheme());
 
-  useEffect(() => {
-    themeRef.current = resolveTheme();
-    const r = renditionRef.current;
-    if (!r) return;
-
-    const t = resolveTheme();
-    const isDark = t === "dark";
-
-    // 1. Vẫn gọi select để epub.js biết theme hiện tại (cho trang mới)
-    r.themes.select(t);
-
-    // 2. Trực tiếp update DOM của iframe đang hiển thị — đây là phần browser thực sự render
-    try {
-      r.getContents().forEach((content) => {
-        const body = content?.document?.body;
-        if (!body) return;
-        body.style.background = isDark ? "#111827" : "#ffffff";
-        body.style.color = isDark ? "#e5e7eb" : "#0f172a";
-      });
-    } catch (e) {
-      console.error("Failed to apply theme to iframe contents:", e);
-    }
-  }, [resolveTheme]);
+useEffect(() => {
+  themeRef.current = resolveTheme();
+  const r = renditionRef.current;
+  if (!r) return;
+  const isDark = resolveTheme() === "dark";
+  r.themes.select(resolveTheme());
+  applyThemeToContents(r, isDark);
+}, [resolveTheme]);
 
   const handleGoBack = useCallback(() => {
     if (typeof onBack === "function") {
@@ -330,7 +347,9 @@ export default function EpubCoreViewer({ onBack }) {
     rendition.themes.select(themeRef.current);
     rendition.themes.fontSize("110%");
     rendition.on("rendered", () => {
+      const isDark = themeRef.current === "dark";
       rendition.themes.select(themeRef.current);
+      applyThemeToContents(rendition, isDark);
     });
 
     const toTotalLocations = () => {
