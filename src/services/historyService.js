@@ -22,6 +22,7 @@ export const getUserHistory = async (userId, { page = 0, size = 8 } = {}) => {
 
 export const recordReadingHistory = async (userId, bookId, payload) => {
   try {
+    console.log("Recording reading history with payload:", payload);
     const response = await api.post(`/users/${userId}/books/${bookId}/history`, payload);
     return response.data || response;
   } catch (error) {

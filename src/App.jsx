@@ -211,7 +211,7 @@ function App() {
               <Route path="/oauth/callback" element={<OAuthRedirect />} />
               <Route path={PATHS.RESET_PASSWORD} element={<ResetPassword />} />
               <Route path="/activate-account" element={<ActivateAccount />} />
-              <Route path="/reader" element={<EpubCoreViewer />} />
+              <Route path="/reader/:bookId" element={<EpubCoreViewer />} />
               <Route path="/upload" element={<Upload />} />
               </Routes>
             </AntdApp>

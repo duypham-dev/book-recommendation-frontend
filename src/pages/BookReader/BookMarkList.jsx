@@ -1,15 +1,10 @@
-/* ---- Bookmarks ---- */
-const BookmarkList = ({
-  bookmarks,
-  onGo,
-  editingId,
-  setEditingId,
-  renameBookmark,
-  removeBookmark,
-}) => {
+import React from "react";
+
+const BookmarkList = ({ bookmarks, onGo, editingId, setEditingId, renameBookmark, removeBookmark }) => {
   if (!bookmarks.length) {
     return <div className="text-gray-400 px-2">Chưa có dấu trang.</div>;
   }
+
   return (
     <ul className="space-y-1 pr-2">
       {bookmarks.map((b) => (
@@ -23,13 +18,17 @@ const BookmarkList = ({
               onSubmit={(e) => {
                 e.preventDefault();
                 renameBookmark(b.id, e.target.elements.note.value.trim());
+                setEditingId(null);
               }}
             >
               <input
                 name="note"
                 defaultValue={b.note}
                 autoFocus
-                onBlur={(e) => renameBookmark(b.id, e.target.value.trim())}
+                onBlur={(e) => {
+                  renameBookmark(b.id, e.target.value.trim());
+                  setEditingId(null);
+                }}
                 className="w-full bg-transparent border-b border-white/20 outline-none"
               />
             </form>
@@ -63,6 +62,6 @@ const BookmarkList = ({
       ))}
     </ul>
   );
-}
+};
 
-export default BookmarkList;
+export default React.memo(BookmarkList);

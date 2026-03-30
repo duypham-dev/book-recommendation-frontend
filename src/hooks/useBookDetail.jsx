@@ -57,7 +57,7 @@ const useBookDetail = () => {
       cover: bookData.coverImageUrl || "https://via.placeholder.com/300x400",
       description: bookData.description || "Chưa có mô tả",
     };
-  }, [bookData]); 
+  }, [bookData]);
 
   // Read handler
   const handleRead = useCallback(async () => {
@@ -66,36 +66,14 @@ const useBookDetail = () => {
       message.warning("Không xác định được sách");
       return;
     }
-
-    try {
-      const result = await getBookReadUrl(bookId, "EPUB");
-      if (!result?.url) {
-        message.warning("Không tìm thấy nội dung để đọc");
-        return;
-      }
-
-      navigate("/reader", {
-        state: {
-          src: result.url,
-          book: {
-            id: bookId,
-            title: book?.title ?? "",
-            coverImageUrl: book?.cover ?? "",
-            authors: bookData?.authors ?? [],
-          },
-        },
-      });
-    } catch {
-      message.error("Không thể tải sách. Vui lòng thử lại.");
+    // Check if user is authenticated before allowing to read
+    if (!isAuthenticated) {
+      message.warning("Vui lòng đăng nhập để đọc sách");
+      return;
     }
-  }, [
-    book?.id,
-    book?.title,
-    book?.cover,
-    bookData?.authors,
-    message,
-    navigate,
-  ]);
+
+    navigate(`/reader/${bookId}`);
+  }, [book?.id, message, navigate, isAuthenticated]);
 
   // Download handler
   const handleDownload = useCallback(async () => {

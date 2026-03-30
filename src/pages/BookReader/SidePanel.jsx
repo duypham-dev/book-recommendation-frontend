@@ -1,7 +1,7 @@
+import React, { useEffect } from "react";
+import { motion } from "framer-motion";
 import TocList from "./TocList.jsx";
 import BookmarkList from "./BookMarkList.jsx";
-import { motion } from "framer-motion";
-import { useEffect } from "react";
 
 const panelVariants = {
   hidden: { x: "100%" },
@@ -16,7 +16,6 @@ const overlayVariants = {
 };
 
 const SidePanel = ({
-  dark,
   onClose,
   tab,
   setTab,
@@ -30,8 +29,6 @@ const SidePanel = ({
   renameBookmark,
   removeBookmark,
 }) => {
-
-  // Esc để đóng
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
@@ -40,7 +37,6 @@ const SidePanel = ({
 
   return (
     <>
-      {/* Overlay */}
       <motion.button
         aria-label="Đóng panel"
         onClick={onClose}
@@ -52,7 +48,6 @@ const SidePanel = ({
         transition={{ duration: 0.18 }}
       />
 
-      {/* Panel trượt từ phải */}
       <motion.aside
         className="fixed top-14 right-0 bottom-0 z-40 w-80 bg-gray-100 text-gray-800 dark:bg-[#2b2b2f] dark:text-gray-100 shadow-xl border-l border-black/20"
         role="dialog"
@@ -63,13 +58,11 @@ const SidePanel = ({
         variants={panelVariants}
         transition={{ type: "tween", duration: 0.22, ease: "easeOut" }}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-4 h-12 border-b border-white/10">
           <div className="text-lg font-semibold">Danh sách</div>
           <button onClick={onClose} title="Đóng">✕</button>
         </div>
 
-        {/* Tabs */}
         <div className="px-4 pt-2">
           <div className="flex gap-6 text-sm">
             <button
@@ -87,7 +80,7 @@ const SidePanel = ({
               className={`pb-2 ${
                 tab === "bm"
                   ? "text-emerald-400 border-b-2 border-emerald-400"
-                  : "dark:text-white text-gray-800 "
+                  : "dark:text-white text-gray-800"
               }`}
             >
               Dấu trang
@@ -96,7 +89,6 @@ const SidePanel = ({
           <div className="border-b border-white/10" />
         </div>
 
-        {/* Body */}
         <div className="px-2 py-3 overflow-y-auto h-[calc(100%-12rem)]">
           {tab === "toc" ? (
             <TocList toc={toc} currentHref={currentHref} goTo={goTo} />
@@ -116,4 +108,4 @@ const SidePanel = ({
   );
 };
 
-export default SidePanel;
+export default React.memo(SidePanel);

@@ -1,23 +1,6 @@
 import React from "react";
 
-/* ---- TOC ---- */
-const TocList = ({ toc, currentHref, goTo }) => {
-  return (
-    <ul className="space-y-1 pr-2">
-      {toc.map((item) => (
-        <TocRow
-          key={item.id}
-          item={item}
-          depth={0}
-          currentHref={currentHref}
-          goTo={goTo}
-        />
-      ))}
-    </ul>
-  );
-}
-
-const TocRow = ({ item, depth, currentHref, goTo }) => {
+const TocRow = React.memo(({ item, depth, currentHref, goTo }) => {
   const isActive = (item.href || "").split("#")[0] === currentHref;
   return (
     <li>
@@ -45,6 +28,24 @@ const TocRow = ({ item, depth, currentHref, goTo }) => {
         ))}
     </li>
   );
-}
+});
 
-export default TocList;
+TocRow.displayName = "TocRow";
+
+const TocList = ({ toc, currentHref, goTo }) => {
+  return (
+    <ul className="space-y-1 pr-2">
+      {toc.map((item) => (
+        <TocRow
+          key={item.id}
+          item={item}
+          depth={0}
+          currentHref={currentHref}
+          goTo={goTo}
+        />
+      ))}
+    </ul>
+  );
+};
+
+export default React.memo(TocList);

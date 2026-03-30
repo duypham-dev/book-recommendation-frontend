@@ -51,10 +51,8 @@ class ErrorBoundary extends React.Component {
 const BookDetail = () => {
   const navigate = useNavigate();
   console.log("Rendering BookDetail");
-  const { book, bookData, loading, handleRead, handleDownload } =
-    useBookDetail();
-  const { isFavorited, loadingFavorite, handleFavorite, syncFavorite } =
-    useFavorite(book?.id);
+  const { book, bookData, loading, handleRead, handleDownload } = useBookDetail();
+  const { isFavorited, loadingFavorite, handleFavorite, syncFavorite } = useFavorite(book?.id);
 
   // Fetch books that share at least one genre with the current book.
   // Starts only once `book.id` is resolved; no-ops on null/undefined.
