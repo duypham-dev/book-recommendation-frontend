@@ -42,6 +42,7 @@ const useEpubReader = (src, { userId, bookId, bookTitle, registerThemes, applyCu
     const map = {};
     const walk = (items = []) => {
       for (const it of items) {
+        console.log("it: ", it);
         if (it.href) map[it.href.split("#")[0]] = it;
         if (it.subitems?.length) walk(it.subitems);
       }
@@ -97,13 +98,16 @@ const useEpubReader = (src, { userId, bookId, bookTitle, registerThemes, applyCu
 
     (async () => {
       try {
+        console.log("Book ready before ready:", epubBook);
         await epubBook.ready;
+        console.log("Book ready:", epubBook);
         await epubBook.locations.generate(1024);
 
         const { title, creator } = epubBook.package?.metadata || {};
         setMeta({ title: title || bookTitle || "", author: creator || "" });
 
         const nav = await epubBook.loaded.navigation;
+        console.log("TOC: ", nav?.toc);
         setToc(nav?.toc || []);
 
         const total = getTotalLocations(epubBook);
@@ -160,7 +164,8 @@ const useEpubReader = (src, { userId, bookId, bookTitle, registerThemes, applyCu
           // Ignore location resolution errors
         }
       }
-
+      
+      // Compute progress and update if possible
       const total = getTotalLocations(bookRef.current);
       if (total > 0 && locationIndex !== null) {
         syncProgress(computeProgress(locationIndex, total));
@@ -200,6 +205,7 @@ const useEpubReader = (src, { userId, bookId, bookTitle, registerThemes, applyCu
   // Derive chapterTitle from currentHref
   useEffect(() => {
     const item = tocByHref[currentHref];
+    console.log("curren title:" , item);
     setChapterTitle(item?.label || "");
   }, [currentHref, tocByHref]);
 

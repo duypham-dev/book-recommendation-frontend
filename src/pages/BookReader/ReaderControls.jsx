@@ -18,7 +18,7 @@ const ReaderControls = ({ page, totalPages, onPrev, onNext }) => {
       >
         <ChevronRight size={32} />
       </button>
-      <div className="fixed bottom-2 inset-x-0 text-center text-gray-200 z-10">
+      <div className="fixed bottom-2 inset-x-0 text-center text-black dark:text-gray-200  z-10">
         {totalPages ? `${page}/${totalPages}` : ""}
       </div>
     </>
