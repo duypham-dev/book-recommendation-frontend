@@ -2,7 +2,7 @@ import api from '../config/ApiConfig.js';
 
 export const getBookFavorites = async (userId, { page = 0, size = 12 } = {}) => {
     try {
-        const response = await api.get(`/users/${userId}/favorites`, {
+        const response = await api.get(`/users/favorites`, {
             params: { page, size },
         });
         return response.data || response || {};
@@ -14,7 +14,7 @@ export const getBookFavorites = async (userId, { page = 0, size = 12 } = {}) => 
 
 export const addFavorite = async (userId, bookId) => {
     try {
-        const response = await api.post(`/users/${userId}/favorites/${bookId}`);
+        const response = await api.post(`/users/favorites/${bookId}`);
         return response.data || response;
     } catch (error) {
         console.error('Add favorite failed:', error.response?.data || error.message);
@@ -24,7 +24,7 @@ export const addFavorite = async (userId, bookId) => {
 
 export const removeFavorite = async (userId, bookId) => {
     try {
-        const response = await api.delete(`/users/${userId}/favorites/${bookId}`);
+        const response = await api.delete(`/users/favorites/${bookId}`);
         return response.data || response;
     } catch (error) {
         console.error('Remove favorite failed:', error.response?.data || error.message);

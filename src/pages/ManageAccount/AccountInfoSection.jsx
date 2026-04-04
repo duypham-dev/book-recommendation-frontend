@@ -30,7 +30,7 @@ const AccountInfoSection = React.memo(() => {
   const fetchUserProfile = useCallback(async () => {
     if (!userId) return;
     try {
-      const profile = await getUserProfile(userId);
+      const profile = await getUserProfile();
       setUserInfo(profile);
     } catch {
       message.error("Không thể tải thông tin tài khoản");
