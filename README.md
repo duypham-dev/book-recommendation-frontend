@@ -1,19 +1,19 @@
-# 📚 Book Recommendation System - Frontend
+# Book Recommendation System - Frontend
 
 Frontend cho **Website Đọc Sách Online** tích hợp **Hệ thống Gợi ý Sách bằng Machine Learning** với khả năng học trực tuyến (Online Learning).
 
-## 🎯 Giới thiệu
+## Giới thiệu
 
 Dự án cung cấp trải nghiệm đọc sách online với các tính năng:
-- 📖 Đọc sách EPUB/PDF trực tiếp trên trình duyệt
-- 🤖 Gợi ý sách thông minh dựa trên AI/ML (ALS + SBERT)
-- 💡 Học và cải thiện gợi ý theo hành vi người dùng
-- ⭐ Đánh giá, yêu thích, lưu lịch sử đọc
-- 🎨 Dark/Light mode, responsive design
+-  Đọc sách EPUB/PDF trực tiếp trên trình duyệt
+-  Gợi ý sách thông minh dựa trên AI/ML (ALS + SBERT)
+-  Học và cải thiện gợi ý theo hành vi người dùng
+-  Đánh giá, yêu thích, lưu lịch sử đọc
+-  Dark/Light mode, responsive design
 
 ---
 
-## 🛠️ Công nghệ sử dụng
+##  Công nghệ sử dụng
 
 ### Core
 - **Vite** - Build tool
@@ -32,7 +32,7 @@ Dự án cung cấp trải nghiệm đọc sách online với các tính năng:
 
 ---
 
-## 📋 Yêu cầu hệ thống
+##  Yêu cầu hệ thống
 
 - **Node.js**: >= 18.x (khuyến nghị 20.x)
 - **npm**: >= 9.x hoặc **yarn**: >= 1.22.x
@@ -47,7 +47,7 @@ npm --version
 
 ---
 
-## 🚀 Cài đặt và chạy dự án
+##  Cài đặt và chạy dự án
 
 ### 1. Clone repository
 ```bash
@@ -72,7 +72,7 @@ npm install
 - URL: `http://localhost:8001/api/v1`
 - Cung cấp: ML-based recommendations, Similar books, Online Learning
 
-> ⚠️ **Lưu ý**: Nếu backend chạy ở port khác, cập nhật trong `src/config/ApiConfig.js`
+>  **Lưu ý**: Nếu backend chạy ở port khác, cập nhật trong `src/config/ApiConfig.js`
 
 ### 4. Chạy development server
 ```bash
@@ -94,24 +94,24 @@ npm run preview
 ```
 ---
 
-## 🎨 Tính năng chính
+##  Tính năng chính
 
-### 👤 User Features
-- ✅ Đăng ký/Đăng nhập (JWT + OAuth2 Google)
-- ✅ Đọc sách EPUB/PDF với bookmark, TOC
-- ✅ Gợi ý sách cá nhân hóa (Personalized Recommendations)
-- ✅ Sách tương tự (Similar Books)
-- ✅ Đa dạng hóa gợi ý (Diversity Mode)
-- ✅ Đánh giá sách (1-5 sao) + viết review
-- ✅ Thêm vào yêu thích
-- ✅ Lịch sử đọc
-- ✅ Tìm kiếm sách
+###  User Features
+-  Đăng ký/Đăng nhập (JWT + OAuth2 Google)
+-  Đọc sách EPUB/PDF với bookmark, TOC
+-  Gợi ý sách cá nhân hóa (Personalized Recommendations)
+-  Sách tương tự (Similar Books)
+-  Đa dạng hóa gợi ý (Diversity Mode)
+-  Đánh giá sách (1-5 sao) + viết review
+-  Thêm vào yêu thích
+-  Lịch sử đọc
+-  Tìm kiếm sách
 
-### 👨‍💼 Admin Features
-- ✅ Quản lý Users (CRUD)
-- ✅ Quản lý Books (CRUD, Upload EPUB/PDF)
-- ✅ Quản lý Genres/Thể loại
-- ✅ **Recommendation System Management**:
+### Admin Features
+-  Quản lý Users (CRUD)
+-  Quản lý Books (CRUD, Upload EPUB/PDF)
+-  Quản lý Genres/Thể loại
+-  **Recommendation System Management**:
   - Chọn model (ALS/NCF/SBERT)
   - Health check & Model info
   - Retrain model
@@ -120,7 +120,7 @@ npm run preview
 
 ---
 
-## 🤖 Online Learning System
+## Online Learning System
 
 Hệ thống tự động học từ hành vi người dùng:
 
@@ -136,7 +136,7 @@ User Action → Frontend feedback → RS API → Buffer
                     Buffer đầy → Auto update SBERT profiles
 ```
 
-## 🔧 Cấu hình
+## Cấu hình
 
 ### API Endpoints
 Cấu hình trong `src/config/ApiConfig.js`:
@@ -157,7 +157,7 @@ VITE_RS_API_BASE_URL=http://localhost:8001/api/v1
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Backend không kết nối được?
 - Kiểm tra backend đang chạy: `http://localhost:8080`
@@ -182,7 +182,7 @@ npm install
 
 ---
 
-## 👥 Vai trò người dùng
+## Vai trò người dùng
 
 ### User (Người dùng thông thường)
 - Đọc sách, đánh giá, yêu thích
