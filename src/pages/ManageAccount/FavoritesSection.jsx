@@ -35,8 +35,6 @@ const FavoritesSection = React.memo(() => {
   const loadingRef = useRef(false);
   const sentinelRef = useRef(null);
 
-
-
   // Function to fetch favorite books with pagination
   const fetchFavorites = useCallback(async (pageIndex = 0, reset = false) => {
     if (!userId || loadingRef.current) return;

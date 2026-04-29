@@ -50,14 +50,15 @@ class ErrorBoundary extends React.Component {
 
 const BookDetail = () => {
   const navigate = useNavigate();
-  console.log("Rendering BookDetail");
+ 
+
   const { book, bookData, loading, handleRead, handleDownload } = useBookDetail();
   const { isFavorited, loadingFavorite, handleFavorite, syncFavorite } = useFavorite(book?.id);
 
   // Fetch books that share at least one genre with the current book.
   // Starts only once `book.id` is resolved; no-ops on null/undefined.
-  const { books: sameGenreBooks, loading: loadingSameGenre } =
-    useSameGenreBooks(book?.id);
+  const { books: sameGenreBooks, loading: loadingSameGenre } = useSameGenreBooks(book?.id);
+
 
   // Derive the first genre for the "Xem tất cả" navigation in RelatedBooks.
   const firstGenre = bookData?.genres?.[0];

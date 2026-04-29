@@ -50,23 +50,23 @@ const OAuthRedirect = () => {
   const getErrorMessage = useCallback((code) => {
     return ERROR_MESSAGES[code] || ERROR_MESSAGES.default;
   }, []);
-
+  console.log('OAuthRedirect rendered with token:', searchParams.get('token'));
   /**
    * Handle successful OAuth callback
    * Exchanges refresh token for access token
    */
-  const handleOAuthSuccess = useCallback(async () => {
+  const handleOAuthSuccess = useCallback(async (token) => {
     try {
       // Call refresh endpoint to exchange cookie-based refresh token for access token
-      const response = await api.post('/auth/refresh');
-      const accessToken = response?.accessToken || response?.data?.accessToken;
+      // const response = await api.post('/auth/refresh');
+      // const accessToken = response?.accessToken || response?.data?.accessToken;
       
-      if (!accessToken) {
+      if (!token) {
         throw new Error('No access token received');
       }
       
       // Store access token (refresh token is in HttpOnly cookie)
-      setAuthData(accessToken);
+      setAuthData(token);
       
       // Fetch user profile to update auth context
       await getUserProfile();
@@ -113,9 +113,10 @@ const OAuthRedirect = () => {
 
     const oauthStatus = searchParams.get('oauth');
     const errorCode = searchParams.get('message');
+    const token = searchParams.get('token');
 
-    if (oauthStatus === 'success') {
-      handleOAuthSuccess();
+    if (oauthStatus === 'success' && token) {
+      handleOAuthSuccess(token);
     } else {
       handleOAuthError(errorCode || 'default');
     }

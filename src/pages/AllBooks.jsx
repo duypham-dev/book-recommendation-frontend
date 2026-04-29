@@ -12,16 +12,17 @@ const AllBooks = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
-  const handleScroll = () => {
-    const shouldShow = window.scrollY > 400;
-    if (showScrollTop !== shouldShow) {
-      setShowScrollTop(shouldShow);
-    }
-  };
+    window.scrollTo(0, 0);
+    const handleScroll = () => {
+      const shouldShow = window.scrollY > 400;
+      if (showScrollTop !== shouldShow) {
+        setShowScrollTop(shouldShow);
+      }
+    };
 
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [showScrollTop]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [showScrollTop]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -42,26 +43,30 @@ const AllBooks = () => {
       console.log("Next page param:", lastPage.nextPage);
       return lastPage.nextPage ? lastPage.nextPage : undefined;
     },
-    staleTime: 5 * 60 * 1000, 
+    staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 
   const observer = useRef();
 
-  const lastBookElementRef = useCallback((node) => {
-    if (isFetchingNextPage) return;
-    if (observer.current) observer.current.disconnect();
-    
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasNextPage) {
-        fetchNextPage();
-      }
-    },
-    { root: null, rootMargin: MAGIN_ROOT, threshold: SCROLL_THRESHOLD }
-);
+  const lastBookElementRef = useCallback(
+    (node) => {
+      if (isFetchingNextPage) return;
+      if (observer.current) observer.current.disconnect();
 
-    if (node) observer.current.observe(node);
-  }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasNextPage) {
+            fetchNextPage();
+          }
+        },
+        { root: null, rootMargin: MAGIN_ROOT, threshold: SCROLL_THRESHOLD },
+      );
+
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage],
+  );
 
   return (
     <MainLayout>
@@ -81,7 +86,9 @@ const AllBooks = () => {
           </div>
         ) : status === "error" ? (
           <div className="text-center py-20 text-red-500">
-            <p className="text-lg font-semibold mb-2">Đã xảy ra lỗi khi tải danh sách!</p>
+            <p className="text-lg font-semibold mb-2">
+              Đã xảy ra lỗi khi tải danh sách!
+            </p>
             <p>{error?.message || "Vui lòng thử lại sau"}</p>
           </div>
         ) : (
@@ -95,12 +102,12 @@ const AllBooks = () => {
                 {data?.pages.map((page, pageIndex) => (
                   <React.Fragment key={pageIndex}>
                     {page.content.map((book, bookIndex) => {
-                      const isLastElement = 
-                        pageIndex === data.pages.length - 1 && 
+                      const isLastElement =
+                        pageIndex === data.pages.length - 1 &&
                         bookIndex === page.content.length - 1;
                       return (
-                        <div 
-                          ref={isLastElement ? lastBookElementRef : null} 
+                        <div
+                          ref={isLastElement ? lastBookElementRef : null}
                           key={`${book.bookId || book.id}-${pageIndex}-${bookIndex}`}
                           className="transform transition duration-300 hover:-translate-y-1"
                         >
@@ -112,13 +119,13 @@ const AllBooks = () => {
                 ))}
               </div>
             )}
-            
+
             {isFetchingNextPage && (
               <div className="flex justify-center items-center py-8 mt-4">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
               </div>
             )}
-            
+
             {!hasNextPage && data?.pages?.[0]?.content?.length > 0 && (
               <div className="text-center py-8 mt-4 text-gray-500 dark:text-gray-400">
                 Bạn đã xem hết danh sách sách.
@@ -132,7 +139,9 @@ const AllBooks = () => {
       <button
         onClick={scrollToTop}
         className={`fixed bottom-8 right-8 p-3 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-300 z-50 ${
-          showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
+          showScrollTop
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-10 pointer-events-none"
         }`}
         aria-label="Quay lại đầu trang"
       >

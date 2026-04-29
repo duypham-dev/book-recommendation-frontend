@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 import useMessage from "./useMessage";
 import { getBookDetail } from "../services/manageBookService";
-import { getBookReadUrl, getBookDownloadUrl } from "../services/bookService";
+import { getBookDownloadUrl } from "../services/bookService";
 
 /**
  * Custom hook that manages book detail data fetching and derived state.
@@ -11,6 +11,7 @@ import { getBookReadUrl, getBookDownloadUrl } from "../services/bookService";
  */
 const useBookDetail = () => {
   const { id } = useParams();
+  console.log("useBookDetail: id =", id);
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const message = useMessage();
@@ -18,15 +19,18 @@ const useBookDetail = () => {
   const [bookData, setBookData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Extract bookId from slugWithId (format: "some-title-123")
+  const splitted = id.split('-');
+  const bookId = splitted.pop(); 
   // Fetch book detail (includes ratings, isFav, averageRating from backend)
   useEffect(() => {
-    if (!id) return;
+    if (!bookId) return;
 
     let cancelled = false;
     const fetchBookDetail = async () => {
       setLoading(true);
       try {
-        const response = await getBookDetail(id, user?.userId);
+        const response = await getBookDetail(bookId, user?.userId);
         if (!cancelled) setBookData(response);
       } catch (error) {
         console.error("Failed to fetch book detail:", error);
@@ -39,7 +43,7 @@ const useBookDetail = () => {
     return () => {
       cancelled = true;
     };
-  }, [id, user?.userId]);
+  }, [bookId, user?.userId]);
 
   // Normalize bookData into a clean book object
   const book = useMemo(() => {

@@ -38,6 +38,7 @@ const AccountInfoSection = React.memo(() => {
   }, [userId, message]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchUserProfile();
   }, [fetchUserProfile]);
 

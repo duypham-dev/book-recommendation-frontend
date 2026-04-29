@@ -21,9 +21,9 @@ export const MAIN_GENRE_CONFIG = [
  * These genres are displayed in the side-title gradient section
  */
 export const SIDE_GENRE_CONFIG = [
-  { id: 12, name: "Văn học", title: "VĂN HỌC" , slug: "van-hoc", color: "from-blue-500 to-white"},
-  { id: 8, name: "Trinh thám", title: "TRINH THÁM" , slug: "trinh-tham", color: "from-green-500 to-white"},
-  { id: 7, name: "Lịch sử", title: "LỊCH SỬ" , slug: "lich-su", color: "from-purple-500 to-white"},
+  { id: 12, name: "Văn học", title: "VĂN HỌC" , slug: "van-hoc", color: "dark:from-blue-500 to-white"},
+  { id: 8, name: "Trinh thám", title: "TRINH THÁM" , slug: "trinh-tham", color: "dark:from-green-500 to-white"},
+  { id: 7, name: "Lịch sử", title: "LỊCH SỬ" , slug: "lich-su", color: "dark:from-purple-500 to-white"},
 ];
 
 /**

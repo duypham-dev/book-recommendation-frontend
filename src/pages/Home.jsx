@@ -73,7 +73,7 @@ const Home = () => {
         )}
 
         {/* Side Title Genres Categories */}
-        <div className="bg-gradient-to-b from-[#282B39] to-gray-900 rounded-xl flex flex-col gap-2">
+        <div className="bg-gradient-to-b from-white to-background dark:bg-gradient-to-b dark:from-[#282B39] dark:to-gray-900 rounded-xl flex flex-col gap-2">
           {SIDE_GENRE_CONFIG.map((genre) => (
             <SideGenreItem
               key={genre.id}

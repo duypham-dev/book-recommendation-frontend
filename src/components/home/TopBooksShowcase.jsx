@@ -2,17 +2,7 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { applyPreset } from "../../utils/cloudinaryUtils.js";
-/**
- * TopBooksShowcase — displays a ranked grid (desktop) or horizontal carousel
- * (tablet/mobile) of the top-read books with slanted clip-path styling.
- *
- * Fixes applied:
- *   - Isolated hover scope: each BookItem has its own `group` without nesting
- *     conflicts with the outer carousel container.
- *   - Improved responsive breakpoints for optimal card sizing across devices.
- *   - Navigation buttons use local hover state instead of parent `group-hover`.
- */
-
+import { generateSlug } from "../../utils/generateSlug.js";
 const TopBooksShowcase = ({ books = [], title = "Top sách nổi bật" }) => {
   const navigate = useNavigate();
   const scrollContainerRef = useRef(null);
@@ -20,7 +10,7 @@ const TopBooksShowcase = ({ books = [], title = "Top sách nổi bật" }) => {
 
   if (!books || books.length === 0) return null;
 
-  const handleBookClick = (bookId) => navigate(`/books/${bookId}`);
+  const handleBookClick = (book) => navigate(`/books/${generateSlug(book.title)}-${book.bookId}`);
 
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
@@ -173,7 +163,7 @@ const BookCard = React.memo(({ book, index, onClick, isCarousel }) => {
   const optimizedCover = book.coverImageUrl ? applyPreset(book.coverImageUrl, "bookCard") : "/placeholder-book.jpg";
   
   return (
-    <BaseBookCard index={index} isCarousel={isCarousel} onClick={() => onClick(book.bookId)}>
+    <BaseBookCard index={index} isCarousel={isCarousel} onClick={() => onClick(book)}>
       {{
         cover: (
           <div className={`relative w-full overflow-hidden aspect-[3/4] transition-transform duration-300 group-hover:scale-[0.97] ${slantClass}`}>

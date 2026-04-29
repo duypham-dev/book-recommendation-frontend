@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { getPreviewBook } from "../../services/bookService";
 import { applyPreset, isCloudinaryUrl } from "../../utils/cloudinaryUtils";
+import { generateSlug } from "../../utils/generateSlug";
 
 const TOOLTIP_WIDTH = 320;
 const TOOLTIP_DEFAULT_HEIGHT = 280;
@@ -38,6 +39,8 @@ const BookCard = ({ book, className = "", preview = true }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [previewBook, setPreviewBook] = useState({});
   const [tooltipPos, setTooltipPos] = useState({ left: 0, top: 0, arrowSide: "left" });
+  
+  const bookUrl = `/books/${generateSlug(book.title)}-${book.bookId}`;
 
   const cardRef = useRef(null);
   const tooltipRef = useRef(null);
@@ -130,7 +133,7 @@ const BookCard = ({ book, className = "", preview = true }) => {
 
   const handleClick = () => {
     dismiss();
-    navigate(`/books/${book.bookId}`);
+    navigate(bookUrl);
   };
 
   const optimizedCoverUrl =

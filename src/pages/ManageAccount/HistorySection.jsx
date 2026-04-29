@@ -92,6 +92,7 @@ const HistorySection = React.memo(() => {
   );
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchHistory(0);
   }, [fetchHistory]);
 
