@@ -35,7 +35,7 @@ const BookCarousel = ({ books, title, genreId, genreName, subtitle, extraHeader,
         
         <div
           ref={scrollContainerRef}
-          className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth p-2 "
+          className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth p-2 py-4 items-start"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {books.map((book, index) => (

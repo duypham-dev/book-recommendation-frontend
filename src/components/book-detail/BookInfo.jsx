@@ -47,6 +47,7 @@ const BookInfo = React.memo(({ book, onRead, onFavorite, onDownload, isFavorited
       <ReviewsSection
         rating={book.rating}
         totalReviews={book.totalReviews}
+        ratingDistribution={book.ratingDistribution}
         reviews={book.reviewsList || []}
         bookTitle={book.title}
         onLoadMore={onLoadMore}

@@ -20,6 +20,7 @@ import MainLayout from "../layouts/MainLayout";
 import useGenreMap from "../hooks/useGenreMap";
 import useTopBooks from "../hooks/useTopBooks";
 import useLazyLoadGenres from "../hooks/useLazyLoadGenres";
+import useRecommendedBooks from "../hooks/useRecommendedBooks";
 
 // Constants
 import {
@@ -39,6 +40,13 @@ const Home = () => {
     loading: topBooksLoading,
     error,
   } = useTopBooks(TOP_BOOKS_SIZE);
+
+  // Load recommended books
+  const {
+    recommendedBooks,
+    loading: recommendationsLoading,
+    error: recommendationsError
+  } = useRecommendedBooks(15);
 
   // Lazy load genre books with Intersection Observer
   const { genreBooks, setGenreRef } = useLazyLoadGenres();
@@ -62,6 +70,16 @@ const Home = () => {
       <main className="mt-8 px-4 sm:px-6 lg:px-8 space-y-8 min-h-[calc(100vh-400px)]">
         {/* Genre Showcase - User Interests */}
         <GenreShowcase />
+
+        {/* Recommended Books Section */}
+        {!recommendationsError && !recommendationsLoading && recommendedBooks.length > 0 && (
+          <section className="mb-8">
+            <BookCarousel
+              books={recommendedBooks}
+              title="Dành riêng cho bạn"
+            />
+          </section>
+        )}
 
         {!error && topBooksLoading && <TopBooksSkeleton />}
 

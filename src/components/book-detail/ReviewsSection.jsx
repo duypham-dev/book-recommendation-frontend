@@ -3,7 +3,7 @@ import RatingSummary from './RatingSummary';
 import ReviewsList from './ReviewsList';
 import ReviewModal from './ReviewModal';
 
-const ReviewsSection = React.memo(({ rating, totalReviews, reviews, onLoadMore, hasMore, loadingMore, bookTitle, onReviewSubmit }) => {
+const ReviewsSection = React.memo(({ rating, totalReviews, ratingDistribution, reviews, onLoadMore, hasMore, loadingMore, bookTitle, onReviewSubmit }) => {
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
     const handleWriteReview = useCallback(() => {
@@ -24,7 +24,7 @@ const ReviewsSection = React.memo(({ rating, totalReviews, reviews, onLoadMore, 
         <>
         <div className="pt-6 sm:pt-10">
           <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">Đánh giá & Nhận xét</h2>
-          <RatingSummary rating={rating} totalReviews={totalReviews} onWriteReview={handleWriteReview} />
+          <RatingSummary rating={rating} totalReviews={totalReviews} ratingDistribution={ratingDistribution} onWriteReview={handleWriteReview} />
           <ReviewsList reviews={reviews} onLoadMore={onLoadMore} hasMore={hasMore} loadingMore={loadingMore} />
         </div>
         <ReviewModal

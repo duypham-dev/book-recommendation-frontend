@@ -16,9 +16,11 @@ function getTotalLocations(book) {
   return 0;
 }
 
-const useEpubReader = (src, { userId, bookId, bookTitle, registerThemes, applyCurrentTheme, syncProgress, computeProgress }) => {
+const useEpubReader = (src, { renditionRef: externalRenditionRef, userId, bookId, bookTitle, registerThemes, applyCurrentTheme, syncProgress, computeProgress }) => {
   const viewerRef = useRef(null);
-  const renditionRef = useRef(null);
+  // Bug 1 fix: use the shared ref from BookReader if provided, otherwise own ref
+  const _ownRenditionRef = useRef(null);
+  const renditionRef = externalRenditionRef ?? _ownRenditionRef;
   const bookRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +44,6 @@ const useEpubReader = (src, { userId, bookId, bookTitle, registerThemes, applyCu
     const map = {};
     const walk = (items = []) => {
       for (const it of items) {
-        console.log("it: ", it);
         if (it.href) map[it.href.split("#")[0]] = it;
         if (it.subitems?.length) walk(it.subitems);
       }
@@ -98,16 +99,13 @@ const useEpubReader = (src, { userId, bookId, bookTitle, registerThemes, applyCu
 
     (async () => {
       try {
-        console.log("Book ready before ready:", epubBook);
         await epubBook.ready;
-        console.log("Book ready:", epubBook);
         await epubBook.locations.generate(1024);
 
         const { title, creator } = epubBook.package?.metadata || {};
         setMeta({ title: title || bookTitle || "", author: creator || "" });
 
         const nav = await epubBook.loaded.navigation;
-        console.log("TOC: ", nav?.toc);
         setToc(nav?.toc || []);
 
         const total = getTotalLocations(epubBook);
@@ -116,29 +114,27 @@ const useEpubReader = (src, { userId, bookId, bookTitle, registerThemes, applyCu
         const savedCfi = localStorage.getItem(posKey);
         await rendition.display(savedCfi || undefined);
 
+        if (!destroyed) setIsLoading(false);
+
+        // Restore page counter from saved position — do NOT force-sync to server.
+        // The server already holds the authoritative max progress; re-syncing
+        // the restored position could send a stale/lower value before the
+        // server-seed in useReadingProgress has resolved.
         if (epubBook.locations?.locationFromCfi) {
           try {
             const idx = savedCfi
               ? epubBook.locations.locationFromCfi(savedCfi)
               : 0;
-            if (typeof idx === "number" && Number.isFinite(idx)) {
+            if (typeof idx === "number" && Number.isFinite(idx) && total > 0) {
               setPage(idx + 1);
-              syncProgress(total > 0 ? computeProgress(idx, total) : 0, true);
-            } else {
-              syncProgress(0, true);
+              // Use syncProgress without force — the monotonic gate in the hook
+              // will handle this correctly once the server seed resolves.
+              syncProgress(computeProgress(idx, total));
             }
           } catch {
-            syncProgress(0, true);
+            // CFI lookup failed — skip syncing, do not reset to 0
           }
-        } else {
-          syncProgress(0, true);
         }
-
-        const hideLoading = () => {
-          if (!destroyed) setIsLoading(false);
-          rendition.off("rendered", hideLoading);
-        };
-        rendition.on("rendered", hideLoading);
       } catch {
         if (!destroyed) {
           setError("Không tải được sách. Vui lòng kiểm tra đường dẫn hoặc CORS.");
@@ -205,7 +201,6 @@ const useEpubReader = (src, { userId, bookId, bookTitle, registerThemes, applyCu
   // Derive chapterTitle from currentHref
   useEffect(() => {
     const item = tocByHref[currentHref];
-    console.log("curren title:" , item);
     setChapterTitle(item?.label || "");
   }, [currentHref, tocByHref]);
 

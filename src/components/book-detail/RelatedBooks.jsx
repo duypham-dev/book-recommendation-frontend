@@ -29,7 +29,7 @@ const SkeletonCard = () => (
  *   genreId  {string|null}    – First genre ID; enables the "Xem tất cả" link.
  *   genreName {string|null}   – Display name for the genre page navigation.
  */
-const RelatedBooks = React.memo(({ books, loading = false, genreId, genreName }) => {
+const RelatedBooks = React.memo(({ books, loading = false, genreId, genreName, title = "Sách cùng thể loại" }) => {
   const navigate = useNavigate();
 
   if (!loading && (!books || books.length === 0)) return null;
@@ -45,7 +45,7 @@ const RelatedBooks = React.memo(({ books, loading = false, genreId, genreName })
       {/* Custom gradient header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <h2 className="text-base sm:text-2xl font-bold bg-gradient-to-r from-primary via-white to-orange-400 bg-clip-text text-transparent">
-          Sách cùng thể loại
+          {title}
         </h2>
         {genreId && (
           <button

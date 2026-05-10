@@ -30,16 +30,21 @@ const SideTitleCarouselSkeleton = () => (
       <div className="h-4 bg-[#3a3f58] dark:bg-gray-700 rounded w-1/2"></div>
     </div>
     {/* Carousel */}
-    <div className="flex-1 p-4 md:p-6 md:pl-0 flex gap-4 overflow-hidden items-center pb-4 md:pb-0">
-      {[...Array(4)].map((_, i) => (
-        <div key={i} className="min-w-[200px] w-[200px] flex-shrink-0 space-y-3">
-          <div className="w-full aspect-[2/3] bg-[#3a3f58] dark:bg-gray-700 rounded-lg shadow-sm"></div>
-          <div className="space-y-2">
-            <div className="h-4 bg-[#3a3f58] dark:bg-gray-700 rounded w-full"></div>
-            <div className="h-3 bg-[#3a3f58] dark:bg-gray-700 rounded w-2/3"></div>
+    <div className="relative flex-1 p-4 md:p-6 md:pl-0 overflow-hidden">
+      <div className="flex gap-4 overflow-hidden h-full items-start px-2 py-4">
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={i}
+            className="min-w-[200px] w-[200px] flex-shrink-0 space-y-3"
+          >
+            <div className="w-full aspect-[2/3] bg-[#3a3f58] dark:bg-gray-700 rounded-lg shadow-sm"></div>
+            <div className="space-y-2">
+              <div className="h-4 bg-[#3a3f58] dark:bg-gray-700 rounded w-full"></div>
+              <div className="h-3 bg-[#3a3f58] dark:bg-gray-700 rounded w-2/3"></div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   </div>
 );

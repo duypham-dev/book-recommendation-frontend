@@ -54,7 +54,7 @@ const SearchResults = () => {
       showHero={false}
       onSearchSubmit={handleSearchSubmit}
     >
-      <main className="mt-8 px-4 sm:px-6 lg:px-8 space-y-8">
+      <main className="mt-8 px-4 sm:px-6 lg:px-8 space-y-8 min-h-dvh">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Kết quả tìm kiếm cho "{keyword}"

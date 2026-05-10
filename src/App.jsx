@@ -10,7 +10,6 @@ import { useThemeContext } from "./hooks/useTheme";
 import BookDetail from "./pages/BookDetail";
 import CategoryBooks from "./pages/CategoryBooks";
 import AllBooks from "./pages/AllBooks";
-import Membership from "./pages/Membership";
 import About from "./pages/About";
 
 import AuthProvider from "./contexts/Auth/AuthProvider.jsx";
@@ -99,14 +98,6 @@ function App() {
                 element={
                   <UserRoute>
                     <CategoryBooks />
-                  </UserRoute>
-                }
-              />
-              <Route
-                path={PATHS.MEMBERSHIP}
-                element={
-                  <UserRoute>
-                    <Membership />
                   </UserRoute>
                 }
               />

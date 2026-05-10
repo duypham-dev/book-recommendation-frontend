@@ -6,6 +6,7 @@ import ScrollToTop from "../components/common/ScrollToTop";
 import useBookDetail from "../hooks/useBookDetail";
 import useFavorite from "../hooks/useFavorite";
 import useBookReviews from "../hooks/useBookReviews";
+import useSimilarBooks from "../hooks/useSimilarBooks";
 import useSameGenreBooks from "../hooks/useSameGenreBooks";
 import { applyPreset, isCloudinaryUrl } from "../utils/cloudinaryUtils";
 
@@ -55,10 +56,11 @@ const BookDetail = () => {
   const { book, bookData, loading, handleRead, handleDownload } = useBookDetail();
   const { isFavorited, loadingFavorite, handleFavorite, syncFavorite } = useFavorite(book?.id);
 
-  // Fetch books that share at least one genre with the current book.
-  // Starts only once `book.id` is resolved; no-ops on null/undefined.
-  const { books: sameGenreBooks, loading: loadingSameGenre } = useSameGenreBooks(book?.id);
+  // Fetch similar books
+  const { similarBooks, loading: loadingSimilarBooks } = useSimilarBooks(book?.id);
 
+  //Fetch same genre books
+   const { books: sameGenreBooks, loading: loadingSameGenre } = useSameGenreBooks(book?.id);
 
   // Derive the first genre for the "Xem tất cả" navigation in RelatedBooks.
   const firstGenre = bookData?.genres?.[0];
@@ -78,6 +80,7 @@ const BookDetail = () => {
     reviews,
     avgRating,
     totalReviews,
+    ratingDistribution,
     hasMore,
     loadingMore,
     loadMore,
@@ -115,9 +118,10 @@ const BookDetail = () => {
       ...book,
       rating: avgRating,
       totalReviews,
+      ratingDistribution,
       reviewsList: reviews,
     };
-  }, [book, avgRating, totalReviews, reviews]);
+  }, [book, avgRating, totalReviews, ratingDistribution, reviews]);
 
   // Optimized background image URL for desktop (blur effect)
   const backgroundBlurUrl = useMemo(() => {
@@ -240,12 +244,18 @@ const BookDetail = () => {
                   </div>
                 }
               >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-12">
                   <RelatedBooks
                     books={sameGenreBooks}
                     loading={loadingSameGenre}
                     genreId={firstGenre?.genreId}
                     genreName={firstGenre?.genreName}
+                    title="Sách cùng thể loại"
+                  />
+                  <RelatedBooks
+                    books={similarBooks}
+                    loading={loadingSimilarBooks}
+                    title="Sách tương tự"
                   />
                 </div>
               </Suspense>

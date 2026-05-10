@@ -1,9 +1,5 @@
 /**
  * Genre configurations for Home page
- *
- * NOTE: These IDs are hard-coded and match the database.
- * In the future, consider making this configurable via API
- * or using slug-based routing instead of numeric IDs.
  */
 
 /**

@@ -200,11 +200,10 @@ const Footer = () => {
         <div className="border-t border-gray-200 dark:border-white/10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-500 dark:text-gray-500">
             &copy; {CURRENT_YEAR} TekBook.org. Tiệm sách eBook trực tuyến miễn phí
-            dành cho mọi người.
+            dành cho mọi người. (ĐÂY LÀ PROJECT ĐỂ PHỤC VỤ MỤC ĐÍCH HỌC TẬP)
           </p>
           <p className="text-xs text-gray-400 dark:text-gray-600 flex items-center gap-1">
-            Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> in
-            Vietnam
+            ĐÂY LÀ PROJECT ĐỂ PHỤC VỤ MỤC ĐÍCH HỌC TẬP
           </p>
         </div>
       </div>

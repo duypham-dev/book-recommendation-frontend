@@ -54,7 +54,7 @@ const SideTitleBookCarousel = ({
 
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth h-full items-center pb-4 md:pb-0"
+          className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth h-full items-start px-2 py-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {books.map((book, index) => (

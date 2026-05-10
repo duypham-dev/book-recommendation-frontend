@@ -21,7 +21,7 @@ export const MessageProvider = ({ children }) => {
     info: (content, duration = 3) => {
       messageApi.info({ content, duration, style: { zIndex: 9999 } });
     }
-  }), [messageApi]); // Dependency là messageApi của antd
+  }), [messageApi]); 
 
   return (
     <MessageContext.Provider value={showMessage}>

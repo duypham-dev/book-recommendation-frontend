@@ -165,15 +165,6 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
                 <CategoryDropdown />
               </div>
 
-              {/* Membership */}
-              <Link
-                to="/membership"
-                className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 rounded-lg transition-colors"
-              >
-                <Crown className="w-4 h-4 text-yellow-500 fill-yellow-500" />{" "}
-                Hội viên
-              </Link>
-
               {/* Search Bar */}
               <div className="flex-1 relative" ref={searchContainerRef}>
                 <input

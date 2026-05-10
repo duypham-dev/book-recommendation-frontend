@@ -16,10 +16,10 @@ const MainLayout = ({
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'register' or 'forgot'
   const { user } = useAuth();
 
-  // Hàm này sẽ được truyền xuống cho Header để mở modal
+  // This function will be passed to the Header component and called when the user clicks the login/register button
   const openAuthModal = (mode) => {
-    setAuthMode(mode); // Cập nhật chế độ (login/register)
-    setShowAuthModal(true); // Hiển thị modal
+    setAuthMode(mode); // Update the mode (login/register)
+    setShowAuthModal(true); // Show the modal
   };
 
 

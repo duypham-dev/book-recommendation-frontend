@@ -87,7 +87,7 @@ const ManageAccount = () => {
             <div className="md:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setIsMobileSidebarOpen(false)} />
           )}
 
-          <div className="md:grid md:grid-cols-4 min-h-[calc(100vh-250px)] md:min-h-[calc(100vh-300px)]">
+          <div className="md:grid md:grid-cols-4 min-h-[calc(100vh-250px)] md:min-h-[100vh]">
             <div
               className={`
                 fixed md:static inset-y-0 left-0 z-40 w-64 md:w-auto

@@ -1,11 +1,11 @@
 import api from "../config/ApiConfig.js";
 
-export const getRecommendedBooks = async (userId, limit = 10) => {
+export const getRecommendedBooks = async (limit = 10) => {
   try {
     const response = await api.get('/recommendations', {
-      params: { userId, limit }
+      params: { limit }
     });
-    return response;
+    return response.data || response;
   } catch (error) {
     console.error("Failed to fetch recommended books:", error);
     throw error;

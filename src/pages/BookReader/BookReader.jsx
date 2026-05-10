@@ -21,7 +21,7 @@ export default function EpubCoreViewer({ onBack }) {
 
   const { book, bookUrl, isLoading: dataLoading, error: dataError } = useBookReaderData(bookId);
 
-  const renditionRef = useRef(null);
+  const renditionRef = useRef(null); // single shared ref for both hooks
   const { registerThemes, applyCurrentTheme } = useEpubTheme(renditionRef);
   const { syncProgress, computeProgress } = useReadingProgress(userId, bookId);
 
@@ -35,7 +35,6 @@ export default function EpubCoreViewer({ onBack }) {
 
   const {
     viewerRef,
-    renditionRef: epubRenditionRef,
     isLoading: epubLoading,
     error: epubError,
     meta,
@@ -50,6 +49,7 @@ export default function EpubCoreViewer({ onBack }) {
     goTo,
     jumpToPage,
   } = useEpubReader(bookUrl, {
+    renditionRef,
     userId,
     bookId,
     bookTitle: book?.title,
@@ -59,10 +59,7 @@ export default function EpubCoreViewer({ onBack }) {
     computeProgress,
   });
 
-  // Keep the shared renditionRef in sync for theme hook
-  useEffect(() => {
-    renditionRef.current = epubRenditionRef.current;
-  });
+  // Bug 1 fixed: renditionRef is now shared directly with useEpubReader — no sync effect needed.
 
   // Send feedback to recommendation system on first load
   const feedbackSentRef = useRef(false);
@@ -127,6 +124,8 @@ export default function EpubCoreViewer({ onBack }) {
 
       <div className="absolute top-18 bottom-10 left-0 right-0 shadow-lg max-w-[1280px] mx-auto">
         <div className="relative w-full h-full">
+
+          {/* The viewer div where the ePub will be rendered */}
           <div ref={viewerRef} className="absolute inset-0" />
 
           {isLoading && (

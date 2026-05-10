@@ -22,7 +22,6 @@ export const getUserHistory = async (userId, { page = 0, size = 8 } = {}) => {
 
 export const recordReadingHistory = async (userId, bookId, payload) => {
   try {
-    console.log("Recording reading history with payload:", payload);
     const response = await api.post(`/users/books/${bookId}/history`, payload);
     return response.data || response;
   } catch (error) {
@@ -31,13 +30,22 @@ export const recordReadingHistory = async (userId, bookId, payload) => {
   }
 };
 
-export const getBookProgress = async (userId, bookId) => {
+/**
+ * Fetch the saved reading progress for a specific book.
+ * Returns a number 0–100 (progress percentage).
+ */
+export const getBookProgressById = async (bookId) => {
   try {
-    const history = await getUserHistory(userId, { page: 0, size: 100 });
-    const bookHistory = history.history.find(h => String(h.bookId) === String(bookId));
-    return bookHistory?.progress || 0;
+    const response = await api.get(`/users/books/${bookId}/progress`);
+    const data = response.data || response;
+    return typeof data?.progress === "number" ? data.progress : 0;
   } catch (error) {
-    console.error("Get book progress failed:", error);
+    console.error("Get book progress failed:", error.response?.data || error.message);
     return 0;
   }
 };
+
+/** @deprecated Use getBookProgressById for a specific book. */
+export const getBookProgress = async (userId, bookId) => {
+  return getBookProgressById(bookId);
+};

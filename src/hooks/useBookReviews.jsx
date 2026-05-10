@@ -28,6 +28,7 @@ const useBookReviews = (bookId, initialStats = null) => {
   const [totalReviews, setTotalReviews] = useState(initialStats?.totalReviews ?? 0);
   const [hasMore, setHasMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [ratingDistribution, setRatingDistribution] = useState(null);
 
   // Sync initial stats from book detail (avoids flash of 0)
   useEffect(() => {
@@ -50,6 +51,9 @@ const useBookReviews = (bookId, initialStats = null) => {
       setReviews((prev) => (replace ? mapped : [...prev, ...mapped]));
       setTotalReviews(data.total ?? 0);
       setHasMore(data.hasMore ?? false);
+      if (data.distribution) {
+        setRatingDistribution(data.distribution);
+      }
       nextPageRef.current = page + 1;
     } catch (err) {
       console.error('Failed to fetch ratings:', err);
@@ -98,7 +102,7 @@ const useBookReviews = (bookId, initialStats = null) => {
     }
   }, [isAuthenticated, user?.userId, bookId, message, fetchPage]);
 
-  return { reviews, avgRating, totalReviews, hasMore, loadingMore, loadMore, handleReviewSubmit };
+  return { reviews, avgRating, totalReviews, ratingDistribution, hasMore, loadingMore, loadMore, handleReviewSubmit };
 };
 
 export default useBookReviews;
