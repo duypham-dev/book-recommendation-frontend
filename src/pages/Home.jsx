@@ -12,7 +12,7 @@ import TopBooksShowcase, {
 import GenreShowcase from "../components/home/GenreShowcase";
 import SideGenreItem from "../components/home/SideGenreItem";
 import GenreCarouselItem from "../components/home/GenreCarouselItem";
-import RecommendedShowcase from "../components/home/RecommendedShowcase";
+import RecommendedShowcase, { RecommendedSkeleton } from "../components/home/RecommendedShowcase";
 
 // Layout
 import MainLayout from "../layouts/MainLayout";
@@ -47,7 +47,7 @@ const Home = () => {
     recommendedBooks,
     loading: recommendationsLoading,
     error: recommendationsError
-  } = useRecommendedBooks(15);
+  } = useRecommendedBooks(10);
 
   // Lazy load genre books with Intersection Observer
   const { genreBooks, setGenreRef } = useLazyLoadGenres();
@@ -72,10 +72,7 @@ const Home = () => {
         {/* Genre Showcase - User Interests */}
         <GenreShowcase />
 
-        {/* Recommended Books Section */}
-        {!recommendationsError && !recommendationsLoading && recommendedBooks.length > 0 && (
-          <RecommendedShowcase books={recommendedBooks} />
-        )}
+      
 
         {!error && topBooksLoading && <TopBooksSkeleton />}
 
@@ -84,6 +81,11 @@ const Home = () => {
             books={topBooks}
             title="Top sách được đọc nhiều nhất"
           />
+        )}
+        {/* Recommended Books Section */}
+        {!error && recommendationsLoading && <RecommendedSkeleton />}
+        {!recommendationsError && !recommendationsLoading && recommendedBooks.length > 0 && (
+          <RecommendedShowcase books={recommendedBooks} />
         )}
 
         {/* Side Title Genres Categories */}
