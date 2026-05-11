@@ -2,8 +2,6 @@ import React from "react";
 
 // Components
 import Hero from "../components/home/Hero";
-import BookCarousel from "../components/common/BookCarousel";
-import ScrollToTop from "../components/common/ScrollToTop";
 
 import TopBooksShowcase, {
   TopBooksSkeleton,
@@ -58,8 +56,6 @@ const Home = () => {
       <main className="mt-8 px-4 sm:px-6 lg:px-8 space-y-8 min-h-[calc(100vh-400px)]">
         {/* Genre Showcase - User Interests */}
         <GenreShowcase />
-
-      
 
         {!error && topBooksLoading && <TopBooksSkeleton />}
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowUp, BookOpen, Search, SlidersHorizontal, X } from "lucide-react";
+import { Pagination, Skeleton } from "antd";
 
 import MainLayout from "../layouts/MainLayout";
 import BookCard from "../components/common/BookCard";
@@ -14,93 +15,14 @@ import { getAllBooks } from "../services/bookService";
 const PAGE_SIZE = 12;
 
 // ------------------------------------------------------------------
-// Pagination Controls
-// ------------------------------------------------------------------
-const PaginationControls = ({ page, totalPages, onPageChange }) => {
-  if (totalPages <= 1) return null;
-
-  // Build page number list with ellipsis
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxVisible = 5;
-
-    if (totalPages <= maxVisible + 2) {
-      for (let i = 0; i < totalPages; i++) pages.push(i);
-    } else {
-      pages.push(0);
-      let start = Math.max(1, page - 1);
-      let end = Math.min(totalPages - 2, page + 1);
-
-      if (page <= 2) {
-        start = 1;
-        end = maxVisible - 2;
-      } else if (page >= totalPages - 3) {
-        start = totalPages - maxVisible + 1;
-        end = totalPages - 2;
-      }
-
-      if (start > 1) pages.push("...");
-      for (let i = start; i <= end; i++) pages.push(i);
-      if (end < totalPages - 2) pages.push("...");
-      pages.push(totalPages - 1);
-    }
-    return pages;
-  };
-
-  return (
-    <div className="flex items-center justify-center gap-1.5 mt-8 pb-4">
-      <button
-        onClick={() => onPageChange(page - 1)}
-        disabled={page === 0}
-        className="px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors"
-      >
-        ‹ Trước
-      </button>
-
-      {getPageNumbers().map((p, idx) =>
-        p === "..." ? (
-          <span
-            key={`ellipsis-${idx}`}
-            className="px-2 py-2 text-sm text-gray-400"
-          >
-            …
-          </span>
-        ) : (
-          <button
-            key={p}
-            onClick={() => onPageChange(p)}
-            className={`min-w-[36px] py-2 text-sm rounded-lg border transition-colors ${
-              p === page
-                ? "border-blue-500 bg-blue-600 text-white shadow-sm"
-                : "border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-            }`}
-          >
-            {p + 1}
-          </button>
-        )
-      )}
-
-      <button
-        onClick={() => onPageChange(page + 1)}
-        disabled={page >= totalPages - 1}
-        className="px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors"
-      >
-        Sau ›
-      </button>
-    </div>
-  );
-};
-
-// ------------------------------------------------------------------
 // Skeleton Loader
 // ------------------------------------------------------------------
 const BookGridSkeleton = ({ count = PAGE_SIZE, hasSidebar = true }) => (
   <div className={`grid grid-cols-2 sm:grid-cols-3 ${hasSidebar ? "lg:grid-cols-4" : "lg:grid-cols-6"} gap-6`}>
     {Array.from({ length: count }).map((_, i) => (
-      <div key={i} className="animate-pulse">
-        <div className="bg-gray-200 dark:bg-gray-700 rounded-lg aspect-[3/4]" />
-        <div className="mt-3 h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-        <div className="mt-1.5 h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+      <div key={i} className="flex flex-col gap-2">
+        <Skeleton.Image active className="w-full aspect-[3/4]" style={{ width: '100%', height: 'auto', aspectRatio: '3/4' }} />
+        <Skeleton active title={false} paragraph={{ rows: 2, width: ['80%', '50%'] }} />
       </div>
     ))}
   </div>
@@ -351,12 +273,16 @@ const AllBooks = () => {
             )}
 
             {/* Pagination */}
-            {!isLoading && !error && books.length > 0 && (
-              <PaginationControls
-                page={pagination.page}
-                totalPages={pagination.totalPages}
-                onPageChange={setPage}
-              />
+            {!isLoading && !error && books.length > 0 && pagination.totalPages > 1 && (
+              <div className="flex justify-center mt-8 pb-4">
+                <Pagination
+                  current={pagination.page + 1}
+                  total={pagination.total}
+                  pageSize={PAGE_SIZE}
+                  onChange={(page) => setPage(page - 1)}
+                  showSizeChanger={false}
+                />
+              </div>
             )}
           </div>
         </div>

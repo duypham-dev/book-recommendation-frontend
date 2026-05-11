@@ -29,14 +29,14 @@ const SideTitleBookCarousel = ({
       {/* Sidebar Title */}
       <div className="md:w-[22%] p-6 md:p-8 md:pr-4 flex flex-col justify-center shrink-0">
         <h2
-          className={`text-2xl md:text-[32px] font-bold bg-gradient-to-r ${className} bg-clip-text text-transparent leading-tight mb-8`}
+          className={`text-2xl md:text-[32px] font-bold bg-gradient-to-r ${className} bg-clip-text dark:text-transparent leading-tight mb-8`}
           style={{ textTransform: "capitalize" }}
         >
           {title}
         </h2>
         <Link
           to={`/category/${genreId}`}
-          className="inline-flex items-center !text-white hover:text-[#E2C677] font-medium transition-colors text-sm group"
+          className="inline-flex items-center !text-black dark:!text-white hover:text-[#E2C677] font-medium transition-colors text-sm group"
         >
           Xem toàn bộ
           <ChevronRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />

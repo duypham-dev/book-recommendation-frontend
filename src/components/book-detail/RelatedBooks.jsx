@@ -22,12 +22,6 @@ const SkeletonCard = () => (
 /**
  * RelatedBooks — renders a grid of books that share at least one genre with
  * the currently viewed book.
- *
- * Props:
- *   books    {Array}          – Mapped book list items from the API.
- *   loading  {boolean}        – Show skeleton placeholders while fetching.
- *   genreId  {string|null}    – First genre ID; enables the "Xem tất cả" link.
- *   genreName {string|null}   – Display name for the genre page navigation.
  */
 const RelatedBooks = React.memo(({ books, loading = false, genreId, genreName, title = "Sách cùng thể loại" }) => {
   const navigate = useNavigate();
@@ -44,7 +38,7 @@ const RelatedBooks = React.memo(({ books, loading = false, genreId, genreName, t
     <div className="pb-4">
       {/* Custom gradient header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <h2 className="text-base sm:text-2xl font-bold bg-gradient-to-r from-primary via-white to-orange-400 bg-clip-text text-transparent">
+        <h2 className="text-base text-black sm:text-2xl font-bold bg-gradient-to-r from-primary via-white to-orange-400 bg-clip-text dark:bg-gradient-to-r from-primary via-white to-orange-400 bg-clip-text dark:text-transparent">
           {title}
         </h2>
         {genreId && (
