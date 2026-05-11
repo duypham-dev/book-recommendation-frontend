@@ -15,9 +15,6 @@ import { App } from "antd"
 // import services
 import { getBookFavorites, removeFavorite } from "../../services/favoriteService"
 
-// import utils
-import { sendFeedback } from "../../utils/feedbackHelper"
-
 const PAGE_SIZE = 10;
 
 const FavoritesSection = React.memo(() => {
@@ -101,7 +98,6 @@ const FavoritesSection = React.memo(() => {
         const favBookId = fav.bookId || fav.book?.id || fav.id;
         return favBookId !== bookId;
       }));
-      sendFeedback(userId, bookId, 'favorite', 0);
     } catch (error) {
       message.error("Xóa thất bại. Vui lòng thử lại");
       console.error("Remove favorite failed:", error);

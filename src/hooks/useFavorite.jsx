@@ -2,7 +2,6 @@ import { useState, useCallback } from "react";
 import useAuth from "./useAuth";
 import useMessage from "./useMessage";
 import { addFavorite, removeFavorite } from "../services/favoriteService";
-import { sendFeedback } from "../utils/feedbackHelper";
 
 /**
  * Custom hook that manages the favorite toggle state for a book.
@@ -47,12 +46,10 @@ const useFavorite = (bookId, initialIsFav = false) => {
         await removeFavorite(user.userId, numericBookId);
         setIsFavorited(false);
         message.success("Đã xóa khỏi yêu thích");
-        sendFeedback(user.userId, numericBookId, "favorite", 0);
       } else {
         await addFavorite(user.userId, numericBookId);
         setIsFavorited(true);
         message.success("Đã thêm vào yêu thích");
-        sendFeedback(user.userId, numericBookId, "favorite");
       }
     } catch (error) {
       console.error("Favorite action failed:", error);

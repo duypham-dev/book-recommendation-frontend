@@ -8,7 +8,6 @@ import useEpubTheme from "../../hooks/useEpubTheme";
 import useReadingProgress from "../../hooks/useReadingProgress";
 import useBookmarks from "../../hooks/useBookmarks";
 import useEpubReader from "../../hooks/useEpubReader";
-import { sendFeedback } from "../../utils/feedbackHelper";
 
 import ReaderHeader from "./ReaderHeader";
 import ReaderControls from "./ReaderControls";
@@ -60,15 +59,6 @@ export default function EpubCoreViewer({ onBack }) {
   });
 
   // Bug 1 fixed: renditionRef is now shared directly with useEpubReader — no sync effect needed.
-
-  // Send feedback to recommendation system on first load
-  const feedbackSentRef = useRef(false);
-  useEffect(() => {
-    if (userId && bookId && bookUrl && !feedbackSentRef.current) {
-      feedbackSentRef.current = true;
-      sendFeedback(userId, bookId, "history");
-    }
-  }, [userId, bookId, bookUrl]);
 
   const isLoading = dataLoading || epubLoading;
   const error = dataError || epubError;

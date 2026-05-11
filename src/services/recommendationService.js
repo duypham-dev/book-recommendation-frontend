@@ -303,27 +303,6 @@ export const getSimilarBooks = async (bookId, limit = 10, options = {}) => {
 };
 
 /**
- * Record user feedback (for online learning)
- */
-export const recordFeedback = async (userId, bookId, event, value = null, options = {}) => {
-  try {
-    const response = await callRecsys('post', '/feedback', {
-      data: {
-        user_id: userId,
-        book_id: bookId,
-        event,
-        rating_value: value,
-      },
-      ...options,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Failed to record feedback:', error);
-    throw error;
-  }
-};
-
-/**
  * Get online learning status (via Java backend proxy)
  */
 export const getOnlineLearningStatus = async () => {
@@ -500,7 +479,6 @@ export default {
   triggerRetrain,
   getRecommendations,
   getSimilarBooks,
-  recordFeedback,
   getOnlineLearningStatus,
   enableOnlineLearning,
   disableOnlineLearning,

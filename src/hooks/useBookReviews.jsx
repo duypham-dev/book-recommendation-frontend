@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import useAuth from './useAuth';
 import useMessage from './useMessage';
 import { createOrUpdateRating, getBookRatingsPaginated } from '../services/ratingService';
-import { sendFeedback } from '../utils/feedbackHelper';
 
 const PAGE_SIZE = 5;
 
@@ -89,7 +88,6 @@ const useBookReviews = (bookId, initialStats = null) => {
     try {
       const { rating, comment } = reviewData;
       await createOrUpdateRating(user.userId, bookId, { value: rating, comment });
-      sendFeedback(user.userId, bookId, 'rating', rating);
 
       // Reset to first page so the new review appears at the top
       nextPageRef.current = 0;
