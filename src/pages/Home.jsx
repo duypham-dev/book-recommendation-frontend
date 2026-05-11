@@ -12,6 +12,7 @@ import TopBooksShowcase, {
 import GenreShowcase from "../components/home/GenreShowcase";
 import SideGenreItem from "../components/home/SideGenreItem";
 import GenreCarouselItem from "../components/home/GenreCarouselItem";
+import RecommendedShowcase from "../components/home/RecommendedShowcase";
 
 // Layout
 import MainLayout from "../layouts/MainLayout";
@@ -73,12 +74,7 @@ const Home = () => {
 
         {/* Recommended Books Section */}
         {!recommendationsError && !recommendationsLoading && recommendedBooks.length > 0 && (
-          <section className="mb-8">
-            <BookCarousel
-              books={recommendedBooks}
-              title="Dành riêng cho bạn"
-            />
-          </section>
+          <RecommendedShowcase books={recommendedBooks} />
         )}
 
         {!error && topBooksLoading && <TopBooksSkeleton />}
