@@ -84,7 +84,7 @@ const useBookReviews = (bookId, initialStats = null) => {
 
     try {
       const { rating, comment } = reviewData;
-      await createOrUpdateRating(user.userId, bookId, { value: rating, comment });
+      await createOrUpdateRating(bookId, { value: rating, comment });
 
       // Reset to first page so the new review appears at the top
       nextPageRef.current = 0;

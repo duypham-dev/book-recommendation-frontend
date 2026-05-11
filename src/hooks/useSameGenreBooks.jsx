@@ -5,11 +5,6 @@ import { getSameGenreBooks } from '../services/bookService';
  * Fetches books that share at least one genre with the given book,
  * excluding the book itself.
  *
- * - Fires only when `bookId` is available (no-ops while the parent detail is loading).
- * - Cancels the in-flight request if `bookId` changes or the component unmounts
- *   (prevents state updates on stale requests).
- * - Isolates this concern from `useBookDetail` (Single Responsibility).
- *
  * @param {string|number|null|undefined} bookId - Source book ID.
  * @param {number} [limit=6]                    - Max number of books to return.
  * @returns {{ books: Array, loading: boolean }}

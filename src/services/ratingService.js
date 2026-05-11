@@ -2,13 +2,12 @@ import api from '../config/ApiConfig.js';
 
 /**
  * Create or update a rating for a book.
- * @param {string} userId
  * @param {string} bookId 
  * @param {{ value: number, comment: string }} ratingData
  * @returns {Promise<any>}
  */
-export const createOrUpdateRating = async (userId, bookId, ratingData) => {
-    const response = await api.post(`/users/${userId}/books/${bookId}/ratings`, ratingData);
+export const createOrUpdateRating = async (bookId, ratingData) => {
+    const response = await api.post(`/books/${bookId}/ratings`, ratingData);
     return response.data || response;
 };
 
@@ -19,7 +18,7 @@ export const createOrUpdateRating = async (userId, bookId, ratingData) => {
  * @returns {Promise<any>}
  */
 export const getBookRatings = async (userId, bookId) => {
-    const response = await api.get(`/users/${userId}/books/${bookId}/ratings`);
+    const response = await api.get(`books/${bookId}/ratings`);
     return response.data || response || [];
 };
 
@@ -36,12 +35,11 @@ export const deleteRating = async (userId, bookId) => {
 
 /**
  * Get the average rating for a book.
- * @param {string} userId The ID of the user (can be a dummy value if not used by backend for this specific call).
  * @param {string} bookId
  * @returns {Promise<{averageRating: number, totalRatings: number}>}
  */
 export const getAverageRatingByBookId = async (userId, bookId) => {
-    const response = await api.get(`/users/${userId}/books/${bookId}/average-rating`);
+    const response = await api.get(`/books/${bookId}/average-rating`);
     return response.data || response;
 };
 

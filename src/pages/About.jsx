@@ -1,189 +1,201 @@
-import React from 'react';
-import { BookOpen, Users, Zap, Globe } from 'lucide-react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { motion as Motion } from "motion/react";
+import { BookOpen, Heart, Sparkles, Users } from "lucide-react";
+
+import MainLayout from "../layouts/MainLayout";
+import { PATHS } from "../constants/routePaths";
+
+const FADE_UP = {
+	initial: { opacity: 0, y: 16 },
+	whileInView: { opacity: 1, y: 0 },
+	viewport: { once: true, amount: 0.25 },
+	transition: { duration: 0.55, ease: "easeOut" },
+};
 
 const About = () => {
-  return (
-    <div className="min-h-screen bg-white dark:bg-slate-950">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-5xl font-bold mb-4">TekBook</h1>
-          <p className="text-xl text-blue-100">
-            Tiệm sách eBook trực tuyến miễn phí - Tri thức không giới hạn cho mọi người
-          </p>
-        </div>
-      </section>
+	const navigate = useNavigate();
 
-      {/* Mission Section */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-                Sứ mệnh của TekBook
-              </h2>
-              <p className="text-gray-700 dark:text-gray-300 text-lg mb-4">
-                TekBook được thành lập với một mục tiêu rõ ràng: cung cấp quyền truy cập miễn phí
-                vào kho sách điện tử khổng lồ cho tất cả mọi người, bất kể họ ở đâu hoặc tài chính
-                của họ như thế nào.
-              </p>
-              <p className="text-gray-700 dark:text-gray-300 text-lg">
-                Chúng tôi tin rằng giáo dục và sự học hỏi không nên bị hạn chế. Mỗi người đều xứng
-                đáng có cơ hội khám phá thế giới thông qua sách.
-              </p>
-            </div>
-            <div className="bg-blue-600 h-80 rounded-lg flex items-center justify-center">
-              <BookOpen className="w-32 h-32 text-white opacity-50" />
-            </div>
-          </div>
-        </div>
-      </section>
+	const values = [
+		{
+			Icon: Users,
+			title: "Cộng đồng trước tiên",
+			description:
+				"Chúng tôi đặt độc giả ở trung tâm: lắng nghe, đồng hành và cùng nhau xây dựng trải nghiệm tốt hơn mỗi ngày.",
+		},
+		{
+			Icon: Sparkles,
+			title: "Đổi mới",
+			description:
+				"Liên tục cải tiến để việc khám phá và đọc sách trở nên nhanh hơn, mượt hơn và cá nhân hoá hơn.",
+		},
+		{
+			Icon: Heart,
+			title: "Đam mê đọc sách",
+			description:
+				"Tình yêu với sách là động lực để chúng tôi tuyển chọn nội dung và tạo ra những công cụ hỗ trợ hành trình đọc.",
+		},
+	];
 
-      {/* Vision Section */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-12">
-            Tầm nhìn và Giá trị
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Card 1 */}
-            <div className="bg-white dark:bg-slate-800 p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <BookOpen className="w-12 h-12 text-blue-600 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Tri thức Miễn phí</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Truy cập hàng nghìn cuốn sách mà không cần chi trả, hoàn toàn miễn phí.
-              </p>
-            </div>
+	const stats = [
+		{ value: "500K+", label: "Sách" },
+		{ value: "5M+", label: "Độc giả" },
+		{ value: "150+", label: "Quốc gia" },
+		{ value: "24/7", label: "Hỗ trợ" },
+	];
 
-            {/* Card 2 */}
-            <div className="bg-white dark:bg-slate-800 p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <Users className="w-12 h-12 text-green-600 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Cộng đồng</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Tham gia cộng đồng độc giả, chia sẻ đánh giá và khám phá những cuốn sách yêu thích.
-              </p>
-            </div>
+	const heroContent = (
+		<section className="w-full bg-primary dark:bg-primary/80">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center">
+				<Motion.h1
+					initial={{ opacity: 0, y: -10 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.55, ease: "easeOut" }}
+					className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white"
+				>
+					Về TekBook
+				</Motion.h1>
+				<Motion.p
+					initial={{ opacity: 0, y: 10 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.55, ease: "easeOut", delay: 0.08 }}
+					className="mt-3 sm:mt-4 text-sm sm:text-base text-white/90 max-w-2xl mx-auto"
+				>
+					Biến việc khám phá và tận hưởng sách điện tử trở nên đơn giản, cá nhân hoá và thú vị hơn.
+				</Motion.p>
+			</div>
+		</section>
+	);
 
-            {/* Card 3 */}
-            <div className="bg-white dark:bg-slate-800 p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <Zap className="w-12 h-12 text-yellow-600 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Nhanh & Dễ dàng</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Giao diện thân thiện, tìm kiếm nhanh chóng, đọc ở bất cứ thiết bị nào.
-              </p>
-            </div>
+	return (
+		<MainLayout showHero={true} heroContent={heroContent}>
+			<div className="px-4 sm:px-6 lg:px-8 pt-20 pb-14 space-y-16 sm:space-y-20">
+				{/* Our Story */}
+				<section className="grid md:grid-cols-2 gap-10 lg:gap-14 items-center">
+					<Motion.div {...FADE_UP}>
+						<h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+							Câu chuyện của chúng tôi
+						</h2>
+						<div className="mt-4 space-y-4 text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
+							<p>
+								TekBook được xây dựng với một niềm tin đơn giản: ai cũng xứng đáng có quyền tiếp cận tri thức và những
+								câu chuyện hay, ngay trong tầm tay.
+							</p>
+							<p>
+								Chúng tôi kết hợp công nghệ với sự tôn trọng dành cho nội dung, tạo nên trải nghiệm đọc mượt mà,
+								tiện lợi và phù hợp với từng người dùng.
+							</p>
+							<p>
+								Mục tiêu của TekBook là giúp việc đọc trở nên dễ tiếp cận hơn, thú vị hơn và bền vững hơn cho mọi
+								người.
+							</p>
+						</div>
+					</Motion.div>
 
-            {/* Card 4 */}
-            <div className="bg-white dark:bg-slate-800 p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <Globe className="w-12 h-12 text-purple-600 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Toàn cầu</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Các cuốn sách từ khắp nơi trên thế giới, dành cho bạn đọc quốc tế.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+					<Motion.div
+						initial={{ opacity: 0, x: 18 }}
+						whileInView={{ opacity: 1, x: 0 }}
+						viewport={{ once: true, amount: 0.25 }}
+						transition={{ duration: 0.6, ease: "easeOut" }}
+						className="w-full"
+					>
+						<div className="w-full aspect-[4/3] rounded-2xl bg-gray-100 dark:bg-gray-800/70 border border-gray-200 dark:border-gray-700 flex items-center justify-center">
+							<div className="flex flex-col items-center justify-center text-center px-6">
+								<div className="h-16 w-16 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex items-center justify-center">
+									<BookOpen className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+								</div>
+								<p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+									Không gian đọc của bạn — gọn gàng, tập trung và dễ chịu.
+								</p>
+							</div>
+						</div>
+					</Motion.div>
+				</section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-12">
-            Các tính năng chính
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
-                  <BookOpen className="h-6 w-6" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Thư viện Khổng lồ</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-2">
-                  Hơn hàng chục ngàn tiêu đề sách bao gồm nhiều thể loại khác nhau.
-                </p>
-              </div>
-            </div>
+				{/* Values */}
+				<section>
+					<Motion.div {...FADE_UP} className="text-center">
+						<h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Giá trị cốt lõi</h2>
+					</Motion.div>
+					<div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+						{values.map((item, index) => (
+							<Motion.div
+								key={item.title}
+								initial={{ opacity: 0, y: 18 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, amount: 0.25 }}
+								transition={{ duration: 0.55, ease: "easeOut", delay: index * 0.06 }}
+								whileHover={{ y: -4 }}
+								className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm"
+							>
+								<div className="h-12 w-12 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center">
+									<item.Icon className="h-6 w-6" />
+								</div>
+								<h3 className="mt-4 font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+								<p className="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{item.description}</p>
+							</Motion.div>
+						))}
+					</div>
+				</section>
 
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
-                  <Users className="h-6 w-6" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Gợi ý Cá nhân hóa</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-2">
-                  Nhận đề xuất sách dựa trên sở thích và lịch sử đọc của bạn.
-                </p>
-              </div>
-            </div>
+				{/* Stats */}
+				<section>
+					<Motion.div {...FADE_UP} className="text-center">
+						<h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Con số nổi bật</h2>
+					</Motion.div>
+					<div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-8">
+						{stats.map((s, index) => (
+							<Motion.div
+								key={s.label}
+								initial={{ opacity: 0, scale: 0.96 }}
+								whileInView={{ opacity: 1, scale: 1 }}
+								viewport={{ once: true, amount: 0.25 }}
+								transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.05 }}
+								className="text-center"
+							>
+								<div className="text-3xl sm:text-4xl font-bold text-primary">{s.value}</div>
+								<div className="mt-1 text-sm text-gray-600 dark:text-gray-400">{s.label}</div>
+							</Motion.div>
+						))}
+					</div>
+				</section>
 
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
-                  <Zap className="h-6 w-6" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Đọc Không gián đoạn</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-2">
-                  Đọc trực tuyến với công cụ đọc tiên tiến, đánh dấu và ghi chú.
-                </p>
-              </div>
-            </div>
+				{/* CTA (full width breakout) */}
+				<section className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-primary dark:bg-primary/80">
+					<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 text-center">
+						<Motion.h2
+							initial={{ opacity: 0, y: 14 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, amount: 0.4 }}
+							transition={{ duration: 0.55, ease: "easeOut" }}
+							className="text-2xl sm:text-3xl font-bold text-white"
+						>
+							Tham gia cộng đồng đọc sách
+						</Motion.h2>
+						<Motion.p
+							initial={{ opacity: 0, y: 14 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, amount: 0.4 }}
+							transition={{ duration: 0.55, ease: "easeOut", delay: 0.06 }}
+							className="mt-3 text-sm sm:text-base text-white/90 max-w-2xl mx-auto"
+						>
+							Bắt đầu hành trình với hàng ngàn cuốn sách. Khám phá ngay để tìm cuốn phù hợp với bạn.
+						</Motion.p>
 
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
-                  <Globe className="h-6 w-6" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Đa nền tảng</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-2">
-                  Truy cập từ máy tính, điện thoại, hoặc tablet ở bất cứ đâu.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
-            Liên hệ với chúng tôi
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Điện thoại</h3>
-              <p className="text-gray-600 dark:text-gray-400">📞 0877736289</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Email</h3>
-              <p className="text-gray-600 dark:text-gray-400">📧 Support@Tekbook.vn</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Website</h3>
-              <p className="text-gray-600 dark:text-gray-400">🌐 www.tekbook.vn</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer Quote */}
-      <section className="py-12 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center">
-        <div className="max-w-3xl mx-auto px-4">
-          <p className="text-2xl font-semibold italic">
-            "Một cuốn sách là chiếc cửa thần kỳ bất tận dẫn ta tới những vương quốc xa xăm."
-          </p>
-        </div>
-      </section>
-    </div>
-  );
+						<Motion.button
+							type="button"
+							whileHover={{ scale: 1.03 }}
+							whileTap={{ scale: 0.98 }}
+							onClick={() => navigate(PATHS.ALL_BOOKS)}
+							className="mt-8 inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-white text-primary font-semibold text-sm shadow-sm hover:bg-gray-100 transition-colors"
+						>
+							Bắt đầu
+						</Motion.button>
+					</div>
+				</section>
+			</div>
+		</MainLayout>
+	);
 };
 
 export default About;
