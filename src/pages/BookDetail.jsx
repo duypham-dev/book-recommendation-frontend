@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useEffect, Suspense } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import Breadcrumb from "../components/common/Breadcrumb";
 import ScrollToTop from "../components/common/ScrollToTop";
@@ -50,8 +50,7 @@ class ErrorBoundary extends React.Component {
 }
 
 const BookDetail = () => {
-  const navigate = useNavigate();
- 
+
 
   const { book, bookData, loading, handleRead, handleDownload } = useBookDetail();
   const { isFavorited, loadingFavorite, handleFavorite, syncFavorite } = useFavorite(book?.id);
@@ -105,15 +104,6 @@ const BookDetail = () => {
     return items;
   }, [firstGenre, book?.title]);
 
-  const handleSearchSubmit = useCallback(
-    (keyword) => {
-      const trimmedKeyword = keyword.trim();
-      if (trimmedKeyword) {
-        navigate(`/search?q=${encodeURIComponent(trimmedKeyword)}`);
-      }
-    },
-    [navigate],
-  );
 
   // Compose the enriched book object for BookInfo
   const enrichedBook = useMemo(() => {
@@ -144,7 +134,7 @@ const BookDetail = () => {
   }, [enrichedBook?.cover]);
 
   return (
-    <MainLayout showHero={false} onSearchSubmit={handleSearchSubmit}>
+    <MainLayout showHero={false}>
       <ScrollToTop />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

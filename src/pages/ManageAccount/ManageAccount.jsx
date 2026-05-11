@@ -55,18 +55,9 @@ const ManageAccount = () => {
     [pathname, navigate],
   )
 
-  const handleSearchSubmit = useCallback(
-    (keyword) => {
-      const trimmed = keyword.trim()
-      if (trimmed) {
-        navigate(`/search?q=${encodeURIComponent(trimmed)}`)
-      }
-    },
-    [navigate],
-  )
 
   return (
-    <MainLayout showHero={false} onSearchSubmit={handleSearchSubmit}>
+    <MainLayout showHero={false}>
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 shadow-sm">
           <Breadcrumb separator=">" items={breadcrumbItems} />

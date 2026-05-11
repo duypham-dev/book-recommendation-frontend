@@ -1,5 +1,4 @@
-import React, { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
 // Components
 import Hero from "../components/home/Hero";
@@ -31,7 +30,6 @@ import {
 } from "../constants/homeGenres";
 
 const Home = () => {
-  const navigate = useNavigate();
   // Get genres with O(1) lookup map
   const { genreMap } = useGenreMap();
   
@@ -52,21 +50,10 @@ const Home = () => {
   // Lazy load genre books with Intersection Observer
   const { genreBooks, setGenreRef } = useLazyLoadGenres();
 
-  const handleSearchSubmit = useCallback(
-    (keyword) => {
-      const trimmedKeyword = keyword.trim();
-      if (trimmedKeyword) {
-        navigate(`/search?keyword=${encodeURIComponent(trimmedKeyword)}`);
-      }
-    },
-    [navigate],
-  );
-
   return (
     <MainLayout
       showHero={true}
       heroContent={<Hero />}
-      onSearchSubmit={handleSearchSubmit}
     >
       <main className="mt-8 px-4 sm:px-6 lg:px-8 space-y-8 min-h-[calc(100vh-400px)]">
         {/* Genre Showcase - User Interests */}

@@ -1,8 +1,8 @@
 import "@ant-design/v5-patch-for-react-19"; // Temporary patch for React 19 compatibility
 import "./App.css";
 import Home from "./pages/Home.jsx";
-import SearchResults from "./pages/SearchResults.jsx";
-import { Routes, Route } from "react-router-dom";
+
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import { ConfigProvider, App as AntdApp, theme as antdTheme } from "antd";
 import { useThemeContext } from "./hooks/useTheme";
@@ -70,14 +70,7 @@ function App() {
                     </UserRoute>
                   }
                 />
-              <Route
-                path={PATHS.SEARCH}
-                element={
-                  <UserRoute>
-                    <SearchResults />
-                  </UserRoute>
-                }
-              />
+
               <Route
                 path="/books/:id"
                 element={
@@ -205,6 +198,8 @@ function App() {
               <Route path="/activate-account" element={<ActivateAccount />} />
               <Route path="/reader/:bookId" element={<EpubCoreViewer />} />
               <Route path="/upload" element={<Upload />} />
+              {/* Redirect legacy /search route to /books */}
+              <Route path="/search" element={<Navigate to="/books" replace />} />
               <Route path="*" element={<NotFound />} />
               </Routes>
             </AntdApp>

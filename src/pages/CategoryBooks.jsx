@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import BookCard from "../components/common/BookCard";
 import Breadcrumb from "../components/common/Breadcrumb";
@@ -123,7 +123,6 @@ const CategoryBooks = () => {
   const { categoryId } = useParams();
   console.log("CategoryBooks rendered with categoryId:", categoryId);
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const initialCategoryName = searchParams.get("name") || "Thể loại";
 
   // Genre info
@@ -213,15 +212,6 @@ const CategoryBooks = () => {
   }, [currentPage, sortBy, fetchBooks]);
 
   // ── Handlers ──────────────────────────────────────────────────────────────
-  const handleSearchSubmit = useCallback(
-    (keyword) => {
-      const trimmed = keyword.trim();
-      if (trimmed) {
-        navigate(`/search?q=${encodeURIComponent(trimmed)}`);
-      }
-    },
-    [navigate]
-  );
 
   const handleSortChange = useCallback((value) => {
     setSortBy(value);
@@ -237,7 +227,7 @@ const CategoryBooks = () => {
   const isLoading = genreLoading || booksLoading;
 
   return (
-    <MainLayout onSearchSubmit={handleSearchSubmit}>
+    <MainLayout>
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header Section */}

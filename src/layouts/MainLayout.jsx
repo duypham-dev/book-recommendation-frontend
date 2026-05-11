@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/header/Header';
 import Footer from './Footer';
 import AuthModal from '../components/auth/AuthModal';
@@ -15,11 +16,20 @@ const MainLayout = ({
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'register' or 'forgot'
   const { user } = useAuth();
+  const navigate = useNavigate();
 
-  // This function will be passed to the Header component and called when the user clicks the login/register button
+  // Default search handler — navigates to AllBooks with keyword query param.
+  // Individual pages can override via onSearchSubmit prop if needed.
+  const defaultSearchHandler = useCallback((keyword) => {
+    const trimmed = (keyword || '').trim();
+    if (trimmed) {
+      navigate(`/books?keyword=${encodeURIComponent(trimmed)}`);
+    }
+  }, [navigate]);
+
   const openAuthModal = (mode) => {
-    setAuthMode(mode); // Update the mode (login/register)
-    setShowAuthModal(true); // Show the modal
+    setAuthMode(mode);
+    setShowAuthModal(true);
   };
 
 
@@ -28,7 +38,7 @@ const MainLayout = ({
       <Header
         onAuthClick={openAuthModal}
         user={user}
-        onSearchSubmit={onSearchSubmit}
+        onSearchSubmit={onSearchSubmit ?? defaultSearchHandler}
         onGenreSelect={onGenreSelect}
       />
       {showHero && heroContent}
@@ -36,13 +46,12 @@ const MainLayout = ({
         {children}
       </main>
       <Footer />
-      {/* Render AuthModal có điều kiện */}
-      {/* Chỉ hiển thị khi showAuthModal là true */}
+      {/* Render AuthModal conditionally */}
       {showAuthModal && (
         <AuthModal
-          onClose={() => setShowAuthModal(false)} // Hàm để đóng modal
-          initialMode={authMode} // Truyền chế độ ban đầu
-          onModeChange={setAuthMode} // Hàm để thay đổi chế độ từ bên trong modal
+          onClose={() => setShowAuthModal(false)}
+          initialMode={authMode}
+          onModeChange={setAuthMode}
         />
       )}
       {!user && <ThemeToggle />}
@@ -52,3 +61,4 @@ const MainLayout = ({
 };
 
 export default MainLayout;
+

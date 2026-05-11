@@ -75,24 +75,38 @@ export const getPreviewBook = async (bookId) => {
   }
 };
 
-export const getAllBooks = async (pageParam, signal) => {
-  try {
-    const response = await api.get(`/books`, {
-      params: { cursor: pageParam },
-      signal
-    });
-    console.log("response", response);
-    const responseData = response.data || response;
-    
-    console.log(`Fetched page ${pageParam} of all books`);
-    return {
-      content: responseData.content || [],
-      nextPage: responseData.nextCursor || null,
-    };
-  } catch (error) {
-    console.error("Failed to fetch all books:", error);
-    throw error;
-  }
+/**
+ * Get all books with offset-based pagination, search, sort, and filter.
+ *
+ * @param {Object}   options
+ * @param {number}   options.page      - Zero-based page index
+ * @param {number}   options.size      - Items per page
+ * @param {string}   options.sort      - 'newest' | 'title-asc' | 'title-desc'
+ * @param {string}   options.keyword   - Search term
+ * @param {number[]} options.genreIds  - Genre ID filter list
+ * @param {number[]} options.authorIds - Author ID filter list
+ * @param {AbortSignal} signal         - Optional abort signal
+ * @returns {{ content: Array, pagination: { page, size, total, totalPages } }}
+ */
+export const getAllBooks = async ({ page = 0, size = 12, sort, keyword, genreIds, authorIds } = {}, signal) => {
+  const params = { page, size };
+  if (sort) params.sort = sort;
+  if (keyword?.trim()) params.keyword = keyword.trim();
+  if (genreIds?.length) params.genreIds = genreIds.join(',');
+  if (authorIds?.length) params.authorIds = authorIds.join(',');
+
+  const response = await api.get('/books', { params, signal });
+  const data = response.data || response;
+
+  return {
+    content: data.content || [],
+    pagination: {
+      page: data.page ?? 0,
+      size: data.size ?? size,
+      total: data.total ?? 0,
+      totalPages: data.totalPages ?? 0,
+    },
+  };
 };
 
 /**
