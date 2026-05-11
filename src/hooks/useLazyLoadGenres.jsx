@@ -32,7 +32,7 @@ const useLazyLoadGenres = ({
   const genreRefs = useRef({});
   const observerRef = useRef(null);
   
-  // ✅ Dùng ref cho enabled để không trigger lại effect
+
   const enabledRef = useRef(enabled);
   useLayoutEffect(() => {
     enabledRef.current = enabled;

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import BookCard from "../components/common/BookCard";
+import Breadcrumb from "../components/common/Breadcrumb";
 import { getGenreById } from "../services/genreService";
 import { getBooksByGenre } from "../services/manageBookService";
 
@@ -241,15 +242,7 @@ const CategoryBooks = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header Section */}
           <div className="mb-8">
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
-              <a href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                Trang chủ
-              </a>
-              <span>/</span>
-              <span className="text-gray-900 dark:text-white font-medium">
-                {genreName}
-              </span>
-            </div>
+            <Breadcrumb items={[{ label: genreName }]} />
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>

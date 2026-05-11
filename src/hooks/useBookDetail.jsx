@@ -11,7 +11,6 @@ import { getBookDownloadUrl } from "../services/bookService";
  */
 const useBookDetail = () => {
   const { id } = useParams();
-  console.log("useBookDetail: id =", id);
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const message = useMessage();
@@ -19,7 +18,7 @@ const useBookDetail = () => {
   const [bookData, setBookData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Extract bookId from slugWithId (format: "some-title-123")
+  // Extract bookId from slugWithId
   const splitted = id.split('-');
   const bookId = splitted.pop(); 
   // Fetch book detail (includes ratings, isFav, averageRating from backend)

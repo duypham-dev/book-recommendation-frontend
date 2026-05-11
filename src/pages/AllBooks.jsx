@@ -3,6 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { ArrowUp, BookOpen } from "lucide-react";
 import MainLayout from "../layouts/MainLayout";
 import BookCard from "../components/common/BookCard";
+import Breadcrumb from "../components/common/Breadcrumb";
 import { getAllBooks } from "../services/bookService";
 const PAGE_SIZE = 12;
 const MAGIN_ROOT = "100px";
@@ -13,16 +14,16 @@ const AllBooks = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
-      const shouldShow = window.scrollY > 400;
-      if (showScrollTop !== shouldShow) {
-        setShowScrollTop(shouldShow);
-      }
+      setShowScrollTop(window.scrollY > 400);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [showScrollTop]);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -71,6 +72,9 @@ const AllBooks = () => {
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-8 mt-5 min-h-screen">
+        <div className="mb-6">
+          <Breadcrumb items={[{ label: "Tất cả sách" }]} />
+        </div>
         <div className="flex items-center gap-3 mb-8">
           <div className="p-3 bg-blue-100 dark:bg-blue-900/40 rounded-xl">
             <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" />

@@ -3,12 +3,13 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useGenres from "../../hooks/useGenres";
 
-const GRADIENTS = [
-  "from-indigo-500 to-black-500", "from-teal-500 to-black-500",
-  "from-purple-500 to-black-500", "from-orange-500 to-black-500",
-  "from-blue-500 to-black-500", "from-yellow-600 to-black-500",
-  "from-pink-500 to-black-500", "from-emerald-500 to-black-500",
-  "from-black to-white",
+const COLORS = [
+  { bg: "bg-blue-50 dark:bg-blue-500/10", text: "text-blue-600 dark:text-blue-400", hover: "hover:border-blue-500/30 dark:hover:border-blue-500/30" },
+  { bg: "bg-emerald-50 dark:bg-emerald-500/10", text: "text-emerald-600 dark:text-emerald-400", hover: "hover:border-emerald-500/30 dark:hover:border-emerald-500/30" },
+  { bg: "bg-violet-50 dark:bg-violet-500/10", text: "text-violet-600 dark:text-violet-400", hover: "hover:border-violet-500/30 dark:hover:border-violet-500/30" },
+  { bg: "bg-orange-50 dark:bg-orange-500/10", text: "text-orange-600 dark:text-orange-400", hover: "hover:border-orange-500/30 dark:hover:border-orange-500/30" },
+  { bg: "bg-rose-50 dark:bg-rose-500/10", text: "text-rose-600 dark:text-rose-400", hover: "hover:border-rose-500/30 dark:hover:border-rose-500/30" },
+  { bg: "bg-cyan-50 dark:bg-cyan-500/10", text: "text-cyan-600 dark:text-cyan-400", hover: "hover:border-cyan-500/30 dark:hover:border-cyan-500/30" },
 ];
 
 const NavButton = ({ direction, show, onClick }) => {
@@ -18,25 +19,24 @@ const NavButton = ({ direction, show, onClick }) => {
   return (
     <button
       onClick={() => onClick(direction)}
-      className={`absolute ${isLeft ? "-left-4" : "-right-4"} top-1/2 -translate-y-1/2 z-20 bg-white/90 dark:bg-gray-800/90 p-2 rounded-full shadow-lg transition-opacity duration-200 ${show ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+      className={`absolute ${isLeft ? "-left-4" : "-right-4"} top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md transition-all duration-200 border border-gray-100 dark:border-gray-700 hover:scale-110 ${show ? "opacity-100" : "opacity-0 pointer-events-none"}`}
       aria-label={`Scroll ${direction}`}
     >
-      <Icon className="w-5 h-5 text-gray-800 dark:text-white" />
+      <Icon className="w-5 h-5 text-gray-800 dark:text-gray-200" />
     </button>
   );
 };
 
-const GenreCard = ({ title, gradient, onClick }) => (
+const GenreCard = ({ title, colorConfig, onClick }) => (
   <div
     onClick={onClick}
-    className={`flex-shrink-0 snap-start w-40 h-40 sm:w-48 sm:h-48 rounded-xl cursor-pointer bg-gradient-to-br ${gradient} p-4 flex flex-col justify-center hover:scale-102 transition-transform duration-300 dark:shadow-md dark:hover:shadow-xl relative overflow-hidden group`}
+    className={`flex-shrink-0 snap-start w-48 sm:w-56 bg-white dark:bg-[#282B39] border border-gray-100 dark:border-gray-800 rounded-2xl cursor-pointer px-5 py-4 flex items-center justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 group ${colorConfig.hover}`}
   >
-    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />
-    <h3 className="text-white  font-bold text-lg sm:text-xl mb-3 relative z-10 break-words line-clamp-2">
+    <h3 className={`font-semibold text-base truncate pr-2 transition-colors duration-300 ${colorConfig.text}`}>
       {title}
     </h3>
-    <div className="flex items-center text-white/90 text-sm font-medium relative z-10 group-hover:text-white transition-colors duration-300">
-      Xem chủ đề <ChevronRight className="w-4 h-4 ml-1" />
+    <div className={`p-1.5 rounded-full opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ${colorConfig.bg} ${colorConfig.text}`}>
+      <ChevronRight className="w-4 h-4" />
     </div>
   </div>
 );
@@ -49,7 +49,7 @@ const GenreShowcase = () => {
 
   const scroll = (direction) => {
     if (!scrollContainerRef.current) return;
-    const cardWidth = 176; // 160px (w-40) + 16px (gap-4)
+    const cardWidth = 240; // 224px (w-56) + 16px (gap-4)
     scrollContainerRef.current.scrollBy({
       left: direction === "left" ? -cardWidth * 2 : cardWidth * 2,
       behavior: "smooth",
@@ -65,7 +65,7 @@ const GenreShowcase = () => {
         <h2 className="mb-6 text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Bạn đang quan tâm gì?</h2>
         <div className="flex gap-4 overflow-x-hidden">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="flex-shrink-0 w-40 h-40 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-xl" />
+            <div key={i} className="flex-shrink-0 w-48 sm:w-56 h-14 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-2xl" />
           ))}
         </div>
       </section>
@@ -89,14 +89,14 @@ const GenreShowcase = () => {
 
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4"
+          className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1 -mx-1"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {featuredGenres.map((genre, index) => (
             <GenreCard
               key={genre.genreId}
               title={genre.genreName || genre.name}
-              gradient={GRADIENTS[index % GRADIENTS.length]}
+              colorConfig={COLORS[index % COLORS.length]}
               onClick={() => navigate(`/category/${genre.genreId}?name=${encodeURIComponent(genre.genreName || genre.name)}`)}
             />
           ))}
@@ -104,7 +104,7 @@ const GenreShowcase = () => {
           {remainingCount > 0 && (
             <GenreCard
               title={`+ ${remainingCount} chủ đề khác`}
-              gradient={GRADIENTS[GRADIENTS.length - 1]}
+              colorConfig={COLORS[featuredGenres.length % COLORS.length]}
               onClick={() => navigate(`/books`)}
             />
           )}

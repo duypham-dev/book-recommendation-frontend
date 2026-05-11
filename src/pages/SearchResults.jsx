@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import BookCarousel from "../components/common/BookCarousel";
+import Breadcrumb from "../components/common/Breadcrumb";
 import { searchBooks } from "../services/manageBookService";
 
 const DEFAULT_PAGE_SIZE = 12;
@@ -56,7 +57,8 @@ const SearchResults = () => {
     >
       <main className="mt-8 px-4 sm:px-6 lg:px-8 space-y-8 min-h-dvh">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Breadcrumb items={[{ label: "Kết quả tìm kiếm" }]} />
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">
             Kết quả tìm kiếm cho "{keyword}"
           </h1>
           {!loading && !error && (

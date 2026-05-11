@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useEffect, Suspense } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
-import { Breadcrumb } from "antd";
+import Breadcrumb from "../components/common/Breadcrumb";
 import ScrollToTop from "../components/common/ScrollToTop";
 import useBookDetail from "../hooks/useBookDetail";
 import useFavorite from "../hooks/useFavorite";
@@ -93,13 +93,17 @@ const BookDetail = () => {
     syncFavorite(bookData.isFav ?? false);
   }, [bookData, syncFavorite]);
 
-  const breadcrumbItems = useMemo(
-    () => [
-      { title: <Link to="/">Trang chủ</Link> },
-      { title: <p>Chi tiết sách</p> },
-    ],
-    [],
-  );
+  const breadcrumbItems = useMemo(() => {
+    const items = [];
+    if (firstGenre) {
+      items.push({ 
+        label: firstGenre.genreName, 
+        link: `/category/${firstGenre.genreId}?name=${encodeURIComponent(firstGenre.genreName)}` 
+      });
+    }
+    items.push({ label: book?.title || "Chi tiết sách" });
+    return items;
+  }, [firstGenre, book?.title]);
 
   const handleSearchSubmit = useCallback(
     (keyword) => {
@@ -145,8 +149,8 @@ const BookDetail = () => {
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Breadcrumb */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
-          <Breadcrumb separator=">" items={breadcrumbItems} />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
+          <Breadcrumb items={breadcrumbItems} />
         </div>
 
         {/* Loading State */}

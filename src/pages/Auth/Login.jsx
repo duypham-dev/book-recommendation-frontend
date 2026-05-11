@@ -103,10 +103,6 @@ const Login = ({ onModeChange, onClose }) => {
         </div>
 
         <div className="flex justify-between items-center">
-          <label className="flex items-center">
-            <input type="checkbox" className="mr-2" />
-            <span className="text-sm text-gray-600">Ghi nhớ đăng nhập</span>
-          </label>
           <button
             type="button"
             onClick={() => onModeChange("forgot")}

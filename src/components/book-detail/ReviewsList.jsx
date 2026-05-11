@@ -5,7 +5,10 @@ const ReviewsList = React.memo(({ reviews, onLoadMore, hasMore = false, loadingM
   return (
     <div className="space-y-3 sm:space-y-4">
       {reviews.length === 0 && !loadingMore && (
-        <p className="text-gray-400 dark:text-gray-500 text-center py-6 sm:py-8 text-xs sm:text-sm">Chưa có đánh giá nào.</p>
+        <div className="text-center py-6 sm:py-8">
+          <img src="/comment-empty.png" alt="No reviews" className="mx-auto" />
+          <p className="text-gray-400 dark:text-gray-500 text-center">Chưa có đánh giá nào.</p>
+        </div>
       )}
 
       {reviews.map((review, index) => (
