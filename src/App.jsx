@@ -11,6 +11,7 @@ import BookDetail from "./pages/BookDetail";
 import CategoryBooks from "./pages/CategoryBooks";
 import AllBooks from "./pages/AllBooks";
 import About from "./pages/About";
+import NotFound from "./pages/NotFound.jsx";
 
 import AuthProvider from "./contexts/Auth/AuthProvider.jsx";
 import { GenreProvider } from "./contexts/Genre/GenreProvider.jsx";
@@ -204,6 +205,7 @@ function App() {
               <Route path="/activate-account" element={<ActivateAccount />} />
               <Route path="/reader/:bookId" element={<EpubCoreViewer />} />
               <Route path="/upload" element={<Upload />} />
+              <Route path="*" element={<NotFound />} />
               </Routes>
             </AntdApp>
           </ConfigProvider>
