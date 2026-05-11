@@ -1,20 +1,19 @@
 // validators.js
-
 // Regex patterns
 export const patterns = {
-  // Email cơ bản (đủ dùng cho UI)
+
   email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
 
-  // Mật khẩu mạnh: >=8, có thường, HOA, số, ký tự đặc biệt
+  // Strong Password: >=8, lowercase, UPPERCASE, number, special character
   passwordStrong: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/,
 
-  // Username: 3-20 ký tự, chữ/số/_ , có thể có khoảng trắng
+  // Username: 3-20 characters, letters/numbers/_ , can have spaces
   username: /^[a-zA-Z0-9_]{3,20}$/,
 
-  // Họ tên (có dấu, cho phép khoảng trắng, dấu . ' - ), độ dài 2-50
+  // Full Name: allows letters, spaces, periods, apostrophes, and hyphens, length 2-50
   fullName: /^[\p{L}][\p{L}\s'.-]{0,48}[\p{L}]$/u,
 
-  // SĐT Việt Nam: +84 hoặc 0, bắt đầu 3/5/7/8/9, đủ 10 số
+  // Vietnamese Phone Number: +84 or 0, starts with 3/5/7/8/9, exactly 10 digits
   phoneVN: /^(?:\+?84|0)(?:3|5|7|8|9)\d{8}$/
 };
 
@@ -32,7 +31,7 @@ export function validateLogin(form) {
     const isEmail = patterns.email.test(identifier);
     const isUsername = patterns.username.test(identifier);
 
-    // Nếu KHÔNG phải email VÀ cũng KHÔNG phải username -> Báo lỗi
+    //  if it's neither a valid email nor a valid username, show error
     if (!isEmail && !isUsername) {
       errors.identifier = "Email hoặc Tên đăng nhập không hợp lệ.";
     }
@@ -49,7 +48,7 @@ export function validateLogin(form) {
   };
 }
 
-// Hàm validate đăng ký
+// Function to validate signup form
 export function validateSignup(form) {
   // form: { email, password, confirmPassword, username }
   const errors = {};

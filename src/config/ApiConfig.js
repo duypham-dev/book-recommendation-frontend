@@ -83,9 +83,7 @@ api.interceptors.response.use(
           setAuthData(accessToken);
           processQueue(null, accessToken);
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-          // FIX: `await` ensures isRefreshing stays true until the retry completes.
-          // Without await, the finally block fires immediately, allowing new 401s
-          // from React re-renders to trigger a second (stale) refresh cycle.
+
           return await api(originalRequest);
         } else {
           throw new Error("No access token received");

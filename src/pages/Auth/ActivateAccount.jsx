@@ -95,7 +95,7 @@ const AccountActivation = () => {
 };
 
 /**
- * Component con hiển thị Card trạng thái (Dễ bảo trì và tái sử dụng)
+ * child component to render status card for loading, success, and error states
  */
 const StatusCard = ({ icon, title, description, bgColor, showButton, buttonText, onButtonClick }) => (
   <div className="flex flex-col items-center">

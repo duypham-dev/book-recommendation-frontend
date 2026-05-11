@@ -1,5 +1,4 @@
-import React, { useMemo, useCallback, useEffect, Suspense } from "react";
-import { Link } from "react-router-dom";
+import React, { useMemo, useEffect, Suspense } from "react";
 import MainLayout from "../layouts/MainLayout";
 import Breadcrumb from "../components/common/Breadcrumb";
 import ScrollToTop from "../components/common/ScrollToTop";
@@ -50,8 +49,6 @@ class ErrorBoundary extends React.Component {
 }
 
 const BookDetail = () => {
-
-
   const { book, bookData, loading, handleRead, handleDownload } = useBookDetail();
   const { isFavorited, loadingFavorite, handleFavorite, syncFavorite } = useFavorite(book?.id);
 

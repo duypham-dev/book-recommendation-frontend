@@ -1,12 +1,10 @@
 import api from "../config/ApiConfig.js";
-
 /**
  * Fetch genres with pagination support.
  * @param {{ page?: number, size?: number, keyword?: string, sort?: string }} params
  * @returns {{ genres: Array, page: Object|null, message: string }}
  */
 export const getGenres = async ({ page = 0, size = 50, keyword = "", sort = "" } = {}) => {
-  try {
     const params = { page, size };
     if (keyword?.trim()) {
       params.keyword = keyword.trim();
@@ -23,20 +21,11 @@ export const getGenres = async ({ page = 0, size = 50, keyword = "", sort = "" }
       page: pageData,
       message: response.message,
     };
-  } catch (error) {
-    console.error("Error fetching genres:", error.response?.data || error.message);
-    throw error;
-  }
 };
 
 export const getAllGenres = async () => {
-  try {
     const response = await api.get("/genres");
     return response.data || response || [];
-  } catch (error) {
-    console.error("Error fetching all genres:", error.response?.data || error.message);
-    throw error;
-  }
 };
 
 /**
@@ -45,13 +34,8 @@ export const getAllGenres = async () => {
  * @returns {{ genreId: string, genreName: string, description: string|null }}
  */
 export const getGenreById = async (genreId) => {
-  try {
     const response = await api.get(`/genres/${genreId}`);
     return response.data || response;
-  } catch (error) {
-    console.error("Error fetching genre by ID:", error.response?.data || error.message);
-    throw error;
-  }
 };
 
 /**
@@ -59,13 +43,8 @@ export const getGenreById = async (genreId) => {
  * @param {{ name: string, description: string }} genreData
  */
 export const createGenre = async (genreData) => {
-  try {
     const response = await api.post("/admin/genres/create", genreData);
     return response.data || response;
-  } catch (error) {
-    console.error("Error creating genre:", error.response?.data || error.message);
-    throw error;
-  }
 };
 
 /**
@@ -74,13 +53,8 @@ export const createGenre = async (genreData) => {
  * @param {{ name: string, description: string }} genreData
  */
 export const updateGenre = async (genreId, genreData) => {
-  try {
     const response = await api.put(`/admin/genres/update/${genreId}`, genreData);
     return response.data || response;
-  } catch (error) {
-    console.error("Error updating genre:", error.response?.data || error.message);
-    throw error;
-  }
 };
 
 /**
@@ -88,11 +62,6 @@ export const updateGenre = async (genreId, genreData) => {
  * @param {number} genreId
  */
 export const deleteGenre = async (genreId) => {
-  try {
     const response = await api.delete(`/admin/genres/delete/${genreId}`);
     return response.data || response;
-  } catch (error) {
-    console.error("Error deleting genre:", error.response?.data || error.message);
-    throw error;
-  }
 };

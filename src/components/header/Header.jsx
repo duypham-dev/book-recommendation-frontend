@@ -47,7 +47,7 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
       setIsLoadingSuggestions(true);
       try {
         const response = await searchBooks(value.trim(), 0, 5);
-        const books = response?.data || [];
+        const books = response || [];
         const booksArray = Array.isArray(books) ? books : [];
         setSuggestions(booksArray);
         setShowSuggestions(booksArray.length > 0);

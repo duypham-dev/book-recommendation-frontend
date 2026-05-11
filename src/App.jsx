@@ -1,30 +1,37 @@
-import "@ant-design/v5-patch-for-react-19"; // Temporary patch for React 19 compatibility
+import "@ant-design/v5-patch-for-react-19";
 import "./App.css";
-import Home from "./pages/Home.jsx";
-
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import { ConfigProvider, App as AntdApp, theme as antdTheme } from "antd";
 import { useThemeContext } from "./hooks/useTheme";
 
+//Context and Providers
+import AuthProvider from "./contexts/Auth/AuthProvider.jsx";
+import GenreProvider from "./contexts/Genre/GenreProvider.jsx";
+
+//Route Guards
+import ProtectedRoute from "./components/routes/ProtectedRoute";
+import AdminRoute from "./components/routes/AdminRoute";
+import UserRoute from "./components/routes/UserRoute";
+
+//Public Pages
+import Home from "./pages/Home.jsx";
 import BookDetail from "./pages/BookDetail";
 import CategoryBooks from "./pages/CategoryBooks";
 import AllBooks from "./pages/AllBooks";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound.jsx";
+import OAuthRedirect from "./pages/Auth/OAuthRedirect.jsx";
 
-import AuthProvider from "./contexts/Auth/AuthProvider.jsx";
-import { GenreProvider } from "./contexts/Genre/GenreProvider.jsx";
-import ProtectedRoute from "./components/routes/ProtectedRoute";
-import AdminRoute from "./components/routes/AdminRoute";
-import UserRoute from "./components/routes/UserRoute";
-
+//User Pages
 import ManageAccount from "./pages/ManageAccount/ManageAccount.jsx";
 import AccountInfoSection from "./pages/ManageAccount/AccountInfoSection.jsx";
 import FavoritesSection from "./pages/ManageAccount/FavoritesSection.jsx";
 import HistorySection from "./pages/ManageAccount/HistorySection.jsx";
 import { PATHS } from "./constants/routePaths.js";
+import ResetPassword from "./pages/Auth/ResetPassword.jsx";
+import ActivateAccount from "./pages/Auth/ActivateAccount.jsx";
 
+//Admin Pages
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 import AdminUsers from "./pages/Admin/AdminUsers.jsx";
 import AdminBooks from "./pages/Admin/AdminBooks.jsx";
@@ -33,12 +40,6 @@ import AdminEditBook from "./pages/Admin/AdminEditBook.jsx";
 import AdminDeletedBooks from "./pages/Admin/AdminDeletedBooks.jsx";
 import AdminGenres from "./pages/Admin/AdminGenres.jsx";
 import AdminRecommendation from "./pages/Admin/AdminRecommendation.jsx";
-import OAuthRedirect from "./pages/Auth/OAuthRedirect.jsx";
-import ResetPassword from "./pages/Auth/ResetPassword.jsx";
-import ActivateAccount from "./pages/Auth/ActivateAccount.jsx";
-
-import Upload from "./pages/Upload.jsx";
-
 import EpubCoreViewer from "./pages/BookReader/BookReader.jsx";
 
 //Devtools
@@ -197,7 +198,6 @@ function App() {
               <Route path={PATHS.RESET_PASSWORD} element={<ResetPassword />} />
               <Route path="/activate-account" element={<ActivateAccount />} />
               <Route path="/reader/:bookId" element={<EpubCoreViewer />} />
-              <Route path="/upload" element={<Upload />} />
               {/* Redirect legacy /search route to /books */}
               <Route path="/search" element={<Navigate to="/books" replace />} />
               <Route path="*" element={<NotFound />} />

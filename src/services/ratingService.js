@@ -8,13 +8,8 @@ import api from '../config/ApiConfig.js';
  * @returns {Promise<any>}
  */
 export const createOrUpdateRating = async (userId, bookId, ratingData) => {
-    try {
-        const response = await api.post(`/users/${userId}/books/${bookId}/ratings`, ratingData);
-        return response.data || response;
-    } catch (error) {
-        console.error('Create/Update rating failed:', error.response?.data || error.message);
-        throw error;
-    }
+    const response = await api.post(`/users/${userId}/books/${bookId}/ratings`, ratingData);
+    return response.data || response;
 };
 
 /**
@@ -24,13 +19,8 @@ export const createOrUpdateRating = async (userId, bookId, ratingData) => {
  * @returns {Promise<any>}
  */
 export const getBookRatings = async (userId, bookId) => {
-    try {
-        const response = await api.get(`/users/${userId}/books/${bookId}/ratings`);
-        return response.data || response || [];
-    } catch (error) {
-        console.error('Get book ratings failed:', error.response?.data || error.message);
-        throw error;
-    }
+    const response = await api.get(`/users/${userId}/books/${bookId}/ratings`);
+    return response.data || response || [];
 };
 
 /**
@@ -40,13 +30,8 @@ export const getBookRatings = async (userId, bookId) => {
  * @returns {Promise<any>}
  */
 export const deleteRating = async (userId, bookId) => {
-    try {
-        const response = await api.delete(`/users/${userId}/books/${bookId}/ratings`);
-        return response.data || response;
-    } catch (error) {
-        console.error('Delete rating failed:', error.response?.data || error.message);
-        throw error;
-    }
+    const response = await api.delete(`/users/${userId}/books/${bookId}/ratings`);
+    return response.data || response;
 };
 
 /**
@@ -56,13 +41,8 @@ export const deleteRating = async (userId, bookId) => {
  * @returns {Promise<{averageRating: number, totalRatings: number}>}
  */
 export const getAverageRatingByBookId = async (userId, bookId) => {
-    try {
-        const response = await api.get(`/users/${userId}/books/${bookId}/average-rating`);
-        return response.data || response;
-    } catch (error) {
-        console.error('Get average rating failed:', error.response?.data || error.message);
-        throw error;
-    }
+    const response = await api.get(`/users/${userId}/books/${bookId}/average-rating`);
+    return response.data || response;
 };
 
 /**
@@ -72,14 +52,9 @@ export const getAverageRatingByBookId = async (userId, bookId) => {
  * @returns {Promise<any>}
  */
 export const getUserRating = async (userId, bookId) => {
-    try {
-        const ratings = await getBookRatings(userId, bookId);
-        // If userId is specific, return the first (and only) rating
-        return ratings.length > 0 ? ratings[0] : null;
-    } catch (error) {
-        console.error('Get user rating failed:', error);
-        return null;
-    }
+    const ratings = await getBookRatings(userId, bookId);
+    // If userId is specific, return the first (and only) rating
+    return ratings.length > 0 ? ratings[0] : null;
 };
 
 /**
@@ -90,13 +65,8 @@ export const getUserRating = async (userId, bookId) => {
  * @returns {Promise<{ ratings: Array, total: number, hasMore: boolean, page: number, size: number }>}
  */
 export const getBookRatingsPaginated = async (bookId, page = 0, size = 5) => {
-    try {
-        const response = await api.get(`/books/${bookId}/ratings`, {
-            params: { page, size },
-        });
-        return response.data?.data ?? response.data ?? { ratings: [], total: 0, hasMore: false };
-    } catch (error) {
-        console.error('Get paginated ratings failed:', error.response?.data || error.message);
-        throw error;
-    }
+    const response = await api.get(`/books/${bookId}/ratings`, {
+        params: { page, size },
+    });
+    return response.data?.data ?? response.data ?? { ratings: [], total: 0, hasMore: false };
 };

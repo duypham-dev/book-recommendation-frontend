@@ -13,10 +13,7 @@ const mapRating = (r) => ({
 });
 
 /**
- * Custom hook that independently fetches & manages paginated ratings for a book.
- * Does NOT depend on the book-detail payload — calls the dedicated ratings endpoint.
- * Accepts optional initialStats (averageRating, totalReviews) from the book detail
- * response to avoid a flash of "0" while the first page is loading.
+  * Custom hook to manage book reviews (ratings + comments)
  */
 const useBookReviews = (bookId, initialStats = null) => {
   const { user, isAuthenticated } = useAuth();

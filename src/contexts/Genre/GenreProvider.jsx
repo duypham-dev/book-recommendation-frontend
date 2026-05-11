@@ -6,7 +6,7 @@ import { getCache, setCache } from "../../utils/cache.utils";
 const GENRES_CACHE_KEY = "genres_cache_v1";
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
-export const GenreProvider = ({ children }) => {
+const GenreProvider = ({ children }) => {
   const [genres, setGenres] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,3 +46,5 @@ export const GenreProvider = ({ children }) => {
     </GenreContext.Provider>
   );
 };
+
+export default GenreProvider;

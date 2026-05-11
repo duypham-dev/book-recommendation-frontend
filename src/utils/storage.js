@@ -2,7 +2,6 @@ const AUTH_TOKEN_KEY = 'jwt'
 const AUTH_USER_KEY = 'auth_user'
 const ACCESS_TOKEN = 'access_token'
 
-
 export function setAuthData(token) {
     try {
         localStorage.setItem(ACCESS_TOKEN, token)
@@ -20,7 +19,6 @@ export function updateAuthUser(updatedUser) {
         console.error('Failed to update Auth user:', error)
     }
 }
-
 
 export function clearAuthData() {
     try {

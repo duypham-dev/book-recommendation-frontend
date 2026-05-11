@@ -21,7 +21,6 @@ export function setCache(key, data, ttl = DEFAULT_TTL) {
     localStorage.setItem(key, JSON.stringify(cacheData));
   } catch (error) {
     console.error(`Failed to set cache for key "${key}":`, error);
-    // Silently fail - cache is not critical
   }
 }
 
