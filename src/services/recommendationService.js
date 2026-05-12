@@ -1,367 +1,184 @@
+/**
+ * Recommendation Service
+ *
+ * Tất cả các API call liên quan đến hệ thống gợi ý sách.
+ * - User-facing: gọi qua Node backend (đã xác thực).
+ * - Admin-facing: gọi qua Node backend proxy → RS (FastAPI).
+ *
+ * KHÔNG gọi thẳng RS từ frontend để đảm bảo bảo mật.
+ */
+
 import api from '../config/ApiConfig.js';
 
-const fetchActiveModelInfo = async () => {
-  try {
-    const response = await api.get('/recommendation/active-model');
-    const payload = getApiData(response);
-    if (payload?.baseUrl) {
-      setActiveModelCache(payload);
-    }
-    lastActiveFetch = Date.now();
-    return payload;
-  } catch (error) {
-    console.warn('[RS API] Failed to fetch active recommendation model:', error.message);
-    return null;
-  }
-};
+// ─────────────────────────────────────────────
+// Helper: Trích xuất data từ response chuẩn { success, data, message }
+// ─────────────────────────────────────────────
+const getApiData = (response) => response?.data?.data ?? response?.data;
 
-const ensureActiveModel = async ({ forceRefresh = false } = {}) => {
-  const needsRefresh = Date.now() - lastActiveFetch > ACTIVE_MODEL_REFRESH_TTL_MS;
-  if (!forceRefresh && activeModelInfo?.baseUrl && !needsRefresh) {
-    return activeModelInfo;
-  }
-
-  const info = await fetchActiveModelInfo();
-  if (info?.baseUrl) {
-    return info;
-  }
-
-  // Fallback to default if no info available
-  setActiveModelCache(activeModelInfo?.baseUrl ? activeModelInfo : DEFAULT_MODEL_INFO);
-  return activeModelInfo;
-};
-
-const callRecsys = async (method, url, options = {}) => {
-  const { forceRefresh = false, ...axiosConfig } = options;
-  await ensureActiveModel({ forceRefresh });
-  return rsApi.request({ method, url, ...axiosConfig });
-};
+// ═════════════════════════════════════════════
+// USER-FACING APIs
+// ═════════════════════════════════════════════
 
 /**
- * Refresh model registry (admin only)
- * @param {boolean} force - Force refresh even if cache is warm
- * @returns {Promise<{models: Array, activeKey: string}>}
+ * Lấy danh sách sách gợi ý cho user đang đăng nhập.
+ * Yêu cầu xác thực JWT.
+ * @param {number} limit - Số lượng gợi ý tối đa (mặc định 10)
  */
-export const refreshModelRegistry = async (force = false) => {
-  if (!force && modelOptionsCache.length && Date.now() - lastRegistryFetch < MODEL_REGISTRY_TTL_MS) {
-    return {
-      models: modelOptionsCache,
-      activeKey: activeModelInfo?.key,
-    };
-  }
-
-  const response = await api.get('/admin/recommendation/models');
-  const payload = getApiData(response);
-  const models = payload?.models ?? [];
-  const activeKey = payload?.activeKey
-    ?? models.find((model) => model.active)?.key
-    ?? activeModelInfo?.key
-    ?? DEFAULT_MODEL_INFO.key;
-
-  setModelOptionsCache(models);
-  lastRegistryFetch = Date.now();
-
-  const active = models.find((model) => model.key === activeKey);
-  if (active?.baseUrl) {
-    setActiveModelCache(active);
-  }
-
-  return {
-    models,
-    activeKey,
-  };
+export const getRecommendations = async (limit = 10) => {
+  const response = await api.get('/recommendations', { params: { limit } });
+  return getApiData(response);
 };
 
 /**
- * Get model options list (admin only)
+ * Lấy danh sách sách tương tự (dựa trên SBERT cosine similarity).
+ * @param {number} bookId - ID của sách gốc
+ * @param {number} limit - Số lượng kết quả tối đa (mặc định 10)
  */
-export const getAvailableRecommendationModels = async (force = false) => {
-  if (!force && modelOptionsCache.length) {
-    return modelOptionsCache;
-  }
-  const { models } = await refreshModelRegistry(true);
-  return models;
+export const getSimilarBooks = async (bookId, limit = 10) => {
+  const response = await api.get('/similar-books', { params: { bookId, limit } });
+  return getApiData(response);
 };
 
-/**
- * Set active recommendation model (admin only)
- */
-export const setActiveRecommendationModel = async (modelKey) => {
-  const response = await api.put(`/admin/recommendation/models/${modelKey}`);
-  const payload = getApiData(response);
-
-  if (payload?.baseUrl) {
-    setActiveModelCache(payload);
-    setModelOptionsCache(
-      modelOptionsCache.map((model) => ({
-        ...model,
-        active: model.key === payload.key,
-      }))
-    );
-  }
-
-  return payload;
-};
+// ═════════════════════════════════════════════
+// ADMIN APIs — Health & Model Info
+// ═════════════════════════════════════════════
 
 /**
- * Get health status of recommendation system (via Java backend proxy)
+ * Kiểm tra trạng thái RS (model đã load chưa, đang retrain không).
  */
 export const getHealthStatus = async () => {
-  try {
-    const response = await api.get('/admin/recommendation/health');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to get health status:', error);
-    throw error;
-  }
+  const response = await api.get('/admin/recommendation/health');
+  return getApiData(response);
 };
 
 /**
- * Get model information (via Java backend proxy)
+ * Lấy thông tin chi tiết model đang chạy.
+ * Trả về: ALS params (users, items, factors, ...) + SBERT params (books, profiles, dim).
  */
 export const getModelInfo = async () => {
-  try {
-    const response = await api.get('/admin/recommendation/model-info');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to get model info:', error);
-    throw error;
-  }
+  const response = await api.get('/admin/recommendation/model-info');
+  return getApiData(response);
 };
 
+// ═════════════════════════════════════════════
+// ADMIN APIs — Retrain
+// ═════════════════════════════════════════════
+
 /**
- * Trigger model retraining (Admin only) - via Java backend proxy
- * This ensures cache invalidation is handled properly
+ * Trigger full retrain cả ALS + SBERT (chạy background ở RS).
+ * Lưu ý: Quá trình retrain có thể mất 2–5 phút.
  */
 export const triggerRetrain = async () => {
-  try {
-    const response = await api.post('/admin/recommendation/retrain');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to trigger retrain:', error);
-    throw error;
-  }
+  const response = await api.post('/admin/recommendation/retrain');
+  return getApiData(response);
 };
 
-/**
- * Get personalized recommendations for a user
- */
-export const getRecommendations = async (userId, limit = 10, options = {}) => {
-  try {
-    const response = await callRecsys('get', '/recommendations', {
-      params: { user_id: userId, limit },
-      ...options,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Failed to get recommendations:', error);
-    throw error;
-  }
-};
+// ═════════════════════════════════════════════
+// ADMIN APIs — Online Learning
+// ═════════════════════════════════════════════
 
 /**
- * Get similar books
- */
-export const getSimilarBooks = async (bookId, limit = 10, options = {}) => {
-  try {
-    const response = await callRecsys('get', '/similar', {
-      params: { book_id: bookId, limit },
-      ...options,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Failed to get similar books:', error);
-    throw error;
-  }
-};
-
-/**
- * Get online learning status (via Java backend proxy)
+ * Lấy trạng thái online learning và thông tin buffer hiện tại.
+ * Trả về: { enabled, buffer_size, buffer_capacity, buffer_full, note }
  */
 export const getOnlineLearningStatus = async () => {
-  try {
-    const response = await api.get('/admin/recommendation/online-learning/status');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to get online learning status:', error);
-    throw error;
-  }
+  const response = await api.get('/admin/recommendation/online-learning/status');
+  return getApiData(response);
 };
 
 /**
- * Enable online learning (via Java backend proxy)
+ * Bật online learning với kích thước buffer tùy chỉnh.
+ * Chỉ cập nhật SBERT profiles, không cập nhật ALS.
+ * @param {number} bufferSize - Số tương tác tích lũy trước khi trigger update (10–1000)
  */
 export const enableOnlineLearning = async (bufferSize = 100) => {
-  try {
-    const response = await api.post('/admin/recommendation/online-learning/enable', null, {
-      params: { bufferSize },
-    });
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to enable online learning:', error);
-    throw error;
-  }
+  const response = await api.post('/admin/recommendation/online-learning/enable', {}, {
+    params: { bufferSize },
+  });
+  return getApiData(response);
 };
 
 /**
- * Disable online learning (via Java backend proxy)
+ * Tắt online learning.
  */
 export const disableOnlineLearning = async () => {
-  try {
-    const response = await api.post('/admin/recommendation/online-learning/disable');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to disable online learning:', error);
-    throw error;
-  }
+  const response = await api.post('/admin/recommendation/online-learning/disable');
+  return getApiData(response);
 };
 
 /**
- * Trigger incremental update (via Java backend proxy)
+ * Trigger cập nhật incremental SBERT profiles từ buffer.
+ * @param {boolean} force - Bỏ qua ngưỡng buffer, cập nhật ngay (mặc định false)
  */
 export const triggerIncrementalUpdate = async (force = false) => {
-  try {
-    const response = await api.post('/admin/recommendation/online-learning/update', null, {
-      params: { force },
-    });
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to trigger incremental update:', error);
-    throw error;
-  }
+  const response = await api.post('/admin/recommendation/online-learning/update', {}, {
+    params: { force },
+  });
+  return getApiData(response);
 };
 
+// ═════════════════════════════════════════════
+// ADMIN APIs — Cache Management
+// ═════════════════════════════════════════════
+
 /**
- * Get cache statistics (Admin only)
+ * Lấy thống kê số lượng Redis key theo từng loại cache gợi ý.
+ * Trả về: { recommendationsCount, similarBooksCount, totalCount }
  */
 export const getCacheStats = async () => {
-  try {
-    const response = await api.get('/admin/recommendation/cache/stats');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to get cache stats:', error);
-    throw error;
-  }
+  const response = await api.get('/admin/recommendation/cache/stats');
+  return getApiData(response);
 };
 
 /**
- * Clear all recommendation caches (Admin only)
+ * Xóa toàn bộ Redis cache gợi ý sách (recommendations, similar_books).
  */
 export const clearRecommendationCache = async () => {
-  try {
-    const response = await api.delete('/admin/recommendation/cache');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to clear recommendation cache:', error);
-    throw error;
-  }
+  const response = await api.delete('/admin/recommendation/cache');
+  return getApiData(response);
 };
 
-// ========== Redis Inspector APIs ==========
+// ═════════════════════════════════════════════
+// ADMIN APIs — Redis Inspector
+// ═════════════════════════════════════════════
 
 /**
- * Get Redis cache summary (Admin only)
- */
-export const getRedisCacheSummary = async () => {
-  try {
-    const response = await api.get('/admin/redis/summary');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to get Redis cache summary:', error);
-    throw error;
-  }
-};
-
-/**
- * Get all Redis cache entries with details (Admin only)
+ * Lấy chi tiết tất cả recommendation cache keys,
+ * phân nhóm theo loại: { recommendations, similarBooks }.
+ * Mỗi key bao gồm: key, type, ttlSeconds, valueType, valuePreview.
  */
 export const getAllRedisCaches = async () => {
-  try {
-    const response = await api.get('/admin/redis/caches');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to get Redis caches:', error);
-    throw error;
-  }
+  const response = await api.get('/admin/redis/caches');
+  return getApiData(response);
 };
 
 /**
- * Search Redis keys by pattern (Admin only)
- */
-export const searchRedisKeys = async (pattern = '*') => {
-  try {
-    const response = await api.get('/admin/redis/keys', {
-      params: { pattern },
-    });
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to search Redis keys:', error);
-    throw error;
-  }
-};
-
-/**
- * Get detailed info for a specific Redis key (Admin only)
- */
-export const getRedisKeyInfo = async (key) => {
-  try {
-    const response = await api.get('/admin/redis/key', {
-      params: { key },
-    });
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to get Redis key info:', error);
-    throw error;
-  }
-};
-
-/**
- * Get the actual value stored in a Redis key (Admin only)
+ * Lấy giá trị thực tế (đã parse JSON) của một Redis key.
+ * @param {string} key - Tên Redis key
  */
 export const getRedisKeyValue = async (key) => {
-  try {
-    const response = await api.get('/admin/redis/value', {
-      params: { key },
-    });
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to get Redis key value:', error);
-    throw error;
-  }
-};
-
-/**
- * Trigger logging all cache keys to backend console (Admin only)
- */
-export const logAllRedisCaches = async () => {
-  try {
-    const response = await api.post('/admin/redis/log-all');
-    return getApiData(response);
-  } catch (error) {
-    console.error('Failed to log Redis caches:', error);
-    throw error;
-  }
+  const response = await api.get('/admin/redis/value', { params: { key } });
+  return getApiData(response);
 };
 
 export default {
-  refreshModelRegistry,
-  getAvailableRecommendationModels,
-  setActiveRecommendationModel,
-  getHealthStatus,
-  getModelInfo,
-  triggerRetrain,
+  // User-facing
   getRecommendations,
   getSimilarBooks,
+  // Admin - Health & Model
+  getHealthStatus,
+  getModelInfo,
+  // Admin - Retrain
+  triggerRetrain,
+  // Admin - Online Learning
   getOnlineLearningStatus,
   enableOnlineLearning,
   disableOnlineLearning,
   triggerIncrementalUpdate,
+  // Admin - Cache
   getCacheStats,
   clearRecommendationCache,
-  getRedisCacheSummary,
+  // Admin - Redis Inspector
   getAllRedisCaches,
-  searchRedisKeys,
-  getRedisKeyInfo,
   getRedisKeyValue,
-  logAllRedisCaches,
 };

@@ -14,12 +14,7 @@ export const getSimilarBooks = async (bookId, limit = 10) => {
     return response;
 };
 
-export const getDiversityBooks = async (bookId, { limit = 5 } = {}) => {
-    const response = await api.get('/diversity-books', {
-      params: { bookId, limit }
-    });
-    return response;
-};
+
 
 export const getBookDetail = async (bookId) => {
     const response = await api.get(`/books/${bookId}`);
