@@ -116,10 +116,6 @@ const useEpubReader = (src, { renditionRef: externalRenditionRef, userId, bookId
 
         if (!destroyed) setIsLoading(false);
 
-        // Restore page counter from saved position — do NOT force-sync to server.
-        // The server already holds the authoritative max progress; re-syncing
-        // the restored position could send a stale/lower value before the
-        // server-seed in useReadingProgress has resolved.
         if (epubBook.locations?.locationFromCfi) {
           try {
             const idx = savedCfi

@@ -35,7 +35,7 @@ const BookmarkList = ({ bookmarks, onGo, editingId, setEditingId, renameBookmark
           ) : (
             <button
               onClick={() => onGo(b)}
-              className="text-left flex-1 text-gray-200 hover:text-emerald-400"
+              className="text-left flex-1 dark:text-gray-200 text-gray-600  hover:text-emerald-400"
               title={b.note}
             >
               {b.note}

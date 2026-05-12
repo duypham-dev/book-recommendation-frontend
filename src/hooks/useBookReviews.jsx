@@ -26,7 +26,7 @@ const useBookReviews = (bookId, initialStats = null) => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [ratingDistribution, setRatingDistribution] = useState(null);
 
-  // Sync initial stats from book detail (avoids flash of 0)
+  // Sync initial stats from book detail
   useEffect(() => {
     if (initialStats) {
       setAvgRating(initialStats.averageRating ?? 0);

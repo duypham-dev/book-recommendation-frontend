@@ -13,23 +13,21 @@ export const createOrUpdateRating = async (bookId, ratingData) => {
 
 /**
  * Get all ratings for a book
- * @param {string} userId Pass '0' to get ALL ratings of the book
  * @param {string} bookId
  * @returns {Promise<any>}
  */
-export const getBookRatings = async (userId, bookId) => {
-    const response = await api.get(`books/${bookId}/ratings`);
+export const getBookRatings = async (bookId) => {
+    const response = await api.get(`/books/${bookId}/ratings`);
     return response.data || response || [];
 };
 
 /**
  * Delete a rating for a book.
- * @param {string} userId
  * @param {string} bookId
  * @returns {Promise<any>}
  */
-export const deleteRating = async (userId, bookId) => {
-    const response = await api.delete(`/users/${userId}/books/${bookId}/ratings`);
+export const deleteRating = async (bookId) => {
+    const response = await api.delete(`/books/${bookId}/ratings`);
     return response.data || response;
 };
 
@@ -38,20 +36,18 @@ export const deleteRating = async (userId, bookId) => {
  * @param {string} bookId
  * @returns {Promise<{averageRating: number, totalRatings: number}>}
  */
-export const getAverageRatingByBookId = async (userId, bookId) => {
+export const getAverageRatingByBookId = async ( bookId) => {
     const response = await api.get(`/books/${bookId}/average-rating`);
     return response.data || response;
 };
 
 /**
  * Get user's own rating for a book
- * @param {string} userId
  * @param {string} bookId
  * @returns {Promise<any>}
  */
-export const getUserRating = async (userId, bookId) => {
-    const ratings = await getBookRatings(userId, bookId);
-    // If userId is specific, return the first (and only) rating
+export const getUserRating = async (bookId) => {
+    const ratings = await getBookRatings(bookId);
     return ratings.length > 0 ? ratings[0] : null;
 };
 

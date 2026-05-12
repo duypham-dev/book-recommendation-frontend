@@ -30,7 +30,7 @@ const useBookmarks = (userId, bookId) => {
   const { data: bookmarks = [], isLoading } = useQuery({
     queryKey,
     queryFn: async () => {
-      const data = await fetchBookmarks(userId, bookId);
+      const data = await fetchBookmarks(bookId);
       return Array.isArray(data) ? data.map(mapBookmarkFromApi) : [];
     },
     enabled,
@@ -39,7 +39,7 @@ const useBookmarks = (userId, bookId) => {
   });
 
   const createMutation = useMutation({
-    mutationFn: (payload) => createBookmark(userId, bookId, payload),
+    mutationFn: (payload) => createBookmark(bookId, payload),
     onSuccess: (created) => {
       const mapped = mapBookmarkFromApi(created);
       queryClient.setQueryData(queryKey, (prev = []) =>
@@ -50,7 +50,7 @@ const useBookmarks = (userId, bookId) => {
 
   const updateMutation = useMutation({
     mutationFn: ({ bookmarkId, payload }) =>
-      updateBookmark(userId, bookmarkId, payload),
+      updateBookmark(bookmarkId, payload),
     onSuccess: (updated) => {
       const mapped = mapBookmarkFromApi(updated);
       queryClient.setQueryData(queryKey, (prev = []) =>
@@ -60,7 +60,7 @@ const useBookmarks = (userId, bookId) => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (bookmarkId) => deleteBookmark(userId, bookmarkId),
+    mutationFn: (bookmarkId) => deleteBookmark(bookmarkId),
     onMutate: async (bookmarkId) => {
       await queryClient.cancelQueries({ queryKey });
       const previous = queryClient.getQueryData(queryKey);

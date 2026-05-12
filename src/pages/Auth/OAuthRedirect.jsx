@@ -23,13 +23,6 @@ const ERROR_MESSAGES = {
  * Handles the callback from OAuth provider (Google).
  * The backend redirects here after successful Google authentication.
  * 
- * Flow:
- * 1. Backend sets refresh token in HttpOnly cookie
- * 2. Backend redirects here with oauth=success
- * 3. This component calls /auth/refresh to get access token
- * 4. Stores access token and fetches user profile
- * 5. Redirects to home page
- * 
  * Error handling:
  * - oauth=error with message param: Display error and redirect
  * - Refresh token failure: Clear auth and redirect to login
