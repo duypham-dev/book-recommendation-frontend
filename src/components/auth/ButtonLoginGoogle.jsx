@@ -1,9 +1,9 @@
 // src/components/auth/ButtonLoginGoogle.jsx
 import React, { useEffect, useCallback, useRef } from "react";
+import { API_BASE_URL } from "../../config/ApiConfig.js";
 
 function ButtonLoginGoogle() {
   const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_FRONTEND || 'http://localhost:8080/api/v1';
   const initializedRef = useRef(false);
 
   const initializeGoogleSignIn = useCallback(() => {
