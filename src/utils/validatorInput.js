@@ -13,7 +13,7 @@ export const patterns = {
   // Full Name: allows letters, spaces, periods, apostrophes, and hyphens, length 2-50
   fullName: /^[\p{L}][\p{L}\s'.-]{0,48}[\p{L}]$/u,
 
-  // Vietnamese Phone Number: +84 or 0, starts with 3/5/7/8/9, exactly 10 digits
+  // Vietnamese Phone Number: +84 or 0, starts with 3/5/7/8/9, exactly 10-11 digits
   phoneVN: /^(?:\+?84|0)(?:3|5|7|8|9)\d{8,9}$/
 };
 
