@@ -64,8 +64,8 @@ const AccountActivation = () => {
             description="Chúc mừng! Tài khoản TekBook của bạn đã sẵn sàng. Bây giờ bạn có thể đăng nhập và trải nghiệm."
             bgColor="bg-green-100"
             showButton
-            buttonText="Đăng nhập ngay"
-            onButtonClick={() => navigate('/login')}
+            buttonText="Về trang chủ"
+            onButtonClick={() => navigate('/')}
           />
         );
       case 'error':
