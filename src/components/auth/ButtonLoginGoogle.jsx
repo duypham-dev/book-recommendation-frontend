@@ -9,10 +9,15 @@ function ButtonLoginGoogle() {
   const initializeGoogleSignIn = useCallback(() => {
     if (!window.google?.accounts?.id || initializedRef.current) return;
 
+    let absoluteLoginUri = `${API_BASE_URL}/auth/google`;
+    if (absoluteLoginUri.startsWith('/')) {
+      absoluteLoginUri = `${window.location.origin}${absoluteLoginUri}`;
+    }
+
     window.google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       ux_mode: "redirect",
-      login_uri: `${API_BASE_URL}/auth/google`,
+      login_uri: absoluteLoginUri,
     });
 
     const buttonContainer = document.getElementById("google-signin-button");
