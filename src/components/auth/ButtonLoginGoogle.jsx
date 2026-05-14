@@ -14,10 +14,18 @@ function ButtonLoginGoogle() {
       absoluteLoginUri = `${window.location.origin}${absoluteLoginUri}`;
     }
 
+    // Determine the root domain to allow CSRF cookie to be shared with api subdomain
+    let parentDomain = window.location.hostname;
+    const domainParts = parentDomain.split('.');
+    if (domainParts.length > 2) {
+      parentDomain = domainParts.slice(-2).join('.');
+    }
+
     window.google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       ux_mode: "redirect",
       login_uri: absoluteLoginUri,
+      state_cookie_domain: parentDomain,
     });
 
     const buttonContainer = document.getElementById("google-signin-button");
