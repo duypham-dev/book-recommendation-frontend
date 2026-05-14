@@ -7,14 +7,14 @@ export const patterns = {
   // Strong Password: >=8, lowercase, UPPERCASE, number, special character
   passwordStrong: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/,
 
-  // Username: 3-20 characters, letters/numbers/_ , can have spaces
+  // Username: 3-20 characters, letters/numbers/_ , not contain spaces
   username: /^[a-zA-Z0-9_]{3,20}$/,
 
   // Full Name: allows letters, spaces, periods, apostrophes, and hyphens, length 2-50
   fullName: /^[\p{L}][\p{L}\s'.-]{0,48}[\p{L}]$/u,
 
   // Vietnamese Phone Number: +84 or 0, starts with 3/5/7/8/9, exactly 10 digits
-  phoneVN: /^(?:\+?84|0)(?:3|5|7|8|9)\d{8}$/
+  phoneVN: /^(?:\+?84|0)(?:3|5|7|8|9)\d{8,9}$/
 };
 
 export function validateLogin(form) {
@@ -73,7 +73,7 @@ export function validateSignup(form) {
 
   if (username && !patterns.username.test(username)) {
     errors.username =
-      "Tên 3-20 ký tự, chỉ gồm chữ/số/underscore, có thể có khoảng trắng.";
+      "Tên 3-20 ký tự, chỉ gồm chữ/số/underscore, không có khoảng trắng.";
   }
 
   return {
