@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://tekbook.me/api/v1/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
