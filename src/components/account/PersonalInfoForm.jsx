@@ -93,7 +93,7 @@ const PersonalInfoForm = React.memo(({ user, onSubmit, onAvatarChange, isSubmitt
           />
         </div>
 
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Id người dùng</label>
           <input
             type="text"
@@ -102,7 +102,7 @@ const PersonalInfoForm = React.memo(({ user, onSubmit, onAvatarChange, isSubmitt
             disabled
             className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed text-sm sm:text-base"
           />
-        </div>
+        </div> */}
 
         <button
           type="submit"

@@ -14,8 +14,6 @@ export const getSimilarBooks = async (bookId, limit = 10) => {
     return response;
 };
 
-
-
 export const getBookDetail = async (bookId) => {
     const response = await api.get(`/books/${bookId}`);
     return response.data || response;

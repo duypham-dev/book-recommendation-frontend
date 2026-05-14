@@ -8,12 +8,6 @@ import { addFavorite, removeFavorite } from "../services/favoriteService";
  * Accepts the initial isFav from the backend book detail payload.
  */
 const useFavorite = (bookId, initialIsFav = false) => {
-  console.log(
-    "Rendering useFavorite for bookId:",
-    bookId,
-    "initialIsFav:",
-    initialIsFav,
-  );
   const { user, isAuthenticated } = useAuth();
   const message = useMessage();
 

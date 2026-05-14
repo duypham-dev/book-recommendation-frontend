@@ -101,3 +101,28 @@ export function validateResetPassword(form) {
     errors
   };
 }
+
+export function validateChangePassword(form) {
+  const errors = {};
+  const currentPassword = form.currentPassword || "";
+  const newPassword = form.newPassword || "";
+  const confirmPassword = form.confirmPassword || "";
+
+  if (!currentPassword) {
+    errors.currentPassword = "Vui lòng nhập mật khẩu hiện tại.";
+  }
+
+  if (!newPassword || !patterns.passwordStrong.test(newPassword)) {
+    errors.newPassword =
+      "Mật khẩu phải ≥ 8 ký tự, có chữ thường, HOA, số và ký tự đặc biệt.";
+  }
+
+  if (confirmPassword !== newPassword) {
+    errors.confirmPassword = "Xác nhận mật khẩu không khớp.";
+  }
+
+  return {
+    valid: Object.keys(errors).length === 0,
+    errors
+  };
+}
