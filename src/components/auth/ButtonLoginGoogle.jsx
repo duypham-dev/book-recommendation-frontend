@@ -10,27 +10,12 @@ function ButtonLoginGoogle() {
     if (!window.google?.accounts?.id || initializedRef.current) return;
 
     let absoluteLoginUri = `${API_BASE_URL}/auth/google`;
-    if (absoluteLoginUri.startsWith('/')) {
-      absoluteLoginUri = `${window.location.origin}${absoluteLoginUri}`;
-    }
 
-    let rootDomain = window.location.hostname;
-    const domainParts = rootDomain.split('.');
-    if (domainParts.length >= 2 && !rootDomain.includes('localhost') && !rootDomain.match(/^\d{1,3}\./)) {
-      rootDomain = domainParts.slice(-2).join('.');
-    }
-
-    const initConfig = {
+    window.google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       ux_mode: "redirect",
       login_uri: absoluteLoginUri,
-    };
-
-    if (!window.location.hostname.includes('localhost') && !window.location.hostname.match(/^\d{1,3}\./)) {
-      initConfig.state_cookie_domain = rootDomain;
-    }
-
-    window.google.accounts.id.initialize(initConfig);
+    });
 
     const buttonContainer = document.getElementById("google-signin-button");
     if (buttonContainer) {
