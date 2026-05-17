@@ -17,15 +17,15 @@ const ListCard = ({
   variant = "rating",
   isLoading = false,
 }) => (
-  <div className="rounded-3xl p-4 md:p-5 bg-white/60 dark:bg-slate-900/60 border border-white/70 dark:border-slate-800 shadow-sm">
-    <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-100 text-center md:text-left">
+  <div className="rounded-3xl p-4 md:p-5 bg-white/60 dark:bg-admin-stat-card-bg-dark border border-white/70 dark:border-admin-stat-card-border-dark shadow-sm">
+    <h3 className="text-xl font-semibold text-slate-800 dark:text-admin-stat-card-text-dark text-center md:text-left">
       {title}
     </h3>
-    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+    <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">
       {subtitle}
     </p>
 
-    <div className="mt-3 divide-y divide-slate-200/70 dark:divide-slate-800">
+    <div className="mt-3 divide-y divide-slate-200/70 dark:divide-admin-stat-card-border-dark">
       {isLoading ? (
         <div className="flex items-center justify-center h-48">
           <Loading />
@@ -52,7 +52,7 @@ const ListCard = ({
           />
         ))
       ) : (
-        <h2 className="text-center text-slate-500 dark:text-slate-400 py-12">
+        <h2 className="text-center text-slate-500 dark:text-gray-400 py-12">
           Không có dữ liệu
         </h2>
       )}

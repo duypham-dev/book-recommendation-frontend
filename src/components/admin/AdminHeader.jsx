@@ -16,7 +16,7 @@ const AdminHeader = ({ title = "ADMIN" }) => {
   }
 
   return (
-    <header className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 px-8 py-4 sticky top-0 z-10">
+    <header className="bg-white dark:bg-header-admin border-b border-gray-200 dark:border-b-[#2E2E2E] px-8 py-4 sticky top-0 z-1">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h1>
 

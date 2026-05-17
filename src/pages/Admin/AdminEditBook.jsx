@@ -235,7 +235,7 @@ const AdminEditBook = () => {
   // ── Render ─────────────────────────────────────────────────────────
   return (
     <AdminLayout>
-      <div className="min-h-screen bg-white dark:bg-gray-900 max-w-7xl mx-auto">
+      <div className="min-h-screen w-full bg-white dark:bg-[#1F1F1F] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
         {/* Header */}
         <div className="grid grid-cols-3 items-center border-b border-gray-200 dark:border-gray-800 px-4 sm:px-6 lg:px-8 py-4">
           <button
@@ -245,7 +245,7 @@ const AdminEditBook = () => {
             <ArrowLeftOutlined className="text-lg" />
           </button>
 
-          <h1 className="justify-self-center text-3xl font-bold text-[#4B69B1] dark:text-blue-400">
+          <h1 className="justify-self-center text-3xl font-bold text-[#4B69B1] dark:text-white">
             Sửa sách
           </h1>
 
@@ -262,7 +262,7 @@ const AdminEditBook = () => {
           >
             {/* Left Column - Book Information */}
             <div className="lg:col-span-2 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-blue-400 mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
                 Thông tin sách
               </h2>
 
@@ -466,8 +466,8 @@ const AdminEditBook = () => {
 
             {/* Right Column - Cover Image */}
             <div className="lg:col-span-1">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 sticky top-6">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-300 mb-4">
+              <div className="bg-white dark:bg-[#1F1F1F] rounded-lg p-6 sticky top-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                   Ảnh bìa
                 </h2>
                 <Upload.Dragger

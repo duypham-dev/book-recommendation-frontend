@@ -19,36 +19,79 @@ The screenshots below illustrate the primary screens of the application. To upda
     <td align="center">
       <img src="docs/screenshots/home.png" alt="Home Page" width="100%"/>
       <br/>
-      <sub><b>Home — Personalized recommendations and featured books</b></sub>
+      <sub><b>Home — Discover featured books and personalized recommendations</b></sub>
+    </td>
+    <td align="center">
+      <img src="docs/screenshots/home2.png" alt="Home Page Alternative" width="100%"/>
+      <br/>
+      <sub><b>Home — Extended home page interface</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="docs/screenshots/book_detail.png" alt="Book Detail" width="100%"/>
+      <br/>
+      <sub><b>Book Detail — Book metadata, ratings, and similar books</b></sub>
+    </td>
+    <td align="center">
+      <img src="docs/screenshots/book_detail2.png" alt="Book Detail Alternative" width="100%"/>
+      <br/>
+      <sub><b>Book Detail — Book metadata, ratings, and similar books</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="docs/screenshots/book_category.png" alt="Book Category" width="100%"/>
+      <br/>
+      <sub><b>Book Category — Explore books by categories and genres</b></sub>
     </td>
     <td align="center">
       <img src="docs/screenshots/all-books.png" alt="All Books" width="100%"/>
       <br/>
-      <sub><b>All Books — Catalog browse with search and genre filters</b></sub>
+      <sub><b>All Books — Comprehensive library with filters and pagination</b></sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="docs/screenshots/book-detail.png" alt="Book Detail" width="100%"/>
+      <img src="docs/screenshots/account.png" alt="Account Management" width="100%"/>
       <br/>
-      <sub><b>Book Detail — Metadata, ratings, reviews, and similar books</b></sub>
+      <sub><b>Account — Account settings and personal information management</b></sub>
     </td>
     <td align="center">
-      <img src="docs/screenshots/book-reader.png" alt="EPUB Reader" width="100%"/>
+      <img src="docs/screenshots/favorite.png" alt="Favorites" width="100%"/>
       <br/>
-      <sub><b>Book Reader — Paginated EPUB viewer with bookmarks and TOC panel</b></sub>
+      <sub><b>Favorites — List of saved favorite books</b></sub>
+    </td>
+  </tr>
+   <tr>
+    <td align="center">
+      <img src="docs/screenshots/history.png" alt="Reading History" width="100%"/>
+      <br/>
+      <sub><b>History — Recent reading history and progress</b></sub>
+    </td>
+    <td align="center">
+      <img src="docs/screenshots/login.png" alt="Login Page" width="100%"/>
+      <br/>
+      <sub><b>Authentication — Secure login and registration interface</b></sub>
+    </td>
+  </tr>
+   <tr>
+    <td align="center">
+      <img src="docs/screenshots/read_new.png" alt="EPUB Reader" width="100%"/>
+      <br/>
+      <sub><b>Book Reader — Optimized EPUB reader with display customizations</b></sub>
+    </td>
+    <td align="center">
+      <img src="docs/screenshots/toc.png" alt="Table of Contents" width="100%"/>
+      <br/>
+      <sub><b>Table of Contents — Quick navigation between chapters</b></sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="docs/screenshots/manage-account.png" alt="Account Management" width="100%"/>
+      <img src="docs/screenshots/book_mark.png" alt="Bookmarks" width="100%"/>
       <br/>
-      <sub><b>Account — Profile, reading history, and favorites management</b></sub>
-    </td>
-    <td align="center">
-      <img src="docs/screenshots/dark-mode.png" alt="Dark Mode" width="100%"/>
-      <br/>
-      <sub><b>Dark Mode — System-level theme support across all pages</b></sub>
+      <sub><b>Bookmarks — Manage saved bookmarks and highlights</b></sub>
     </td>
   </tr>
 </table>
@@ -60,24 +103,36 @@ The screenshots below illustrate the primary screens of the application. To upda
     <td align="center">
       <img src="docs/screenshots/admin-dashboard.png" alt="Admin Dashboard" width="100%"/>
       <br/>
-      <sub><b>Dashboard — Platform analytics and key metrics</b></sub>
+      <sub><b>Dashboard — Overview of platform statistics, activity, and analytics</b></sub>
     </td>
     <td align="center">
-      <img src="docs/screenshots/admin-books.png" alt="Admin Books" width="100%"/>
+      <img src="docs/screenshots/books.png" alt="Book Management" width="100%"/>
       <br/>
-      <sub><b>Books — Catalog management with add, edit, and soft-delete</b></sub>
+      <sub><b>Book Management — Manage book catalog, metadata, and library content</b></sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="docs/screenshots/admin-recommendation.png" alt="Admin Recommendation Engine" width="100%"/>
+      <img src="docs/screenshots/add_book.png" alt="Add New Book" width="100%"/>
       <br/>
-      <sub><b>Recommendation Engine — Model status, retrain controls, and Redis cache inspector</b></sub>
+      <sub><b>Add Book — Upload and publish new books to the platform</b></sub>
     </td>
     <td align="center">
-      <img src="docs/screenshots/admin-users.png" alt="Admin Users" width="100%"/>
+      <img src="docs/screenshots/user_manage.png" alt="User Management" width="100%"/>
       <br/>
-      <sub><b>Users — User account management and role administration</b></sub>
+      <sub><b>User Management — Manage user accounts</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="docs/screenshots/category.png" alt="Category Management" width="100%"/>
+      <br/>
+      <sub><b>Category Management — Organize and manage book genres and categories</b></sub>
+    </td>
+    <td align="center">
+      <img src="docs/screenshots/recommend.png" alt="Recommendation System" width="100%"/>
+      <br/>
+      <sub><b>Recommendation System — Configure and monitor personalized book recommendations</b></sub>
     </td>
   </tr>
 </table>

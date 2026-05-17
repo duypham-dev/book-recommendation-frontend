@@ -45,9 +45,8 @@ const AdminAddbook = () => {
             name: g.genreName,
           })),
         );
-      } catch (error) {
+      } catch {
         message.error("Không thể tải danh sách thể loại!");
-        console.error("[ADMIN ADD_BOOK] Lỗi tải thể loại:", error);
       } finally {
         setGenresLoading(false);
       }
@@ -182,7 +181,6 @@ const AdminAddbook = () => {
 
     setSubmitting(true);
     try {
-      console.log("Submitting new book with data:", formData);
       const response = await createBook(formData);
       message.success(response.message || "Thêm sách thành công!");
       form.resetFields();
@@ -202,17 +200,17 @@ const AdminAddbook = () => {
 
   return (
     <AdminLayout>
-      <div className="min-h-screen bg-white dark:bg-gray-900 max-w-7xl mx-auto">
+      <div className="min-h-screen w-full bg-white dark:bg-[#1F1F1F] rounded-2xl shadow-sm border border-gray-100 dark:border-[#2E2E2E]">
         {/* Header */}
-        <div className="grid grid-cols-3 items-center border-b border-gray-200 dark:border-gray-800 dark:text-blue-400 px-4 sm:px-6 lg:px-8 py-4">
+        <div className="grid grid-cols-3 items-center border-b border-gray-200 dark:border-[#2E2E2E] px-4 sm:px-6 lg:px-8 py-4">
           <button
             onClick={handleBack}
-            className="justify-self-start inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="justify-self-start inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <ArrowLeftOutlined className="text-lg" />
           </button>
 
-          <h1 className="justify-self-center text-3xl font-bold text-[#4B69B1]">
+          <h1 className="justify-self-center text-3xl font-bold text-[#4B69B1] dark:text-white">
             Thêm sách mới
           </h1>
 
@@ -230,7 +228,7 @@ const AdminAddbook = () => {
           >
             {/* Left Column - Book Information */}
             <div className="lg:col-span-2 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-blue-400 mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
                 Thông tin sách
               </h2>
 
@@ -475,8 +473,8 @@ const AdminAddbook = () => {
 
             {/* Right Column - Cover Image */}
             <div className="lg:col-span-1">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 sticky top-6">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-300 mb-4">
+              <div className="bg-white dark:bg-[#1F1F1F] rounded-lg p-6 sticky top-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                   Ảnh bìa
                 </h2>
                 <Upload.Dragger

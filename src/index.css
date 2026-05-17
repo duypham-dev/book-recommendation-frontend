@@ -40,6 +40,22 @@ input::-webkit-reveal-button {
     color-scheme: dark;
   }
 } */
+/* Custom row Dark Mode */
+.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-row-selected > td {
+  background-color: #313131 !important; /* Nền xám nhẹ / dark gray */
+}
+
+/* Custom when hovering over selected row in Dark Mode */
+.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-row-selected:hover > td {
+  background-color: #3f3f3f !important; 
+}
+
+/* Custom header table for Dark Mode */
+.dark .ant-table-wrapper .ant-table-thead > tr > th {
+  background-color: #2A2A2A !important;
+  color: #E5E5E5 !important;
+  border-bottom: 1px solid #4A4B50 !important;
+}
 
 @theme {
 
@@ -53,8 +69,6 @@ input::-webkit-reveal-button {
 --color-gray-sidebar: #0B0B0B;
 
 --color-sidebar-admin-bg: #FFFFFF;
---color-sidebar-admin-bg-dark: #152259;
-
 
 --color-sidebar-admin-text: #615BE1;
 --color-sidebar-admin-items-text: #5D7194;
@@ -65,21 +79,40 @@ input::-webkit-reveal-button {
 
 /* Dark Mode Colors (Slate/Indigo Tone) */
 
+--color-admin-bg-dark: #171717;
+
 /* Overall sidebar background */
---color-sidebar-admin-bg-dark: #0F172A; 
+--color-sidebar-admin-bg-dark: #171717; 
 
 /* Logo and Main Title */
---color-sidebar-admin-text-dark: #F8FAFC; /* Bright white, highly prominent */
+--color-sidebar-admin-text-dark: #F8FAFC;
 
 /* Default State (Unselected) */
---color-sidebar-admin-items-text-dark: #94A3B8; /* Light gray, readable but not overpowering */
---color-sidebar-admin-items-hover-dark: #1E293B; /* Dark slate background on hover */
+/* --color-sidebar-admin-items-text-dark: #94A3B8; 
+--color-sidebar-admin-items-hover-dark: #1E293B;  */
 
 /* Active State (Selected) */
---color-sidebar-admin-items-active-dark: #312E81; /* Deep indigo background (creates depth) */
---color-sidebar-admin-items-active-text-dark: #818CF8; /* Bright indigo text (pops against the dark background) */
---color-sidebar-admin-items-active-border-dark: #6366F1; /* Prominent indigo border */
-   
+/* --color-sidebar-admin-items-active-dark: #312E81; 
+--color-sidebar-admin-items-active-text-dark: #818CF8; 
+--color-sidebar-admin-items-active-border-dark: #6366F1;  */
+/* Trạng thái mặc định (Chưa chọn) */
+--color-sidebar-admin-items-text-dark: #898989;     /* Xám bạc trung tính, dịu mắt và rất sang */
+--color-sidebar-admin-items-hover-dark: #232323;    /* Đen xám nhẹ khi hover (Carbon nhẹ) */
+
+/* Trạng thái Active (Đang được chọn) */
+--color-sidebar-admin-items-active-dark: #313131;   /* Nền xám đậm hơn một chút để tạo khối nổi (Elevation) */
+--color-sidebar-admin-items-active-text-dark: #4A4A4A; /* Chữ trắng thuần nổi bật hoàn toàn trên nền tối */
+--color-sidebar-admin-items-active-border-dark: #4A4B50; /* Border xám tinh tế, hoặc có thể dùng #FFFFFF nếu muốn gắt hơn */
+  
+--color-header-admin: #171717;
+
+/* --------- ADMIN DASHBOARD ------------*/
+/* Admin Stat Cards */
+--color-admin-stat-card-bg-dark: #1f1f1f;
+--color-admin-stat-card-text-dark: #E5E5E5;
+--color-admin-stat-card-border-dark: #2E2E2E;
+
+
 
 --font-sekuya: "Sekuya", sans-serif;
 }

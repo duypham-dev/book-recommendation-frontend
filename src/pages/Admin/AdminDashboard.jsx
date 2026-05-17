@@ -53,14 +53,14 @@ const AdminDashboard = () => {
     queryKey: ["newUsersLast7Days", TIME_RANGES[0].value],
     queryFn: () => getNewUsers(TIME_RANGES[0].value),
     refetchOnWindowFocus: false,
-    staleTime:  5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const statsQuery = useQuery({
     queryKey: ["dashboardStats"],
     queryFn: () => getDashboardStats(),
     refetchOnWindowFocus: false,
-    staleTime:  5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
     select: (response) => response?.data ?? {},
   });
 
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
     queryKey: ["topRatedBooks", defaultParams],
     queryFn: () => getTopRatedBooks(defaultParams),
     refetchOnWindowFocus: false,
-    staleTime:  5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
     select: (response) => response?.data ?? {},
   });
 
@@ -144,7 +144,7 @@ const AdminDashboard = () => {
 
   return (
     <AdminLayout title="ADMIN">
-      <div className="rounded-3xl p-6 md:p-8 bg-[#F4F7FF] dark:bg-slate-950/30">
+      <div className="p-6 md:p-8 bg-transparent h-full">
         <h2 className="text-3xl font-semibold text-indigo-900 dark:text-white mb-6">
           Thống kê
         </h2>
@@ -162,8 +162,96 @@ const AdminDashboard = () => {
               />
             ))}
           </div>
-
           <div className="lg:col-span-2 h-full">
+            <div className="h-full rounded-3xl p-4 md:p-5 bg-white/60 dark:bg-admin-stat-card-bg-dark border border-white/70 dark:border-admin-stat-card-border-dark shadow-sm">
+              <div className="text-slate-700 dark:text-admin-stat-card-text-dark font-medium mb-3">
+                Người dùng mới trong 7 ngày qua
+              </div>
+
+              {/* Thêm class text color ở đây để XAxis và Label nhận màu tự động thông qua currentColor */}
+              <div className="h-56 md:h-64 rounded-2xl bg-[#F3F6FF] dark:bg-admin-bg-dark p-3 md:p-4 text-slate-700 dark:text-admin-stat-card-text-dark">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={
+                      chartData.length ? chartData : [{ date: "", value: 0 }]
+                    }
+                    margin={{ top: 24, right: 12, left: 8, bottom: 0 }}
+                    barCategoryGap={24}
+                  >
+                    <XAxis
+                      dataKey="date"
+                      // Thay mã hex cứng thành currentColor để tự bắt theo class text- của thẻ cha
+                      tick={{
+                        fill: "currentColor",
+                        fontSize: 12,
+                        fontWeight: 500,
+                      }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis hide />
+                    <Tooltip
+                      cursor={false}
+                      wrapperStyle={{ zIndex: 50, outline: "none" }}
+                      content={({ active, payload, label }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-white dark:bg-admin-stat-card-bg-dark p-3 rounded-xl shadow-[0_6px_24px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.06)] border border-transparent dark:border-admin-stat-card-border-dark">
+                              <p className="text-slate-500 dark:text-gray-400 text-sm mb-1">
+                                Ngày {label}
+                              </p>
+                              <p className="text-slate-800 dark:text-admin-stat-card-text-dark font-semibold">
+                                Số lượng : {formatNumber(payload[0].value)}
+                              </p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <defs>
+                      <linearGradient id="mint" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#4AD8C7" />
+                        <stop offset="100%" stopColor="#39C1B0" />
+                      </linearGradient>
+                      <filter
+                        id="soft"
+                        x="-20%"
+                        y="-20%"
+                        width="140%"
+                        height="140%"
+                      >
+                        <feDropShadow
+                          dx="0"
+                          dy="6"
+                          stdDeviation="8"
+                          floodOpacity="0.18"
+                        />
+                      </filter>
+                    </defs>
+                    <Bar
+                      dataKey="value"
+                      name="Số lượng"
+                      fill="url(#mint)"
+                      radius={[12, 12, 12, 12]}
+                      maxBarSize={42}
+                      style={{ filter: "url(#soft)" }}
+                    >
+                      <LabelList
+                        dataKey="value"
+                        position="top"
+                        formatter={formatNumber}
+                        fill="currentColor"
+                        style={{ fontSize: 12 }}
+                        offset={8}
+                      />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+          {/* <div className="lg:col-span-2 h-full">
             <div className="h-full rounded-3xl p-4 md:p-5 bg-white/60 dark:bg-slate-900/60 border border-white/70 dark:border-slate-800 shadow-sm">
               <div className="text-slate-700 dark:text-slate-200 font-medium mb-3">
                 Người dùng mới trong 7 ngày qua
@@ -237,19 +325,19 @@ const AdminDashboard = () => {
                 </ResponsiveContainer>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Row 2: 2 tables */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Top Rated Books */}
-            <ListCard
-              title="Top sách được đánh giá cao"
-              subtitle="Các đầu sách được đánh giá cao nhất:"
-              items={topRatedBooks}
-              variant="rating"
-              isLoading={topRatedBooksQuery.isFetching}
-            />
+          <ListCard
+            title="Top sách được đánh giá cao"
+            subtitle="Các đầu sách được đánh giá cao nhất:"
+            items={topRatedBooks}
+            variant="rating"
+            isLoading={topRatedBooksQuery.isFetching}
+          />
           {/* Top Favorited Books */}
           <ListCard
             title="Top sách được yêu thích nhất"

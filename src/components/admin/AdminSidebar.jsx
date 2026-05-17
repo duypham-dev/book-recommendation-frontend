@@ -14,7 +14,7 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <aside className="w-64 bg-sidebar-admin-bg dark:bg-sidebar-admin-bg-dark border border-r-gray-200 dark:border-r-gray-800 min-h-screen max-h-screen flex flex-col sticky top-0 z-20">
+    <aside className="w-64 bg-sidebar-admin-bg dark:bg-sidebar-admin-bg-dark border-r border-r-gray-200 dark:border-r-[#2E2E2E] min-h-screen max-h-screen flex flex-col sticky top-0 z-20">
       {/* Logo */}
       <div className="p-6 flex items-center gap-3">
         <img src="/logo.png" alt="Logo" className="w-10 h-10" />
@@ -35,7 +35,7 @@ const AdminSidebar = () => {
               to={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
                 isActive
-                  ? "!bg-sidebar-admin-items-active dark:!bg-sidebar-admin-items-active-dark !text-sidebar-admin-items-active-text dark:!text-white border border-sidebar-admin-items-active-border dark:border-sidebar-admin-items-active-border-dark"
+                  ? "!bg-sidebar-admin-items-active dark:!bg-sidebar-admin-items-active-dark !text-sidebar-admin-items-active-text dark:!text-white border border-sidebar-admin-items-active-border dark:border-none"
                   : "!text-sidebar-admin-items-text dark:!text-sidebar-admin-items-text-dark hover:!bg-sidebar-admin-items-hover dark:hover:!bg-sidebar-admin-items-hover-dark border border-transparent"
               }`}
             >
