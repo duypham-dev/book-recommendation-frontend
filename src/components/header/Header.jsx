@@ -169,6 +169,14 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-4 flex-1 max-w-2xl mx-6">
+              {/* Tất cả sách */}
+              <Link
+                to="/books"
+                className="px-3 py-2 text-sm font-medium !text-gray-700 dark:!text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"
+              >
+                Tất cả sách
+              </Link>
+
               {/* Categories */}
               <div className="relative group">
                 <button className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors">
@@ -296,6 +304,15 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
               </div>
 
               <div className="space-y-1">
+                {/* Tất cả sách */}
+                <Link
+                  to="/books"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center px-4 py-2.5 text-sm font-medium !text-gray-700 dark:!text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
+                >
+                  Tất cả sách
+                </Link>
+
                 <button
                   onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
                   className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
@@ -321,7 +338,7 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
                             setMobileMenuOpen(false);
                             setMobileCategoriesOpen(false);
                           }}
-                          className="block py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-blue-400 transition-colors"
+                          className="block py-2 text-sm !text-gray-600 dark:!text-gray-300 hover:!text-primary dark:hover:!text-blue-400 transition-colors"
                         >
                           {genre.genreName}
                         </Link>
@@ -400,7 +417,7 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
                     <Link
                       to="/manage-account/profile"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm !text-gray-700 dark:!text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
                     >
                       <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                       <span>Quản lý tài khoản</span>
@@ -408,7 +425,7 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
                     <Link
                       to="/manage-account/favorite-books"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm !text-gray-700 dark:!text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
                     >
                       <Book className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                       <span>Sách yêu thích</span>
@@ -416,7 +433,7 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
                     <Link
                       to="/manage-account/history-reading"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm !text-gray-700 dark:!text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
                     >
                       <History className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                       <span>Lịch sử đọc sách</span>
@@ -436,7 +453,7 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
                         logout();
                         setMobileMenuOpen(false);
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors text-left mt-1"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm !text-red-500 dark:!text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors text-left mt-1"
                     >
                       <LogOut className="w-4 h-4" />
                       <span>Đăng xuất</span>

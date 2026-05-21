@@ -18,7 +18,7 @@ const PAGE_SIZE = 12;
 // Skeleton Loader
 // ------------------------------------------------------------------
 const BookGridSkeleton = ({ count = PAGE_SIZE, hasSidebar = true }) => (
-  <div className={`grid grid-cols-2 sm:grid-cols-3 ${hasSidebar ? "lg:grid-cols-4" : "lg:grid-cols-6"} gap-6`}>
+  <div className={`grid grid-cols-3 sm:grid-cols-3 ${hasSidebar ? "lg:grid-cols-4" : "lg:grid-cols-6"} gap-1.5 sm:gap-6`}>
     {Array.from({ length: count }).map((_, i) => (
       <div key={i} className="flex flex-col gap-2">
         <Skeleton.Image active className="w-full aspect-[3/4]" style={{ width: '100%', height: 'auto', aspectRatio: '3/4' }} />
@@ -247,7 +247,7 @@ const AllBooks = () => {
                 )}
               </div>
             ) : viewMode === "grid" ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6 transition-all">
+              <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-1.5 sm:gap-6 transition-all">
                 {books.map((book) => (
                   <div
                     key={book.bookId}

@@ -78,13 +78,13 @@ const ProfilePopover = ({ user, logout }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 rounded-full transition-colors"
       >
-        <span className="text-sm font-medium hidden md:block text-gray-800 dark:text-gray-200">{user?.fullName || 'No Name'}</span>
+        <span className="text-sm font-medium hidden md:block !text-gray-800 dark:!text-gray-200">{user?.fullName || 'No Name'}</span>
         <img
           src={avatarSrc}
           alt={displayName}
           className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-600"
         />
-        <ChevronDown className={`w-4 h-4 text-gray-600 dark:text-gray-300 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 !text-gray-600 dark:!text-gray-300 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Dropdown Menu */}
@@ -107,8 +107,8 @@ const ProfilePopover = ({ user, logout }) => {
                 className="w-14 h-14 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
               />
               <div className="min-w-0">
-                <p className="font-semibold text-gray-900 dark:text-white truncate">{displayName}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{email}</p>
+                <p className="font-semibold !text-gray-900 dark:!text-white truncate">{displayName}</p>
+                <p className="text-sm !text-gray-500 dark:!text-gray-400 truncate">{email}</p>
               </div>
             </div>
           </div>
@@ -124,8 +124,8 @@ const ProfilePopover = ({ user, logout }) => {
                     onClick={() => handleMenuClick(item.path)}
                     className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700/60 transition-colors text-left"
                   >
-                  <Icon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                  <span className="text-sm text-gray-700 dark:text-gray-200">{item.label}</span>
+                  <Icon className="w-5 h-5 !text-gray-500 dark:!text-gray-400" />
+                  <span className="text-sm !text-gray-700 dark:!text-gray-200">{item.label}</span>
                 </motion.button>
               );
             })}
@@ -136,8 +136,8 @@ const ProfilePopover = ({ user, logout }) => {
               className="flex items-center justify-between px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700/60 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <Moon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                <span className="text-sm text-gray-700 dark:text-gray-200">Dark Mode</span>
+                <Moon className="w-5 h-5 !text-gray-500 dark:!text-gray-400" />
+                <span className="text-sm !text-gray-700 dark:!text-gray-200">Dark Mode</span>
               </div>
               <div className="relative">
                 <Switch checked={theme === 'dark'} onChange={handleThemeChange} />
@@ -149,7 +149,7 @@ const ProfilePopover = ({ user, logout }) => {
           <motion.div variants={itemVariants} className="border-t border-gray-200 dark:border-gray-700 p-2">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-3 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-3 !text-red-500 dark:!text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
             >
               <LogOut className="w-5 h-5" />
               <span className="text-sm font-medium">Đăng xuất</span>

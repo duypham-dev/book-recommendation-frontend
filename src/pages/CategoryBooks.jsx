@@ -10,10 +10,15 @@ const BOOKS_PER_PAGE = 12;
 
 // ─── Sub-components ─────────────────────────────────────────────────────────
 
-const LoadingSpinner = () => (
-  <div className="text-center py-16">
-    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
-    <p className="mt-4 text-gray-600 dark:text-gray-300">Đang tải sách...</p>
+const BookGridSkeleton = ({ count = 6 }) => (
+  <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1.5 sm:gap-6">
+    {Array.from({ length: count }).map((_, i) => (
+      <div key={i} className="flex flex-col gap-2">
+        <div className="w-full aspect-[3/4] bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
+        <div className="mt-2 sm:mt-3 h-3 sm:h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mx-auto animate-pulse" />
+        <div className="mt-1 sm:mt-2 h-2.5 sm:h-3 bg-gray-200 dark:bg-gray-800 rounded w-1/2 mx-auto animate-pulse" />
+      </div>
+    ))}
   </div>
 );
 
@@ -290,33 +295,53 @@ const CategoryBooks = () => {
           </div>
 
           {/* Sort Bar */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
-            <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Sắp xếp:
-              </label>
-              <select
-                value={sortBy}
-                onChange={(e) => handleSortChange(e.target.value)}
-                className="px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              >
-                <option value="popular">Phổ biến nhất</option>
-                <option value="newest">Mới nhất</option>
-                <option value="title-asc">Tên sách (A-Z)</option>
-                <option value="title-desc">Tên sách (Z-A)</option>
-              </select>
+          <div className="bg-white dark:bg-gray-800/40 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/80 dark:border-gray-700/60 p-3 sm:p-4 mb-6 transition-all duration-300">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                  </svg>
+                </div>
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                  Sắp xếp sách theo
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { value: "popular", label: "Phổ biến" },
+                  { value: "newest", label: "Mới nhất" },
+                  { value: "title-asc", label: "Tên A-Z" },
+                  { value: "title-desc", label: "Tên Z-A" },
+                ].map((option) => {
+                  const isActive = sortBy === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      onClick={() => handleSortChange(option.value)}
+                      className={`flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold tracking-wide transition-all duration-200 text-center ${
+                        isActive
+                          ? "bg-blue-600 text-white shadow-md shadow-blue-500/10 scale-105"
+                          : "bg-gray-50 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {/* Books Grid/List */}
           {booksLoading ? (
-            <LoadingSpinner />
+            <BookGridSkeleton />
           ) : books.length === 0 ? (
             <EmptyState />
           ) : (
             <>
               {viewMode === "grid" ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1.5 sm:gap-6">
                   {books.map((book) => (
                     <BookCard key={book.bookId} book={book} />
                   ))}
