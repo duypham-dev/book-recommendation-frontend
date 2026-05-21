@@ -31,13 +31,13 @@ const formatLastReadTime = (timestamp) => {
  * Skeleton card placeholder while data is loading.
  */
 const BookCardSkeleton = () => (
-  <div className="flex flex-col items-center animate-pulse">
-    <div className="w-[180px]">
-      <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg" />
-      <div className="mt-3 h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-      <div className="mt-2 h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+  <div className="flex flex-col items-center animate-pulse w-full max-w-[100px] sm:max-w-[180px]">
+    <div className="w-full">
+      <div className="w-full h-32 sm:h-64 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+      <div className="mt-1.5 sm:mt-3 h-2.5 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto" />
+      <div className="mt-1 sm:mt-2 h-2 sm:h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mx-auto" />
     </div>
-    <div className="mt-2 h-3 bg-gray-200 dark:bg-gray-700 rounded w-24" />
+    <div className="mt-1 sm:mt-2 h-2 sm:h-3 bg-gray-200 dark:bg-gray-700 rounded w-14 sm:w-24" />
   </div>
 );
 
@@ -119,7 +119,7 @@ const HistorySection = React.memo(() => {
       )}
 
       {loading ? (
-        <div className="grid gap-4 md:gap-6 xl:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-2 sm:gap-4 md:gap-6 xl:gap-8 grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
           {Array.from({ length: PAGE_SIZE }).map((_, i) => (
             <BookCardSkeleton key={i} />
           ))}
@@ -128,7 +128,7 @@ const HistorySection = React.memo(() => {
         <EmptyState icon={History} message="Chưa có lịch sử đọc sách" />
       ) : (
         <>
-          <div className="grid gap-4 md:gap-6 xl:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-2 sm:gap-4 md:gap-6 xl:gap-8 grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
             {historyItems.map((item) => {
               const progressValue = typeof item.progress === "number" ? Math.round(item.progress) : null;
               // Ensure book object always has bookId for BookCard tooltip
@@ -144,16 +144,16 @@ const HistorySection = React.memo(() => {
                   
 
               return (
-                <div key={item.id ?? item.bookId ?? `${book.bookId}-${item.lastReadAt}`} className="flex flex-col items-center">
-                  <div className="relative">
+                <div key={item.id ?? item.bookId ?? `${book.bookId}-${item.lastReadAt}`} className="flex flex-col items-center w-full">
+                  <div className="relative w-full">
                     <BookCard book={book} preview={false} />
                     {progressValue !== null && (
-                      <span className="absolute left-2 top-2 rounded-full bg-blue-600/90 px-3 py-1 text-xs font-medium text-white shadow">
+                      <span className="absolute left-1 top-1 sm:left-2 sm:top-2 rounded-full bg-blue-600/90 px-1.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-xs font-semibold text-white shadow">
                         Đọc {progressValue}%
                       </span>
                     )}
                   </div>
-                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 text-center line-clamp-2">
                     Cập nhật: {formatLastReadTime(item.lastReadAt) || "Chưa có dữ liệu"}
                   </p>
                 </div>

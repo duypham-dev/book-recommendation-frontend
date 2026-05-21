@@ -139,20 +139,20 @@ const FavoritesSection = React.memo(() => {
   }
 
   return (
-    <div className="max-h-[800px] overflow-y-auto px-2">
+    <div className="max-h-none md:max-h-[800px] md:overflow-y-auto px-1 sm:px-2">
       <div className="sticky top-0 bg-white pb-1 dark:bg-gray-800 z-20">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 shrink-0">SÁCH YÊU THÍCH</h2>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6 py-4">
+      <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1.5 sm:gap-4 lg:gap-6 py-4">
         {favoriteBooks.map((book) => (
-          <div key={book.id} className="relative group flex justify-center">
+          <div key={book.id} className="relative group flex justify-center w-full">
             <BookCard book={book.book || book} preview={false} />
             <button
               onClick={() => confirmRemove(book)}
-              className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600 z-10"
+              className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-red-500 text-white p-1 sm:p-2 rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600 z-10"
               aria-label="Xóa khỏi yêu thích"
             >
-              <Trash2 size={16} />
+              <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
           </div>
         ))}
