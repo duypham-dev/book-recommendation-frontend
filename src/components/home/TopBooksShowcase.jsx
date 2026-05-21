@@ -131,9 +131,10 @@ const BaseBookCard = ({ children, isCarousel, index, onClick }) => {
   const slantClass = index % 2 === 0 ? "clip-slant-left" : "clip-slant-right";
   return (
     <div
+      data-book-card
       className={`flex-shrink-0 snap-start ${
         isCarousel
-          ? "w-[70vw] xs:w-[55vw] sm:w-[45vw] md:w-[35vw] max-w-[280px]"
+          ? "w-[calc((100%-16px)/2)] xs:w-[calc((100%-16px)/2)] sm:w-[45vw] md:w-[35vw] max-w-[280px]"
           : "w-full"
       }`}
       onClick={onClick}

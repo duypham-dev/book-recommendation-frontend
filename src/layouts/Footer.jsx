@@ -98,8 +98,8 @@ const Footer = () => {
           {/* Brand column */}
           <div className="lg:col-span-4">
             <Link to="/" className="inline-flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center group-hover:bg-emerald-700 transition-colors">
-                <BookOpen className="w-5 h-5 text-white" />
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center group-hover:bg-emerald-700 transition-colors">
+                <img src="/logo.png" alt="Logo" />
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
                 Tekbook
@@ -122,7 +122,7 @@ const Footer = () => {
                   href="mailto:support@tekbook.vn"
                   className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                 >
-                  support@tekbook.vn
+                  phucduy.dev@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-gray-600 dark:text-gray-400">
