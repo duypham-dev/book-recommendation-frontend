@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { generateSlug } from '../../utils/generateSlug';
 import { applyPreset, isCloudinaryUrl } from '../../utils/cloudinaryUtils';
 import useFavorite from '../../hooks/useFavorite';
+import useAuth from '../../hooks/useAuth';
 import { getRecentlyUploadedBooks } from '../../services/bookService';
 
 // Subcomponent for the favorite button to use the hook correctly
@@ -73,6 +74,7 @@ export const RecentlyUploadedSkeleton = () => {
 
 const RecentlyUploadedShowcase = ({ limit = 10 }) => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -115,7 +117,12 @@ const RecentlyUploadedShowcase = ({ limit = 10 }) => {
     return () => {
       isMounted = false;
     };
-  }, [limit]);
+  }, [limit, isAuthenticated]);
+
+  // Reset local favorites when user authentication status changes
+  useEffect(() => {
+    setLocalFavs({});
+  }, [isAuthenticated]);
 
   // Reset index if books array changes
   useEffect(() => {
