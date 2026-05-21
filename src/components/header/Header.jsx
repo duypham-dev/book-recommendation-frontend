@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Search, ChevronDown, Menu, X, Crown } from "lucide-react";
+import { Search, ChevronDown, Menu, X, Crown, User, Book, History, Moon, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import CategoryDropdown from "./CategoriesDropdown";
 import ProfilePopover from "./ProfilePopover";
 import SearchSuggestions from "./SearchSuggestions";
 import useAuth from "../../hooks/useAuth";
 import useGenres from "../../hooks/useGenres";
+import { Switch } from "antd";
+import { useThemeContext } from "../../hooks/useTheme";
 import { searchBooks } from "../../services/manageBookService";
 
 const SCROLL_THRESHOLD = 50;
@@ -14,6 +16,7 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
   const { genres, isLoading: isGenresLoading } = useGenres();
+  const { theme, setTheme } = useThemeContext();
   const [internalSearch, setInternalSearch] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -374,8 +377,71 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
                   </button>
                 </div>
               ) : (
-                <div className="px-2 py-1">
-                  <ProfilePopover user={user} logout={logout} />
+                <div className="px-2 py-1 space-y-3">
+                  {/* User info inline block */}
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-900/40 rounded-xl">
+                    <img
+                      src={user?.avatarUrl || user?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop'}
+                      alt={user?.fullName || user?.name || user?.username || 'Người dùng'}
+                      className="w-10 h-10 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-sm text-gray-900 dark:text-white truncate">
+                        {user?.fullName || user?.name || user?.username || 'Người dùng'}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        {user?.email || 'Chưa cập nhật email'}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Menu options list */}
+                  <div className="space-y-1">
+                    <Link
+                      to="/manage-account/profile"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
+                    >
+                      <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                      <span>Quản lý tài khoản</span>
+                    </Link>
+                    <Link
+                      to="/manage-account/favorite-books"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
+                    >
+                      <Book className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                      <span>Sách yêu thích</span>
+                    </Link>
+                    <Link
+                      to="/manage-account/history-reading"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
+                    >
+                      <History className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                      <span>Lịch sử đọc sách</span>
+                    </Link>
+                    
+                    {/* Theme toggle option */}
+                    <div className="flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors">
+                      <div className="flex items-center gap-3">
+                        <Moon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        <span>Dark Mode</span>
+                      </div>
+                      <Switch checked={theme === 'dark'} onChange={(checked) => setTheme(checked ? 'dark' : 'light')} />
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        logout();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors text-left mt-1"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Đăng xuất</span>
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

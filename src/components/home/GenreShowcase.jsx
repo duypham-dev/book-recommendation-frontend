@@ -19,7 +19,7 @@ const NavButton = ({ direction, show, onClick }) => {
   return (
     <button
       onClick={() => onClick(direction)}
-      className={`absolute ${isLeft ? "-left-4" : "-right-4"} top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md transition-all duration-200 border border-gray-100 dark:border-gray-700 hover:scale-110 ${show ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+      className={`absolute ${isLeft ? "-left-4" : "-right-4"} top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md transition-all duration-200 border border-gray-100 dark:border-gray-700 hover:scale-110 hidden sm:block ${show ? "opacity-100" : "opacity-0 pointer-events-none"}`}
       aria-label={`Scroll ${direction}`}
     >
       <Icon className="w-5 h-5 text-gray-800 dark:text-gray-200" />
@@ -30,13 +30,13 @@ const NavButton = ({ direction, show, onClick }) => {
 const GenreCard = ({ title, colorConfig, onClick }) => (
   <div
     onClick={onClick}
-    className={`flex-shrink-0 snap-start w-48 sm:w-56 bg-white dark:bg-[#282B39] border border-gray-100 dark:border-gray-800 rounded-2xl cursor-pointer px-5 py-4 flex items-center justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 group ${colorConfig.hover}`}
+    className={`flex-shrink-0 snap-start w-36 sm:w-56 bg-white dark:bg-[#282B39] border border-gray-100 dark:border-gray-800 rounded-2xl cursor-pointer px-3.5 py-3 sm:px-5 sm:py-4 flex items-center justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 group ${colorConfig.hover}`}
   >
-    <h3 className={`font-semibold text-base truncate pr-2 transition-colors duration-300 ${colorConfig.text}`}>
+    <h3 className={`font-semibold text-sm sm:text-base truncate pr-2 transition-colors duration-300 ${colorConfig.text}`}>
       {title}
     </h3>
-    <div className={`p-1.5 rounded-full opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ${colorConfig.bg} ${colorConfig.text}`}>
-      <ChevronRight className="w-4 h-4" />
+    <div className={`p-1 sm:p-1.5 rounded-full opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ${colorConfig.bg} ${colorConfig.text}`}>
+      <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
     </div>
   </div>
 );
@@ -61,11 +61,11 @@ const GenreShowcase = () => {
 
   if (loading) {
     return (
-      <section className="mb-12">
-        <h2 className="mb-6 text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Bạn đang quan tâm gì?</h2>
-        <div className="flex gap-4 overflow-x-hidden">
+      <section className="mb-6 sm:mb-12">
+        <h2 className="mb-3 sm:mb-6 text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Bạn đang quan tâm gì?</h2>
+        <div className="flex gap-3 sm:gap-4 overflow-x-hidden">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="flex-shrink-0 w-48 sm:w-56 h-14 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-2xl" />
+            <div key={i} className="flex-shrink-0 w-36 sm:w-56 h-12 sm:h-14 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-2xl" />
           ))}
         </div>
       </section>
@@ -75,8 +75,8 @@ const GenreShowcase = () => {
   if (!genres?.length) return null;
 
   return (
-    <section className="mb-12">
-      <h2 className="mb-6 text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+    <section className="mb-6 sm:mb-12">
+      <h2 className="mb-3 sm:mb-6 text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
         Bạn đang quan tâm gì?
       </h2>
       <div
@@ -89,7 +89,7 @@ const GenreShowcase = () => {
 
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1 -mx-1"
+          className="flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1 -mx-1"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {featuredGenres.map((genre, index) => (
