@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { generateSlug } from '../../utils/generateSlug';
 import { applyPreset, isCloudinaryUrl } from '../../utils/cloudinaryUtils';
 import useFavorite from '../../hooks/useFavorite';
+import { getRecentlyUploadedBooks } from '../../services/bookService';
 
 // Subcomponent for the favorite button to use the hook correctly
 const FavoriteButton = ({ bookId, initialIsFav, onFavChange }) => {
@@ -30,7 +31,7 @@ const FavoriteButton = ({ bookId, initialIsFav, onFavChange }) => {
   );
 };
 
-export const RecommendedSkeleton = () => {
+export const RecentlyUploadedSkeleton = () => {
   return (
     <section className="mb-12 relative rounded-2xl overflow-hidden bg-[#1B1E21] shadow-2xl animate-pulse">
       <div className="relative z-10 flex flex-row min-h-0 lg:min-h-[500px]">
@@ -70,8 +71,11 @@ export const RecommendedSkeleton = () => {
   );
 };
 
-const RecommendedShowcase = ({ books }) => {
+const RecentlyUploadedShowcase = ({ limit = 10 }) => {
   const navigate = useNavigate();
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [localFavs, setLocalFavs] = useState({});
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
@@ -85,12 +89,44 @@ const RecommendedShowcase = ({ books }) => {
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
 
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBooks = async () => {
+      setLoading(true);
+      try {
+        const data = await getRecentlyUploadedBooks(limit);
+        if (isMounted) {
+          setBooks(data.content || data || []);
+          setError(null);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err.message || 'Failed to fetch recently uploaded books');
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchBooks();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [limit]);
+
   // Reset index if books array changes
   useEffect(() => {
     setActiveIndex(0);
   }, [books]);
 
-  if (!books || books.length === 0) return null;
+  if (loading) {
+    return <RecentlyUploadedSkeleton />;
+  }
+
+  if (error || !books || books.length === 0) return null;
 
   const activeBook = books[activeIndex];
   const url = `/books/${generateSlug(activeBook.title)}-${activeBook.bookId}`;
@@ -127,7 +163,7 @@ const RecommendedShowcase = ({ books }) => {
         {/* Left Info Panel */}
         <div className="w-1/2 p-3 sm:p-10 lg:p-12 lg:pr-4 flex flex-col justify-center">
           <h2 className="text-[11px] sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-8 lg:mb-10 text-white/90 tracking-wide line-clamp-1">
-            Dành riêng cho bạn
+            Sách mới tải lên gần đây
           </h2>
           
           <div className="flex-1 flex flex-col justify-center">
@@ -141,7 +177,7 @@ const RecommendedShowcase = ({ books }) => {
                 className="flex flex-col"
               >
                 <div className="inline-block px-1.5 py-0.5 sm:px-2.5 sm:py-1 bg-white/10 text-gray-300 rounded text-[7px] sm:text-[10px] font-bold tracking-widest uppercase mb-1.5 sm:mb-4 w-max">
-                  Hệ thống đề xuất
+                  Mới nhất
                 </div>
                 <h3 className="text-[13px] sm:text-2xl lg:text-4xl font-bold mb-1.5 sm:mb-4 line-clamp-2 leading-tight text-white min-h-[36px] sm:min-h-[64px] lg:min-h-[90px]">
                   {activeBook.title}
@@ -269,4 +305,4 @@ const RecommendedShowcase = ({ books }) => {
   );
 };
 
-export default RecommendedShowcase;
+export default RecentlyUploadedShowcase;

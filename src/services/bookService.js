@@ -33,6 +33,19 @@ export const getMostReadBooks = async (page = 0, size = 5, signal) => {
     return response.data;
 };
 
+/**
+ * Get recently uploaded books
+ * @param {number} limit - Max number of books
+ * @param {AbortSignal} signal - Optional abort signal
+ */
+export const getRecentlyUploadedBooks = async (limit = 10, signal) => {
+    const response = await api.get('/books/recently-uploaded', {
+      params: { limit },
+      signal
+    });
+    return response.data || response;
+};
+
 export const getPreviewBook = async (bookId) => {
     const response = await api.get(`/books/${bookId}/preview`);
     return response.data || response;

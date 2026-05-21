@@ -149,7 +149,7 @@ const BookCard = ({ book, className = "", preview = true }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 hover:scale-105 group">
+      <div className="relative overflow-hidden rounded-md sm:rounded-lg shadow-md transition-transform duration-300 hover:scale-105 group">
         <img
           src={optimizedCoverUrl || "/placeholder.svg"}
           alt={book.title}
@@ -159,11 +159,11 @@ const BookCard = ({ book, className = "", preview = true }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
       </div>
-      <h3 className="mt-2 sm:mt-3 font-semibold text-gray-800 dark:text-white line-clamp-2 text-xs sm:text-sm">
+      <h3 className="mt-1.5 sm:mt-3 font-semibold text-gray-800 dark:text-white line-clamp-2 text-[11px] sm:text-sm">
         {book.title}
       </h3>
-      <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-300 mt-0.5 sm:mt-1 flex gap-1.5 sm:gap-2 items-center">
-        <Pen size={12} className="flex-shrink-0 sm:w-3.5 sm:h-3.5" />
+      <p className="text-[9px] sm:text-xs text-gray-500 dark:text-gray-300 mt-0.5 sm:mt-1 flex gap-1 sm:gap-2 items-center">
+        <Pen className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
         <span className="truncate">
           {book.authors?.map((a) => a.authorName).join(", ") || "-"}
         </span>

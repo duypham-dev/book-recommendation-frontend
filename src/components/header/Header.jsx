@@ -5,12 +5,15 @@ import CategoryDropdown from "./CategoriesDropdown";
 import ProfilePopover from "./ProfilePopover";
 import SearchSuggestions from "./SearchSuggestions";
 import useAuth from "../../hooks/useAuth";
+import useGenres from "../../hooks/useGenres";
 import { searchBooks } from "../../services/manageBookService";
 
 const SCROLL_THRESHOLD = 50;
 
 const Header = ({ onAuthClick, user, onSearchSubmit }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
+  const { genres, isLoading: isGenresLoading } = useGenres();
   const [internalSearch, setInternalSearch] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -29,6 +32,13 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Reset mobile categories dropdown state when mobile menu closes
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      setMobileCategoriesOpen(false);
+    }
+  }, [mobileMenuOpen]);
 
   const updateSearchValue = (value) => {
     setInternalSearch(value);
@@ -258,7 +268,7 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
           {/* Mobile Menu */}
           <div
             className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${
-              mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              mobileMenuOpen ? "max-h-[80vh] overflow-y-auto opacity-100" : "max-h-0 opacity-0"
             }`}
           >
             <div className="px-4 pb-4 pt-2 border-t border-gray-200/60 dark:border-gray-700/40 space-y-3">
@@ -282,18 +292,43 @@ const Header = ({ onAuthClick, user, onSearchSubmit }) => {
                 </button>
               </div>
 
-              <button className="w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors">
-                Thể loại
-              </button>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
+                  className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-colors"
+                >
+                  <span>Thể loại</span>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      mobileCategoriesOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
 
-              <Link
-                to="/membership"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-purple-600 dark:text-white hover:bg-purple-50 dark:hover:bg-purple-900/30 rounded-xl transition-colors"
-              >
-                <Crown className="w-5 h-5 text-yellow-500 fill-yellow-500" />{" "}
-                Hội viên
-              </Link>
+                {mobileCategoriesOpen && (
+                  <div className="pl-6 pr-4 py-1 space-y-1 bg-gray-50/50 dark:bg-white/5 rounded-xl max-h-60 overflow-y-auto">
+                    {isGenresLoading ? (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 py-2">Đang tải thể loại...</p>
+                    ) : genres && genres.length > 0 ? (
+                      genres.map((genre) => (
+                        <Link
+                          key={genre.genreId}
+                          to={`/category/${genre.genreId}?name=${encodeURIComponent(genre.genreName)}`}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            setMobileCategoriesOpen(false);
+                          }}
+                          className="block py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-blue-400 transition-colors"
+                        >
+                          {genre.genreName}
+                        </Link>
+                      ))
+                    ) : (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 py-2">Không có thể loại nào</p>
+                    )}
+                  </div>
+                )}
+              </div>
               {loading ? (
                 <div className="flex items-center justify-center py-2.5 h-full">
                   <svg

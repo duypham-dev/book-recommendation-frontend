@@ -2,6 +2,7 @@ import React from "react";
 
 // Components
 import Hero from "../components/home/Hero";
+import RecentlyUploadedShowcase from "../components/home/RecentlyUploadedShowcase";
 
 import TopBooksShowcase, {
   TopBooksSkeleton,
@@ -54,6 +55,8 @@ const Home = () => {
       heroContent={<Hero />}
     >
       <main className="mt-8 px-4 sm:px-6 lg:px-8 space-y-8 min-h-[calc(100vh-400px)]">
+
+
         {/* Genre Showcase - User Interests */}
         <GenreShowcase />
 
@@ -83,7 +86,8 @@ const Home = () => {
             />
           ))}
         </div>
-
+        {/* Recently Uploaded Books Section */}
+        <RecentlyUploadedShowcase />
         {/* Genre Carousels - Lazy Loaded */}
         {MAIN_GENRE_CONFIG.map((genre) => (
           <GenreCarouselItem
