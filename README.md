@@ -12,10 +12,6 @@ The application targets two distinct user roles: regular users who browse, read,
 
 The screenshots below illustrate the primary screens of the application. To update this section, place your images inside a `docs/screenshots/` directory at the project root and replace the placeholder paths accordingly.
 
-## UI Screenshots
-
-To keep this README concise, all application screenshots (both User-Facing and Admin Panel) have been moved to a separate document.
-
 👉 **[View the UI Screenshots here](docs/UI_SCREENSHOTS.md)**
 
 ---
