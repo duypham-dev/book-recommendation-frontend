@@ -34,6 +34,7 @@ const useLazyLoadGenres = ({
   
 
   const enabledRef = useRef(enabled);
+
   useLayoutEffect(() => {
     enabledRef.current = enabled;
   });
@@ -102,7 +103,7 @@ const useLazyLoadGenres = ({
       });
       return { genreBooks: booksMap, genreLoaded: loadedMap };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [intersectedGenres]), // ✅ combine nhận intersectedGenres qua closure
+    }, [intersectedGenres]), // combine nhận intersectedGenres qua closure
   });
 
   return {

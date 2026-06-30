@@ -202,6 +202,23 @@ function App() {
               <Route path="/search" element={<Navigate to="/books" replace />} />
               <Route path="*" element={<NotFound />} />
               </Routes>
+              
+              {/* Floating Chatbot Widget iframe */}
+              <iframe
+                src="http://localhost:3000/widget?domainId=0e571463-b7d3-4204-a946-e3152ca759e4"
+                width="380px"
+                height="600px"
+                style={{
+                  position: 'fixed',
+                  bottom: '20px',
+                  right: '20px',
+                  border: 'none',
+                  borderRadius: '16px',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+                  zIndex: 99999,
+                }}
+                title="SuperShip Chatbot Widget"
+              />
             </AntdApp>
           </ConfigProvider>
         </GenreProvider>
