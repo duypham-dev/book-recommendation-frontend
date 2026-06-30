@@ -52,7 +52,7 @@ function App() {
   const { isDark } = useThemeContext();
 
   return (
-     <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <GenreProvider>
           <ConfigProvider
@@ -72,153 +72,137 @@ function App() {
                   }
                 />
 
-              <Route
-                path="/books/:id"
-                element={
-                  <UserRoute>
-                    <BookDetail />
-                  </UserRoute>
-                }
-              />
-              <Route
-                path={PATHS.ALL_BOOKS}
-                element={
-                  <UserRoute>
-                    <AllBooks />
-                  </UserRoute>
-                }
-              />
-              <Route
-                path={PATHS.CATEGORY}
-                element={
-                  <UserRoute>
-                    <CategoryBooks />
-                  </UserRoute>
-                }
-              />
-              <Route
-                path={PATHS.ABOUT}
-                element={
-                  <UserRoute>
-                    <About />
-                  </UserRoute>
-                }
-              />
-              <Route
-                path={PATHS.MANAGE_ACCOUNT_REDIRECT.ROOT}
-                element={
-                  <ProtectedRoute>
-                    <ManageAccount />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<AccountInfoSection />} />
                 <Route
-                  path={PATHS.MANAGE_ACCOUNT_CHILD.PROFILE}
-                  element={<AccountInfoSection />}
+                  path="/books/:id"
+                  element={
+                    <UserRoute>
+                      <BookDetail />
+                    </UserRoute>
+                  }
                 />
                 <Route
-                  path={PATHS.MANAGE_ACCOUNT_CHILD.FAVORITE_BOOKS}
-                  element={<FavoritesSection />}
+                  path={PATHS.ALL_BOOKS}
+                  element={
+                    <UserRoute>
+                      <AllBooks />
+                    </UserRoute>
+                  }
                 />
                 <Route
-                  path={PATHS.MANAGE_ACCOUNT_CHILD.HISTORY_READING}
-                  element={<HistorySection />}
+                  path={PATHS.CATEGORY}
+                  element={
+                    <UserRoute>
+                      <CategoryBooks />
+                    </UserRoute>
+                  }
                 />
-              </Route>
+                <Route
+                  path={PATHS.ABOUT}
+                  element={
+                    <UserRoute>
+                      <About />
+                    </UserRoute>
+                  }
+                />
+                <Route
+                  path={PATHS.MANAGE_ACCOUNT_REDIRECT.ROOT}
+                  element={
+                    <ProtectedRoute>
+                      <ManageAccount />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route index element={<AccountInfoSection />} />
+                  <Route
+                    path={PATHS.MANAGE_ACCOUNT_CHILD.PROFILE}
+                    element={<AccountInfoSection />}
+                  />
+                  <Route
+                    path={PATHS.MANAGE_ACCOUNT_CHILD.FAVORITE_BOOKS}
+                    element={<FavoritesSection />}
+                  />
+                  <Route
+                    path={PATHS.MANAGE_ACCOUNT_CHILD.HISTORY_READING}
+                    element={<HistorySection />}
+                  />
+                </Route>
 
-              {/* Admin Routes - Protected by AdminRoute */}
-              <Route
-                path={PATHS.ADMIN.ROOT}
-                element={
-                  <AdminRoute>
-                    <AdminDashboard />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={PATHS.ADMIN.USERS}
-                element={
-                  <AdminRoute>
-                    <AdminUsers />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={PATHS.ADMIN.BOOKS}
-                element={
-                  <AdminRoute>
-                    <AdminBooks />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={PATHS.ADMIN.ADD_BOOK}
-                element={
-                  <AdminRoute>
-                    <AdminAddBook />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={PATHS.ADMIN.EDIT_BOOK}
-                element={
-                  <AdminRoute>
-                    <AdminEditBook />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={PATHS.ADMIN.DELETED_BOOKS}
-                element={
-                  <AdminRoute>
-                    <AdminDeletedBooks />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={PATHS.ADMIN.GENRES}
-                element={
-                  <AdminRoute>
-                    <AdminGenres />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path={PATHS.ADMIN.RECOMMENDATION}
-                element={
-                  <AdminRoute>
-                    <AdminRecommendation />
-                  </AdminRoute>
-                }
-              />
+                {/* Admin Routes - Protected by AdminRoute */}
+                <Route
+                  path={PATHS.ADMIN.ROOT}
+                  element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path={PATHS.ADMIN.USERS}
+                  element={
+                    <AdminRoute>
+                      <AdminUsers />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path={PATHS.ADMIN.BOOKS}
+                  element={
+                    <AdminRoute>
+                      <AdminBooks />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path={PATHS.ADMIN.ADD_BOOK}
+                  element={
+                    <AdminRoute>
+                      <AdminAddBook />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path={PATHS.ADMIN.EDIT_BOOK}
+                  element={
+                    <AdminRoute>
+                      <AdminEditBook />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path={PATHS.ADMIN.DELETED_BOOKS}
+                  element={
+                    <AdminRoute>
+                      <AdminDeletedBooks />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path={PATHS.ADMIN.GENRES}
+                  element={
+                    <AdminRoute>
+                      <AdminGenres />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path={PATHS.ADMIN.RECOMMENDATION}
+                  element={
+                    <AdminRoute>
+                      <AdminRecommendation />
+                    </AdminRoute>
+                  }
+                />
 
-              {/* Other Routes */}
-              <Route path="/oauth/callback" element={<OAuthRedirect />} />
-              <Route path={PATHS.RESET_PASSWORD} element={<ResetPassword />} />
-              <Route path="/activate-account" element={<ActivateAccount />} />
-              <Route path="/reader/:bookId" element={<EpubCoreViewer />} />
-              {/* Redirect legacy /search route to /books */}
-              <Route path="/search" element={<Navigate to="/books" replace />} />
-              <Route path="*" element={<NotFound />} />
+                {/* Other Routes */}
+                <Route path="/oauth/callback" element={<OAuthRedirect />} />
+                <Route path={PATHS.RESET_PASSWORD} element={<ResetPassword />} />
+                <Route path="/activate-account" element={<ActivateAccount />} />
+                <Route path="/reader/:bookId" element={<EpubCoreViewer />} />
+                {/* Redirect legacy /search route to /books */}
+                <Route path="/search" element={<Navigate to="/books" replace />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
-              
-              {/* Floating Chatbot Widget iframe */}
-              <iframe
-                src="http://localhost:3000/widget?domainId=0e571463-b7d3-4204-a946-e3152ca759e4"
-                width="380px"
-                height="600px"
-                style={{
-                  position: 'fixed',
-                  bottom: '20px',
-                  right: '20px',
-                  border: 'none',
-                  borderRadius: '16px',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
-                  zIndex: 99999,
-                }}
-                title="SuperShip Chatbot Widget"
-              />
+
             </AntdApp>
           </ConfigProvider>
         </GenreProvider>
