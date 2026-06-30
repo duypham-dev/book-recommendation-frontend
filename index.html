@@ -21,16 +21,14 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Load marked for markdown parsing -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" async></script>
-    <!-- Load chatbot widget.js and initialize onload -->
-    <script src="https://six-mammals-march.loca.lt/widget.js" async onload="
-      if (window.supership) {
-        window.supership.init({
-          domainId: '0e571463-b7d3-4204-a946-e3152ca759e4',
-          apiBaseUrl: 'https://repressed-fresh-truffle.ngrok-free.dev/api/v1'
-        });
-      }
-    "></script>
+    <!-- Dán đoạn mã này vào trước thẻ </body> trên website của bạn -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://tidy-years-show.loca.lt/widget.js"></script>
+    <script>
+      window.SuperShipChat = new SuperShipWidget({
+        apiBaseUrl: "https://privatize-periscope-multitask.ngrok-free.dev/api/v1",
+        publicKey: "0e571463-b7d3-4204-a946-e3152ca759e4"
+      });
+    </script>
   </body>
 </html>
