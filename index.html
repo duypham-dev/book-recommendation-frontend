@@ -16,21 +16,18 @@
       })();
     </script>
     <script src="https://accounts.google.com/gsi/client" async></script>
-     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-    <!-- Load file Widget.js từ Vercel của bạn -->
-    <script src="https://brave-rockets-relate.loca.lt/widget.js"></script>
-
-    <!-- Khởi tạo Chatbot -->
-    <script>
-        window.SuperShipChat = new SuperShipWidget({
-            apiBaseUrl: "https://privatize-periscope-multitask.ngrok-free.dev/api/v1",
-            publicKey: "0e571463-b7d3-4204-a946-e3152ca759e4"
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+    <script src="http://localhost:3000/widget.js"></script>
+    <script>
+      window.SuperShipChat = new SuperShipWidget({
+        apiBaseUrl: "https://repressed-fresh-truffle.ngrok-free.dev/api/v1",
+        publicKey: "7ef4ad16-0b68-445f-96a4-899e25915919"
+      });
+    </script>
   </body>
 </html>
