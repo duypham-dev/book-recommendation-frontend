@@ -411,7 +411,7 @@ export default function WebhookDocs() {
                     value={webhookUrl}
                     onChange={(e) => setWebhookUrl(e.target.value)}
                     placeholder="http://localhost:5000/api/v1/web-crawls/webhook/<webhook_token>"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-750 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/45 focus:border-emerald-500 transition-all text-sm shadow-sm"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/45 focus:border-emerald-500 transition-all text-sm shadow-sm"
                   />
                   <p className="text-xs text-gray-400 mt-1.5 leading-normal">
                     Địa chỉ nhận webhook được sinh ra từ trang quản trị nguồn website của chatbot. 
@@ -427,7 +427,7 @@ export default function WebhookDocs() {
                     value={webhookSecret}
                     onChange={(e) => setWebhookSecret(e.target.value)}
                     placeholder="Nhập secret key để xác thực request"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-750 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/45 focus:border-emerald-500 transition-all text-sm shadow-sm"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/45 focus:border-emerald-500 transition-all text-sm shadow-sm"
                   />
                   <p className="text-xs text-gray-400 mt-1.5 leading-normal">
                     Mã băm token xác thực. Hệ thống backend sẽ đối chiếu trực tiếp qua header <code className="font-mono text-emerald-500 bg-emerald-50 dark:bg-indigo-950/40 px-1 py-0.5 rounded">X-Webhook-Secret</code>.
@@ -495,7 +495,7 @@ export default function WebhookDocs() {
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-750 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all text-sm shadow-sm font-semibold"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all text-sm shadow-sm font-semibold"
                   />
                 </div>
 
@@ -505,7 +505,7 @@ export default function WebhookDocs() {
                     rows={2}
                     value={editDescription}
                     onChange={(e) => setEditDescription(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-750 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all text-sm shadow-sm resize-none"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all text-sm shadow-sm resize-none"
                   />
                 </div>
 
