@@ -18,6 +18,7 @@ const ABOUT_LINKS = [
   { label: "Giới thiệu", to: PATHS.ABOUT },
   { label: "Tất cả sách", to: PATHS.ALL_BOOKS },
   { label: "Gói thành viên", to: PATHS.MEMBERSHIP },
+  { label: "Tài liệu Webhook", to: PATHS.WEBHOOK_DOCS },
 ];
 
 const ACCOUNT_LINKS = [

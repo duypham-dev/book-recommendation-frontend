@@ -19,6 +19,7 @@ import BookDetail from "./pages/BookDetail";
 import CategoryBooks from "./pages/CategoryBooks";
 import AllBooks from "./pages/AllBooks";
 import About from "./pages/About";
+import WebhookDocs from "./pages/WebhookDocs.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import OAuthRedirect from "./pages/Auth/OAuthRedirect.jsx";
 
@@ -101,6 +102,14 @@ function App() {
                   element={
                     <UserRoute>
                       <About />
+                    </UserRoute>
+                  }
+                />
+                <Route
+                  path={PATHS.WEBHOOK_DOCS}
+                  element={
+                    <UserRoute>
+                      <WebhookDocs />
                     </UserRoute>
                   }
                 />

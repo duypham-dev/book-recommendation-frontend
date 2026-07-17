@@ -6,6 +6,7 @@ export const PATHS = {
   MEMBERSHIP: "/membership",
   ABOUT: "/about",
   RESET_PASSWORD: "/reset-password",
+  WEBHOOK_DOCS: "/docs/webhooks",
   MANAGE_ACCOUNT_REDIRECT: {
     ROOT: "/manage-account",
     PROFILE: "/manage-account/profile",
